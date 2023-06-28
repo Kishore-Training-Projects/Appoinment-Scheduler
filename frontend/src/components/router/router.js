@@ -10,6 +10,10 @@ import { Register } from "../pages/login/Register";
 
 import { UserDashboard } from "../pages/User/UserDashboard";
 
+
+
+import { DoctorDashboard } from "../pages/doctor/DoctorDashboard";
+
 function Router() {
     return (
       <BrowserRouter>
@@ -38,6 +42,11 @@ function Router() {
       {
         path: "/user/dashboard",
         element: <UserDashboard />,
+      },
+
+      {
+        path: "/doctor/dashboard",
+        element: <DoctorDashboard />,
       },
   
   ];
