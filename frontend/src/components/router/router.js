@@ -7,6 +7,9 @@ import { Login } from "../pages/login/Login";
 import { Register } from "../pages/login/Register";
 
 
+
+import { UserDashboard } from "../pages/User/UserDashboard";
+
 function Router() {
     return (
       <BrowserRouter>
@@ -31,6 +34,10 @@ function Router() {
       {
         path: "/register",
         element: <Register />,
+      },
+      {
+        path: "/user/dashboard",
+        element: <UserDashboard />,
       },
   
   ];
