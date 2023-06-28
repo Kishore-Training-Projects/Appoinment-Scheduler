@@ -3,6 +3,9 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import App from '../../App'
 
+import { Login } from "../pages/login/Login";
+import { Register } from "../pages/login/Register";
+
 
 function Router() {
     return (
@@ -21,6 +24,14 @@ function Router() {
       path: "/",
       element: <App />,
     },
+    {
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/register",
+        element: <Register />,
+      },
   
   ];
   
