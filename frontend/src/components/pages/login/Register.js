@@ -5,13 +5,26 @@ import { MobileAuth } from "./components/MobileAuth";
 
 export const Register = () => {
   
-  const [number , setNumber] = useState("");
   const [otpverify , setOtpverify] = useState(false);
+
+  const [formData, setFormData] = useState({
+    name: "",
+    gender: "",
+    DOB: "",
+    Age: "",
+    BloodGroup: "",
+    Mobile: "",
+    Email: "",
+    Address : "",   
+  });
+
+
   function getmobile (value)
   {
-      setNumber(value);
+    setFormData({
+      ...formData,
+      Mobile: value, })
       setOtpverify(true);
-      console.log(value);
   }
   
 
@@ -41,7 +54,12 @@ export const Register = () => {
                       <input
                         type="text"
                         name="Name"
-                        id="brand"
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            [e.target.name]: e.target.value,
+                          })
+                        }
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Full Name"
                         required=""
@@ -58,7 +76,12 @@ export const Register = () => {
                       <input
                         type="date"
                         name="DOB"
-                        id="brand"
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            [e.target.name]: e.target.value,
+                          })
+                        }
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Date of Birth"
                         required=""
@@ -74,6 +97,12 @@ export const Register = () => {
                       <select
                         id="category"
                         name="gender"
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            [e.target.name]: e.target.value,
+                          })
+                        }
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       >
                         <option value="Male">Male</option>
@@ -91,7 +120,12 @@ export const Register = () => {
                       <input
                         type="number"
                         name="Age"
-                        id="brand"
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            [e.target.name]: e.target.value,
+                          })
+                        }
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Age"
                         required=""
@@ -106,6 +140,12 @@ export const Register = () => {
                       </label>
                       <input
                         type="text"
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            [e.target.name]: e.target.value,
+                          })
+                        }
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder=" Blood Group"
                         required=""
@@ -121,6 +161,12 @@ export const Register = () => {
                       <input
                         type="email"
                         name="Email"
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            [e.target.name]: e.target.value,
+                          })
+                        }
                         id="name"
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Email Address"
@@ -150,6 +196,12 @@ export const Register = () => {
                         id="description"
                         rows="5"
                         name="Address"
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            [e.target.name]: e.target.value,
+                          })
+                        }
                         className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Address"
                       ></textarea>
