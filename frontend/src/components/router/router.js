@@ -7,14 +7,16 @@ import { Login } from "../pages/login/Login";
 import { Register } from "../pages/login/Register";
 
 
-
+// user routers
 import { UserDashboard } from "../pages/User/UserDashboard";
+import { AddUserAppointment } from "../pages/User/AddUserAppointment";
 
-
-
+// doctor routers
 import { DoctorDashboard } from "../pages/doctor/DoctorDashboard";
 
 
+
+// admin routers
 import { AdminDashboard } from "../pages/admin/AdminDashboard";
 
 function Router() {
@@ -34,6 +36,11 @@ function Router() {
       path: "/",
       element: <App />,
     },
+
+
+    //login routes
+
+
     {
         path: "/login",
         element: <Login />,
@@ -42,15 +49,31 @@ function Router() {
         path: "/register",
         element: <Register />,
       },
+
+      // user routes
+
       {
         path: "/user/dashboard",
         element: <UserDashboard />,
       },
+      {
+        path: "/user/appointment/new",
+        element: <AddUserAppointment />,
+      },
 
+
+
+
+
+      // doctor routes
       {
         path: "/doctor/dashboard",
         element: <DoctorDashboard />,
       },
+
+
+
+      // admin routes
       {
         path: "/admin/dashboard",
         element: <AdminDashboard />,
