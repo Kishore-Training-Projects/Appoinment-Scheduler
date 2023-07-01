@@ -11,7 +11,11 @@ import { Register } from "../pages/login/Register";
 import { UserDashboard } from "../pages/User/UserDashboard";
 import { AddUserAppointment } from "../pages/User/AddUserAppointment";
 import { UserAppointment } from "../pages/User/UserAppointment";
-
+import { UserMedicalRecords } from "../pages/User/UserMedicalRecords";
+import { UserPrescription } from "../pages/User/UserPrescription";
+import { UserDoctor } from "../pages/User/UserDoctor";
+import { UserPayment } from "../pages/User/UserPayment";
+import { UserProfile } from "../pages/User/UserProfile";
 
 // doctor routers
 import { DoctorDashboard } from "../pages/doctor/DoctorDashboard";
@@ -66,7 +70,26 @@ function Router() {
         path: "/user/appointment/new",
         element: <AddUserAppointment />,
       },
-
+      {
+        path: "/user/medicalrecords",
+        element: <UserMedicalRecords />,
+      },
+      {
+        path: "/user/prescription",
+        element: <UserPrescription />,
+      },
+      {
+        path: "/user/doctors",
+        element: <UserDoctor />,
+      },
+      {
+        path: "/user/payments",
+        element: <UserPayment />,
+      },
+      {
+        path: "/user/profile",
+        element: <UserProfile />,
+      },
 
 
 
