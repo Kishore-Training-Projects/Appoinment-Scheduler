@@ -24,6 +24,8 @@ import { DoctorAppointment } from "../pages/doctor/DoctorAppointment";
 import { DoctorMedicalRecords } from "../pages/doctor/DoctorMedicalRecords";
 import { DoctorPrescription } from "../pages/doctor/DoctorPrescritpion";
 import { DoctorLeave } from "../pages/doctor/DoctorLeave";
+import { DoctorProfile } from "../pages/doctor/DoctorProfile";
+
 
 // admin routers
 import { AdminDashboard } from "../pages/admin/AdminDashboard";
@@ -121,6 +123,10 @@ function Router() {
       {
         path: "/doctor/leave/",
         element: <DoctorLeave />,
+      },
+      {
+        path: "/doctor/profile/",
+        element: <DoctorProfile />,
       },
 
 
