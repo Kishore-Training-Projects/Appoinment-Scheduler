@@ -21,8 +21,8 @@ export const AddUserAppointment = () => {
     <>
       <UserSidebar />
 
-      <div class="p-4 bg-gray-100 sm:ml-64">
-        <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
+      <div class="p-2 md:p-4 min-h-screen bg-gray-200 sm:ml-64">
+        <div class=" p-2 md:p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
           {/* bread crumbs  */}
           <div class="flex w-full mb-4 rounded bg-white dark:bg-gray-800">
             <nav
@@ -195,20 +195,7 @@ export const AddUserAppointment = () => {
             </div>
           </div>
 
-          <div class="grid grid-cols-2 gap-4">
-            <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-              <p class="text-2xl text-gray-400 dark:text-gray-500">+</p>
-            </div>
-            <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-              <p class="text-2xl text-gray-400 dark:text-gray-500">+</p>
-            </div>
-            <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-              <p class="text-2xl text-gray-400 dark:text-gray-500">+</p>
-            </div>
-            <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-              <p class="text-2xl text-gray-400 dark:text-gray-500">+</p>
-            </div>
-          </div>
+          
         </div>
       </div>
     </>

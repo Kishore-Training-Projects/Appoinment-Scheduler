@@ -10,6 +10,8 @@ import { Register } from "../pages/login/Register";
 // user routers
 import { UserDashboard } from "../pages/User/UserDashboard";
 import { AddUserAppointment } from "../pages/User/AddUserAppointment";
+import { UserAppointment } from "../pages/User/UserAppointment";
+
 
 // doctor routers
 import { DoctorDashboard } from "../pages/doctor/DoctorDashboard";
@@ -55,6 +57,10 @@ function Router() {
       {
         path: "/user/dashboard",
         element: <UserDashboard />,
+      },
+      {
+        path: "/user/appointment",
+        element: <UserAppointment />,
       },
       {
         path: "/user/appointment/new",
