@@ -1,8 +1,17 @@
 import React from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 export const DoctorSidebar = () => {
+  const navigate = useNavigate();
+
   const [isOpen, setIsOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isuserOpen, setIsuserOpen] = useState(false);
+
+  const usertoggleDropdown = () => {
+    setIsuserOpen(!isuserOpen);
+  };
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -20,56 +29,146 @@ export const DoctorSidebar = () => {
 
   return (
     <>
-      <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-        <div class="px-3 py-3 lg:px-5 lg:pl-3">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center justify-start">
-              <button
-                data-drawer-target="logo-sidebar"
-                data-drawer-toggle="logo-sidebar"
-                onClick={toggleSidebar}
-                aria-controls="logo-sidebar"
-                type="button"
-                class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+      <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-300 px-4 lg:px-6 py-2.5 dark:bg-gray-800 ">
+        <div class="flex flex-wrap justify-between items-center">
+          <div class="flex justify-start items-center">
+            <button
+              data-drawer-target="logo-sidebar"
+              data-drawer-toggle="logo-sidebar"
+              onClick={toggleSidebar}
+              aria-controls="logo-sidebar"
+              type="button"
+              class="mr-2 inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+            >
+              <span class="sr-only">Open sidebar</span>
+              <svg
+                class="w-6 h-6"
+                aria-hidden="true"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                <span class="sr-only">Open sidebar</span>
-                <svg
-                  class="w-6 h-6"
-                  aria-hidden="true"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    clip-rule="evenodd"
-                    fill-rule="evenodd"
-                    d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
-                  ></path>
-                </svg>
-              </button>
-              <a href="https://flowbite.com" class="flex ml-2 md:mr-24">
-                <img
-                  src="https://flowbite.com/docs/images/logo.svg"
-                  class="h-8 mr-3"
-                  alt="FlowBite Logo"
-                />
-                <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">
-                  DoctorDashboard
-                </span>
-              </a>
+                <path
+                  clip-rule="evenodd"
+                  fill-rule="evenodd"
+                  d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
+                ></path>
+              </svg>
+            </button>
+            <a href="https://flowbite.com" class="flex mr-4">
+              <img
+                src="https://flowbite.s3.amazonaws.com/logo.svg"
+                class="mr-3 h-8"
+                alt="FlowBite Logo"
+              />
+              <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+                Flowbite
+              </span>
+            </a>
+          </div>
+          <div className="flex items-center lg:order-2">
+            <button
+              type="button"
+              data-dropdown-toggle="language-dropdown-menu"
+              class="hidden md:block inline-flex items-center font-medium justify-center px-4 py-2 text-sm text-gray-900 dark:text-white rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+            >
+            
+              English (US)
+            </button>
+            {/* dropdown */}
+            <div
+              class="hidden fixed top-11 z-50  my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700"
+              id="language-dropdown-menu"
+            >
+              <ul class="py-2 font-medium" role="none">
+                <li>
+                  <a
+                    href="#"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
+                    role="menuitem"
+                  >
+                    <div class="inline-flex items-center">
+                   🔴 Away 
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
+                    role="menuitem"
+                  >
+                    <div class="inline-flex items-center">
+                     
+                    🟢 Active
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
+                    role="menuitem"
+                  >
+                    <div class="inline-flex items-center">
+                     
+                    🍔 Lunch
+                    </div>
+                  </a>
+                </li>
+               
+              </ul>
             </div>
-            <div class="flex items-center">
-              <div class="flex items-center ml-3">
-                <span className="mr-2 hidden md:block">admin@gmail.com</span>
-
-                <button
-                  type="button"
-                  class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase"
+            <button
+              type="button"
+              className="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+              id="user-menu-button"
+              aria-expanded={isuserOpen}
+              onClick={usertoggleDropdown}
+            >
+              <span className="sr-only">Open user menu</span>
+              <img
+                className="w-8 h-8 rounded-full"
+                src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                alt="user photo"
+              />
+            </button>
+            {isuserOpen && (
+              <div
+                className="fixed top-10 right-1 z-50 my-4 w-56 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
+                id="dropdown"
+              >
+                <div className="py-3 px-4">
+                  <span className="block text-sm font-semibold text-gray-900 dark:text-white">
+                    Neil sims
+                  </span>
+                  <span className="block text-sm font-light text-gray-500 truncate dark:text-gray-400">
+                    name@flowbite.com
+                  </span>
+                </div>
+                <ul
+                  className="py-1 font-light text-gray-500 dark:text-gray-400"
+                  aria-labelledby="dropdown"
                 >
-                  🔐 Logout
-                </button>
+                  {/* <li>
+                    <a
+                      href="#"
+                      className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white"
+                    >
+                      My profile
+                    </a>
+                  </li> */}
+                  <li>
+                    <a
+                      href="#"
+                      className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      Sign out
+                    </a>
+                  </li>
+                </ul>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </nav>
@@ -85,7 +184,7 @@ export const DoctorSidebar = () => {
           <ul class="space-y-2 font-medium">
             <li>
               <a
-                href="#"
+                onClick={() => navigate("/doctor/dashboard/")}
                 class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <svg
@@ -102,9 +201,11 @@ export const DoctorSidebar = () => {
               </a>
             </li>
             <li>
-              <a
-                href="#"
-                class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+              <button
+                type="button"
+                className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                aria-controls="dropdown-example"
+                onClick={toggleDropdown}
               >
                 <svg
                   class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
@@ -121,12 +222,52 @@ export const DoctorSidebar = () => {
                     d="M7 19H1.933A.97.97 0 0 1 1 18V5.828a2 2 0 0 1 .586-1.414l2.828-2.828A2 2 0 0 1 5.828 1h8.239A.97.97 0 0 1 15 2v4M6 1v4a1 1 0 0 1-1 1H1m11 8h4m-2 2v-4m5 2a5 5 0 1 1-10 0 5 5 0 0 1 10 0Z"
                   />
                 </svg>
-                <span class="flex-1 ml-3 whitespace-nowrap">Appointments</span>
-              </a>
+                <span className="flex-1 ml-3 text-left whitespace-nowrap">
+                  Appointment{" "}
+                </span>
+                <svg
+                  className={`w-6 h-6 ${
+                    isdropdownOpen ? "transform rotate-180" : ""
+                  }`}
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  ></path>
+                </svg>
+              </button>
+              <ul
+                id="dropdown-example"
+                className={` py-2 space-y-2 ${
+                  isdropdownOpen ? "block" : "hidden"
+                }`}
+              >
+                <li></li>
+                <li>
+                  <a
+                    onClick={() => navigate("/doctor/appointment/today")}
+                    className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                  >
+                    Today Appointment
+                  </a>
+                </li>
+                <li>
+                  <a
+                    onClick={() => navigate("/doctor/appointment/")}
+                    className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                  >
+                    All Appointments
+                  </a>
+                </li>
+              </ul>
             </li>
             <li>
               <a
-                href="#"
+                onClick={() => navigate("/doctor/medicalrecords/")}
                 class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <svg
@@ -150,79 +291,10 @@ export const DoctorSidebar = () => {
                 </span>
               </a>
             </li>
-            <li>
-              <button
-                type="button"
-                className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                aria-controls="dropdown-example"
-                onClick={toggleDropdown}
-              >
-                <svg
-                  aria-hidden="true"
-                  className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z"
-                    clipRule="evenodd"
-                  ></path>
-                </svg>
-                <span className="flex-1 ml-3 text-left whitespace-nowrap">
-                  E-commerce
-                </span>
-                <svg
-                  className={`w-6 h-6 ${
-                    isdropdownOpen ? "transform rotate-180" : ""
-                  }`}
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  ></path>
-                </svg>
-              </button>
-              <ul
-                id="dropdown-example"
-                className={` py-2 space-y-2 ${
-                  isdropdownOpen ? "block" : "hidden"
-                }`}
-              >
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                  >
-                    Products
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                  >
-                    Billing
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                  >
-                    Invoice
-                  </a>
-                </li>
-              </ul>
-            </li>
+
             <li>
               <a
-                href="#"
+                onClick={() => navigate("/doctor/prescription/")}
                 class="flex items-center p-2  dark:hover:bg-gray-700 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <svg
@@ -245,7 +317,7 @@ export const DoctorSidebar = () => {
             </li>
             <li>
               <a
-                href="#"
+                onClick={() => navigate("/doctor/leave/")}
                 class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <svg
