@@ -5,6 +5,8 @@ import { AdminSidebar } from "../../layout/sidebar/adminsidebar";
 export const AddAdminDoctor = () => {
   const today = new Date().toISOString().split("T")[0]; // Get current date in yyyy-mm-dd format
   const [selectedDate, setSelectedDate] = useState("");
+  const [showModal, setShowModal] = React.useState(false);
+
 
   const handleDateChange = (event) => {
     const selected = new Date(event.target.value);
@@ -97,7 +99,7 @@ export const AddAdminDoctor = () => {
           {/* form */}
           <div class="flex mb-4 rounded bg-white dark:bg-gray-800">
             <div className="w-full p-3 border border-white rounded-lg">
-              <h1 className="text-2xl font-bold mb-6">New Patient</h1>
+              <h1 className="text-2xl font-bold mb-6">New Doctor</h1>
 
               <form>
                 <div className="flex flex-wrap mb-4">
@@ -113,7 +115,7 @@ export const AddAdminDoctor = () => {
                 </div>
                 <div className="flex flex-wrap mb-4">
                   <label htmlFor="date" className="w-full md:w-1/4">
-                    Age :
+                    Designation :
                   </label>
                   <input
                     type="text"
@@ -124,34 +126,19 @@ export const AddAdminDoctor = () => {
                 </div>
                 <div className="flex flex-wrap mb-4">
                   <label htmlFor="date" className="w-full md:w-1/4">
-                    Date of Birth :
+                    Qualification :
                   </label>
                   <input
-                    type="date"
+                    type="text"
                     id="date"
                     name="name"
                     className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
                   />
                 </div>
-                <div className="flex flex-wrap mb-4">
-                  <label htmlFor="date" className="w-full md:w-1/4">
-                    Gender :
-                  </label>
-                  <select
-                    id="date"
-                    name="name"
-                    className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
-                  >
-                    <option defaultChecked>select option</option>
 
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="others">Others</option>
-                  </select>
-                </div>
                 <div className="flex flex-wrap mb-4">
                   <label htmlFor="date" className="w-full md:w-1/4">
-                    Blood Group :
+                    Email Address :
                   </label>
                   <input
                     type="text"
@@ -162,10 +149,10 @@ export const AddAdminDoctor = () => {
                 </div>
                 <div className="flex flex-wrap mb-4">
                   <label htmlFor="date" className="w-full md:w-1/4">
-                    Email :
+                    Password :
                   </label>
                   <input
-                    type="email"
+                    type="password"
                     id="date"
                     name="name"
                     className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
@@ -176,18 +163,18 @@ export const AddAdminDoctor = () => {
                     Mobile Number :
                   </label>
                   <div className="flex w-full md:w-3/4">
-                  <input
-                    type="number"
-                  disabled
-                  placeholder="+91"
-                    className="w-14 mr-2  px-2 py-1 border border-gray-300 rounded"
-                  />
-                  <input
-                    type="number"
-                    id="date"
-                    name="name"
-                    className="w-full  px-2 py-1 border border-gray-300 rounded"
-                  />
+                    <input
+                      type="number"
+                      disabled
+                      placeholder="+91"
+                      className="w-14 mr-2  px-2 py-1 border border-gray-300 rounded"
+                    />
+                    <input
+                      type="number"
+                      id="date"
+                      name="name"
+                      className="w-full  px-2 py-1 border border-gray-300 rounded"
+                    />
                   </div>
                 </div>
                 <div className="flex flex-wrap mb-4">
@@ -213,6 +200,8 @@ export const AddAdminDoctor = () => {
           </div>
         </div>
       </div>
+
+
     </>
   );
 };
