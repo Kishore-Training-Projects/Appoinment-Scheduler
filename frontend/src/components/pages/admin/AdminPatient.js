@@ -1,84 +1,104 @@
-import React from "react";
-import { useState } from "react";
-import { DoctorSidebar } from "../../layout/sidebar/doctorsidebar";
+import React, { useState } from "react";
 import ReactPaginate from "react-paginate";
+import { useNavigate } from "react-router-dom";
 
-export const DoctorLeave = () => {
-  const today = new Date().toISOString().split("T")[0]; // Get current date in yyyy-mm-dd format
 
+import { AdminSidebar } from "../../layout/sidebar/adminsidebar";
+
+export const AdminPatient = () => {
+  const navigate = useNavigate();
 
   const tableData = [
     {
-      doctorName: 'Dr. John Smith',
-      designation: 'Cardiologist',
-      date: '2023-06-28',
-      disease: 'Hypertension',
-      allergy: 'None',
-      prescription: 'Medication X, Medication Y',
-      remark: 'Patient advised to monitor blood pressure regularly.',
+      height: 160,
+      Date: "2023-07-02",
+
+      weight: 70,
+      pressure: 120,
+      temperature: 98.6,
+      remark: "Normal",
+      attenderName: "John Doe"
     },
     {
-      doctorName: 'Dr. Sarah Johnson',
-      designation: 'Dermatologist',
-      date: '2023-06-30',
-      disease: 'Eczema',
-      allergy: 'Penicillin',
-      prescription: 'Cream A, Cream B',
-      remark: 'Patient to avoid exposure to allergens.',
-    }, {
-      doctorName: 'Dr. Emily Lee',
-      designation: 'Pediatrician',
-      date: '2023-06-29',
-      disease: 'Common Cold',
-      allergy: 'None',
-      prescription: 'Antibiotic X, Syrup Y',
-      remark: 'Patient advised to get plenty of rest and drink fluids.',
+      height: 170,
+      weight: 65,
+      Date: "2023-07-02",
+
+      pressure: 130,
+      temperature: 99.1,
+      remark: "Normal",
+      attenderName: "Jane Smith"
     },
     {
-      doctorName: 'Dr. Michael Johnson',
-      designation: 'Orthopedic Surgeon',
-      date: '2023-06-27',
-      disease: 'Fractured Arm',
-      allergy: 'None',
-      prescription: 'Cast applied, Pain medication',
-      remark: 'Patient to follow up after four weeks for cast removal.',
+        height: 160,
+        weight: 70,
+        Date: "2023-07-02",
+
+        pressure: 120,
+        temperature: 98.6,
+        remark: "Normal",
+        attenderName: "John Doe"
+      },
+      {
+        height: 170,
+        weight: 65,
+        Date: "2023-07-02",
+
+        pressure: 130,
+        temperature: 99.1,
+        remark: "Normal",
+        attenderName: "Jane Smith"
+      },
+      {
+        height: 160,
+        weight: 70,
+        pressure: 120,
+        temperature: 98.6,
+        Date: "2023-07-02",
+
+        remark: "Normal",
+        attenderName: "John Doe"
+      },
+      {
+        height: 170,
+        weight: 65,
+        Date: "2023-07-02",
+
+        pressure: 130,
+        temperature: 99.1,
+        remark: "Normal",
+        attenderName: "Jane Smith"
+      },
+    {
+      height: 155,
+      weight: 60,
+      pressure: 115,
+      temperature: 98.2,
+      Date: "2023-07-02",
+
+      remark: "Normal",
+      attenderName: "Michael Johnson"
     },
     {
-      doctorName: 'Dr. Jennifer Davis',
-      designation: 'Gynecologist',
-      date: '2023-06-26',
-      disease: 'Irregular Menstruation',
-      allergy: 'None',
-      prescription: 'Hormone Therapy',
-      remark: 'Patient advised to maintain a healthy lifestyle and exercise regularly.',
+      height: 175,
+      weight: 80,
+      pressure: 140,
+      temperature: 98.9,
+      Date: "2023-07-02",
+
+      remark: "Normal",
+      attenderName: "Emily Davis"
     },
     {
-      doctorName: 'Dr. Robert Anderson',
-      designation: 'Ophthalmologist',
-      date: '2023-06-25',
-      disease: 'Cataracts',
-      allergy: 'None',
-      prescription: 'Cataract Surgery',
-      remark: 'Patient to attend pre-operative consultation before surgery.',
-    },
-    {
-      doctorName: 'Dr. Laura Wilson',
-      designation: 'Psychiatrist',
-      date: '2023-06-24',
-      disease: 'Depression',
-      allergy: 'None',
-      prescription: 'Antidepressant Medication',
-      remark: 'Patient advised to attend therapy sessions regularly.',
-    },
-    {
-      doctorName: 'Dr. Christopher Brown',
-      designation: 'Dentist',
-      date: '2023-06-23',
-      disease: 'Cavity',
-      allergy: 'None',
-      prescription: 'Tooth Filling',
-      remark: 'Patient to maintain regular oral hygiene practices.',
-    },
+      height: 165,
+      weight: 75,
+      pressure: 125,
+      Date: "2023-07-02",
+
+      temperature: 98.4,
+      remark: "Normal",
+      attenderName: "Robert Wilson"
+    }
   ];
 
   const itemsPerPage = 5; // Number of items to display per page
@@ -92,16 +112,9 @@ export const DoctorLeave = () => {
   const offset = currentPage * itemsPerPage;
   const currentPageData = tableData.slice(offset, offset + itemsPerPage);
 
-
-
-
-
-
-
-
   return (
     <>
-      <DoctorSidebar />
+      <AdminSidebar />
 
       <div class="p-2 md:p-4 min-h-screen bg-gray-200 sm:ml-64">
         <div class=" p-2 md:p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
@@ -144,100 +157,25 @@ export const DoctorLeave = () => {
                         clip-rule="evenodd"
                       ></path>
                     </svg>
-                    <a
-                      href="#"
-                      class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2 dark:text-gray-400 dark:hover:text-white"
-                    >
-                      Leave
+                    <a class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2 dark:text-gray-400 dark:hover:text-white">
+                      Patient Details
                     </a>
-                  </div>
-                </li>
-                <li aria-current="page">
-                  <div class="flex items-center">
-                    <svg
-                      aria-hidden="true"
-                      class="w-6 h-6 text-gray-400"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400">
-                      Apply
-                    </span>
                   </div>
                 </li>
               </ol>
             </nav>
           </div>
 
-          {/* form */}
-          <div class="flex mb-4 rounded bg-white dark:bg-gray-800">
-            <div className="w-full p-3 border border-white rounded-lg">
-              <h1 className="text-2xl font-bold mb-6">Doctor Leave Apply</h1>
+    
 
-              <form>
-                <div className="flex flex-wrap mb-4">
-                  <label htmlFor="date" className="w-full md:w-1/4">
-                    From Date:
-                  </label>
-                  <input
-                    type="date"
-                    id="date"
-                    min={today}
-                    className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
-                  />
-                </div>
-
-                <div className="flex flex-wrap mb-4">
-                  <label htmlFor="date" className="w-full md:w-1/4">
-                    To Date:
-                  </label>
-                  <input
-                    type="date"
-                    id="date"
-                    min={today}
-                    className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
-                  />
-                </div>
-
-                <div className="flex flex-wrap mb-4">
-                  <label htmlFor="email" className="w-full md:w-1/4">
-                    Reason:
-                  </label>
-                  <textarea
-                    type="email"
-                    id="email"
-                    row="3"
-                    className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                >
-                  Submit
-                </button>
-              </form>
-            </div>
-          </div>
-
-
-
-   {/* table code */}
-   <div class="flex w-full mb-4 h-full rounded bg-gray-50 dark:bg-gray-800">
+          {/* table code */}
+          <div class="flex w-full mb-4 h-full rounded bg-gray-50 dark:bg-gray-800">
             <section class="bg-gray-50 dark:bg-gray-900 w-full h-full">
               <div class="mx-auto max-w-screen ">
                 <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
                   <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                     <caption class="w-full p-2 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
-                      Doctor Leave Details
+                      Patient Details
                     </caption>
                     <div class="w-full md:w-1/2">
                       <form class="flex items-center">
@@ -270,6 +208,28 @@ export const DoctorLeave = () => {
                         </div>
                       </form>
                     </div>
+                    <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
+                      <button
+                        type="button"
+                        class="flex items-center justify-center text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800"
+                      >
+                        <svg
+                          class="h-3.5 w-3.5 mr-2"
+                          fill="currentColor"
+                          viewbox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                          aria-hidden="true"
+                        >
+                          <path
+                            clip-rule="evenodd"
+                            fill-rule="evenodd"
+                            d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                          />
+                        </svg>
+                        Add Patient
+                      </button>
+                      <div class="flex items-center space-x-3 w-full md:w-auto"></div>
+                    </div>
                   </div>
                   <div class="overflow-x-auto">
                     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -291,17 +251,23 @@ export const DoctorLeave = () => {
                             Sn no
                           </th>
                           <th scope="col" class="px-4 py-3">
-                            Doctor Name
+                            Patient Name
                           </th>
-                          <th scope="col" class="px-4 py-3 ">
-                            from date
-                          </th>
-                          <th scope="col" class="px-4 py-3 ">
-                            To date
-                          </th>
-                                                  
                           <th scope="col" class="px-4 py-3">
-                            Reason
+                            Patient Mobile
+                          </th>
+                          <th scope="col" class="px-4 py-3">
+                            Patient Email
+                          </th>
+                          <th scope="col" class="px-4 py-3">
+                          Patient age
+
+                          </th>
+                          <th scope="col" class="px-4 py-3 ">
+                          Patient bloodGroup
+                          </th>
+                          <th scope="col" class="px-4 py-3 ">
+                          Patient DOB
                           </th>
                           <th scope="col" class="px-4 py-3">
                             Actions
@@ -336,13 +302,14 @@ export const DoctorLeave = () => {
                               scope="row"
                               class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                             >
-                              {row.date}
+                              {row.Date}
                             </th>
-                            <td class="px-4 py-3 text-center ">{row.doctorName}</td>
-                            <td class="px-4 py-3 text-center">{row.designation}</td>
-                            
-
+                            <td class="px-4 py-3 text-center ">{row.height}</td>
+                            <td class="px-4 py-3 text-center">{row.weight}</td>
+                            <td class="px-4 py-3 text-center">{row.pressure}</td>
+                           
                             <td class="px-4 py-3 ">{row.remark}</td>
+                            <td class="px-4 py-3 ">{row.attenderName}</td>
 
                             <td className="px-4 py-3">
                               {" "}
@@ -390,8 +357,6 @@ export const DoctorLeave = () => {
               </div>
             </section>
           </div>
-
-
         </div>
       </div>
     </>

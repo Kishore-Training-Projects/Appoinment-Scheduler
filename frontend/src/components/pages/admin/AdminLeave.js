@@ -1,9 +1,9 @@
 import React from "react";
 import { useState } from "react";
-import { DoctorSidebar } from "../../layout/sidebar/doctorsidebar";
+import { AdminSidebar } from "../../layout/sidebar/adminsidebar";
 import ReactPaginate from "react-paginate";
 
-export const DoctorLeave = () => {
+export const AdminLeave = () => {
   const today = new Date().toISOString().split("T")[0]; // Get current date in yyyy-mm-dd format
 
 
@@ -101,7 +101,7 @@ export const DoctorLeave = () => {
 
   return (
     <>
-      <DoctorSidebar />
+      <AdminSidebar />
 
       <div class="p-2 md:p-4 min-h-screen bg-gray-200 sm:ml-64">
         <div class=" p-2 md:p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
@@ -182,6 +182,26 @@ export const DoctorLeave = () => {
               <h1 className="text-2xl font-bold mb-6">Doctor Leave Apply</h1>
 
               <form>
+                  
+              <div className="flex flex-wrap mb-4 items-center">
+                  <label htmlFor="email" className="w-full md:w-1/4">
+                    Doctor:
+
+                  </label>
+
+                  <div className="flex w-full md:w-3/4">
+                    <input
+                      type="text"
+                      id="username-success"
+                      disabled
+                      className="flex-grow px-2 py-1 border border-gray-300 rounded"
+                    />
+
+                    <button className="ml-3 w-34 text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                      select doctor
+                    </button>
+                  </div>
+                </div>
                 <div className="flex flex-wrap mb-4">
                   <label htmlFor="date" className="w-full md:w-1/4">
                     From Date:

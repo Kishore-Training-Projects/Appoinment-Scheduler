@@ -1,11 +1,11 @@
-import React from "react";
-import { useState } from "react";
-import { DoctorSidebar } from "../../layout/sidebar/doctorsidebar";
+import React, { useState } from "react";
 import ReactPaginate from "react-paginate";
+import { useNavigate } from "react-router-dom";
 
-export const DoctorLeave = () => {
-  const today = new Date().toISOString().split("T")[0]; // Get current date in yyyy-mm-dd format
+import { AdminSidebar } from "../../layout/sidebar/adminsidebar";
 
+export const AdminPrescription = () => {
+  const navigate = useNavigate();
 
   const tableData = [
     {
@@ -92,16 +92,9 @@ export const DoctorLeave = () => {
   const offset = currentPage * itemsPerPage;
   const currentPageData = tableData.slice(offset, offset + itemsPerPage);
 
-
-
-
-
-
-
-
   return (
     <>
-      <DoctorSidebar />
+      <AdminSidebar />
 
       <div class="p-2 md:p-4 min-h-screen bg-gray-200 sm:ml-64">
         <div class=" p-2 md:p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
@@ -144,100 +137,25 @@ export const DoctorLeave = () => {
                         clip-rule="evenodd"
                       ></path>
                     </svg>
-                    <a
-                      href="#"
-                      class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2 dark:text-gray-400 dark:hover:text-white"
-                    >
-                      Leave
+                    <a class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2 dark:text-gray-400 dark:hover:text-white">
+                      Prescription Records
                     </a>
-                  </div>
-                </li>
-                <li aria-current="page">
-                  <div class="flex items-center">
-                    <svg
-                      aria-hidden="true"
-                      class="w-6 h-6 text-gray-400"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400">
-                      Apply
-                    </span>
                   </div>
                 </li>
               </ol>
             </nav>
           </div>
 
-          {/* form */}
-          <div class="flex mb-4 rounded bg-white dark:bg-gray-800">
-            <div className="w-full p-3 border border-white rounded-lg">
-              <h1 className="text-2xl font-bold mb-6">Doctor Leave Apply</h1>
+    
 
-              <form>
-                <div className="flex flex-wrap mb-4">
-                  <label htmlFor="date" className="w-full md:w-1/4">
-                    From Date:
-                  </label>
-                  <input
-                    type="date"
-                    id="date"
-                    min={today}
-                    className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
-                  />
-                </div>
-
-                <div className="flex flex-wrap mb-4">
-                  <label htmlFor="date" className="w-full md:w-1/4">
-                    To Date:
-                  </label>
-                  <input
-                    type="date"
-                    id="date"
-                    min={today}
-                    className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
-                  />
-                </div>
-
-                <div className="flex flex-wrap mb-4">
-                  <label htmlFor="email" className="w-full md:w-1/4">
-                    Reason:
-                  </label>
-                  <textarea
-                    type="email"
-                    id="email"
-                    row="3"
-                    className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                >
-                  Submit
-                </button>
-              </form>
-            </div>
-          </div>
-
-
-
-   {/* table code */}
-   <div class="flex w-full mb-4 h-full rounded bg-gray-50 dark:bg-gray-800">
+          {/* table code */}
+          <div class="flex w-full mb-4 h-full rounded bg-gray-50 dark:bg-gray-800">
             <section class="bg-gray-50 dark:bg-gray-900 w-full h-full">
               <div class="mx-auto max-w-screen ">
                 <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
                   <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                     <caption class="w-full p-2 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
-                      Doctor Leave Details
+                      Prescription Record Details
                     </caption>
                     <div class="w-full md:w-1/2">
                       <form class="flex items-center">
@@ -291,18 +209,21 @@ export const DoctorLeave = () => {
                             Sn no
                           </th>
                           <th scope="col" class="px-4 py-3">
-                            Doctor Name
+                            Date
                           </th>
                           <th scope="col" class="px-4 py-3 ">
-                            from date
+                            Patient Name
                           </th>
                           <th scope="col" class="px-4 py-3 ">
-                            To date
+                            Mobile Number
                           </th>
-                                                  
                           <th scope="col" class="px-4 py-3">
-                            Reason
+                            Disease
                           </th>
+                          <th scope="col" class="px-4 py-3">
+                           Allergy
+                          </th>                         
+                         
                           <th scope="col" class="px-4 py-3">
                             Actions
                           </th>
@@ -340,18 +261,15 @@ export const DoctorLeave = () => {
                             </th>
                             <td class="px-4 py-3 text-center ">{row.doctorName}</td>
                             <td class="px-4 py-3 text-center">{row.designation}</td>
-                            
+                            <td class="px-4 py-3 text-center">{row.disease}</td>
+                            <td class="px-4 py-3 text-center">{row.allergy}</td>
 
-                            <td class="px-4 py-3 ">{row.remark}</td>
 
                             <td className="px-4 py-3">
                               {" "}
                               <div className="flex space-x-2">
                                 <button className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded">
                                   View
-                                </button>
-                                <button className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded">
-                                  Delete
                                 </button>
                               </div>
                             </td>
@@ -390,8 +308,6 @@ export const DoctorLeave = () => {
               </div>
             </section>
           </div>
-
-
         </div>
       </div>
     </>

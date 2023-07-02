@@ -1,84 +1,134 @@
-import React from "react";
-import { useState } from "react";
-import { DoctorSidebar } from "../../layout/sidebar/doctorsidebar";
+import React, { useState } from "react";
 import ReactPaginate from "react-paginate";
+import { useNavigate } from "react-router-dom";
 
-export const DoctorLeave = () => {
-  const today = new Date().toISOString().split("T")[0]; // Get current date in yyyy-mm-dd format
-
+import { AdminSidebar } from "../../layout/sidebar/adminsidebar";
+export const AdminAppointment = () => {
+  const navigate = useNavigate();
 
   const tableData = [
     {
-      doctorName: 'Dr. John Smith',
-      designation: 'Cardiologist',
-      date: '2023-06-28',
-      disease: 'Hypertension',
-      allergy: 'None',
-      prescription: 'Medication X, Medication Y',
-      remark: 'Patient advised to monitor blood pressure regularly.',
+      doctorName: "Dr. John Doe",
+      appointmentDate: "2023-07-01",
+      appointmentTime: "10:00 AM",
+      healthReason: "General Check-up",
+      appointmentStatus: "Confirmed",
+      paymentStatus: "Paid",
     },
     {
-      doctorName: 'Dr. Sarah Johnson',
-      designation: 'Dermatologist',
-      date: '2023-06-30',
-      disease: 'Eczema',
-      allergy: 'Penicillin',
-      prescription: 'Cream A, Cream B',
-      remark: 'Patient to avoid exposure to allergens.',
-    }, {
-      doctorName: 'Dr. Emily Lee',
-      designation: 'Pediatrician',
-      date: '2023-06-29',
-      disease: 'Common Cold',
-      allergy: 'None',
-      prescription: 'Antibiotic X, Syrup Y',
-      remark: 'Patient advised to get plenty of rest and drink fluids.',
+      doctorName: "Dr. Jane Smith",
+      appointmentDate: "2023-07-02",
+      appointmentTime: "11:30 AM",
+      healthReason: "Dental Consultation",
+      appointmentStatus: "Confirmed",
+      paymentStatus: "Pending",
     },
     {
-      doctorName: 'Dr. Michael Johnson',
-      designation: 'Orthopedic Surgeon',
-      date: '2023-06-27',
-      disease: 'Fractured Arm',
-      allergy: 'None',
-      prescription: 'Cast applied, Pain medication',
-      remark: 'Patient to follow up after four weeks for cast removal.',
+      doctorName: "Dr. Mark Johnson",
+      appointmentDate: "2023-07-03",
+      appointmentTime: "2:15 PM",
+      healthReason: "Eye Check-up",
+      appointmentStatus: "Cancelled",
+      paymentStatus: "Not Paid",
     },
     {
-      doctorName: 'Dr. Jennifer Davis',
-      designation: 'Gynecologist',
-      date: '2023-06-26',
-      disease: 'Irregular Menstruation',
-      allergy: 'None',
-      prescription: 'Hormone Therapy',
-      remark: 'Patient advised to maintain a healthy lifestyle and exercise regularly.',
+      doctorName: "Dr. Jane Smith",
+      appointmentDate: "2023-07-02",
+      appointmentTime: "11:30 AM",
+      healthReason: "Dental Consultation",
+      appointmentStatus: "Confirmed",
+      paymentStatus: "Pending",
     },
     {
-      doctorName: 'Dr. Robert Anderson',
-      designation: 'Ophthalmologist',
-      date: '2023-06-25',
-      disease: 'Cataracts',
-      allergy: 'None',
-      prescription: 'Cataract Surgery',
-      remark: 'Patient to attend pre-operative consultation before surgery.',
+      doctorName: "Dr. Mark Johnson",
+      appointmentDate: "2023-07-03",
+      appointmentTime: "2:15 PM",
+      healthReason: "Eye Check-up",
+      appointmentStatus: "Cancelled",
+      paymentStatus: "Not Paid",
     },
     {
-      doctorName: 'Dr. Laura Wilson',
-      designation: 'Psychiatrist',
-      date: '2023-06-24',
-      disease: 'Depression',
-      allergy: 'None',
-      prescription: 'Antidepressant Medication',
-      remark: 'Patient advised to attend therapy sessions regularly.',
+      doctorName: "Dr. Jane Smith",
+      appointmentDate: "2023-07-02",
+      appointmentTime: "11:30 AM",
+      healthReason: "Dental Consultation",
+      appointmentStatus: "Confirmed",
+      paymentStatus: "Pending",
     },
     {
-      doctorName: 'Dr. Christopher Brown',
-      designation: 'Dentist',
-      date: '2023-06-23',
-      disease: 'Cavity',
-      allergy: 'None',
-      prescription: 'Tooth Filling',
-      remark: 'Patient to maintain regular oral hygiene practices.',
+      doctorName: "Dr. Mark Johnson",
+      appointmentDate: "2023-07-03",
+      appointmentTime: "2:15 PM",
+      healthReason: "Eye Check-up",
+      appointmentStatus: "Cancelled",
+      paymentStatus: "Not Paid",
     },
+    {
+      doctorName: "Dr. Jane Smith",
+      appointmentDate: "2023-07-02",
+      appointmentTime: "11:30 AM",
+      healthReason: "Dental Consultation",
+      appointmentStatus: "Confirmed",
+      paymentStatus: "Pending",
+    },
+    {
+      doctorName: "Dr. Mark Johnson",
+      appointmentDate: "2023-07-03",
+      appointmentTime: "2:15 PM",
+      healthReason: "Eye Check-up",
+      appointmentStatus: "Cancelled",
+      paymentStatus: "Not Paid",
+    },
+    {
+      doctorName: "Dr. Jane Smith",
+      appointmentDate: "2023-07-02",
+      appointmentTime: "11:30 AM",
+      healthReason: "Dental Consultation",
+      appointmentStatus: "Confirmed",
+      paymentStatus: "Pending",
+    },
+    {
+      doctorName: "Dr. Mark Johnson",
+      appointmentDate: "2023-07-03",
+      appointmentTime: "2:15 PM",
+      healthReason: "Eye Check-up",
+      appointmentStatus: "Cancelled",
+      paymentStatus: "Not Paid",
+    },
+    {
+      doctorName: "Dr. Jane Smith",
+      appointmentDate: "2023-07-02",
+      appointmentTime: "11:30 AM",
+      healthReason: "Dental Consultation",
+      appointmentStatus: "Confirmed",
+      paymentStatus: "Pending",
+    },
+    {
+      doctorName: "Dr. Mark Johnson",
+      appointmentDate: "2023-07-03",
+      appointmentTime: "2:15 PM",
+      healthReason: "Eye Check-up",
+      appointmentStatus: "Cancelled",
+      paymentStatus: "Not Paid",
+    },
+    {
+      doctorName: "Dr. Jane Smith",
+      appointmentDate: "2023-07-02",
+      appointmentTime: "11:30 AM",
+      healthReason: "Dental Consultation",
+      appointmentStatus: "Confirmed",
+      paymentStatus: "Pending",
+    },
+    {
+      doctorName: "Dr. Mark Johnson",
+      appointmentDate: "2023-07-03",
+      appointmentTime: "2:15 PM",
+      healthReason: "Eye Check-up",
+      appointmentStatus: "Cancelled",
+      paymentStatus: "Not Paid",
+    },
+
+    // Add more appointment objects as needed
   ];
 
   const itemsPerPage = 5; // Number of items to display per page
@@ -92,16 +142,9 @@ export const DoctorLeave = () => {
   const offset = currentPage * itemsPerPage;
   const currentPageData = tableData.slice(offset, offset + itemsPerPage);
 
-
-
-
-
-
-
-
   return (
     <>
-      <DoctorSidebar />
+      <AdminSidebar />
 
       <div class="p-2 md:p-4 min-h-screen bg-gray-200 sm:ml-64">
         <div class=" p-2 md:p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
@@ -144,100 +187,24 @@ export const DoctorLeave = () => {
                         clip-rule="evenodd"
                       ></path>
                     </svg>
-                    <a
-                      href="#"
-                      class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2 dark:text-gray-400 dark:hover:text-white"
-                    >
-                      Leave
+                    <a class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2 dark:text-gray-400 dark:hover:text-white">
+                      Appointments
                     </a>
-                  </div>
-                </li>
-                <li aria-current="page">
-                  <div class="flex items-center">
-                    <svg
-                      aria-hidden="true"
-                      class="w-6 h-6 text-gray-400"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400">
-                      Apply
-                    </span>
                   </div>
                 </li>
               </ol>
             </nav>
           </div>
+       
 
-          {/* form */}
-          <div class="flex mb-4 rounded bg-white dark:bg-gray-800">
-            <div className="w-full p-3 border border-white rounded-lg">
-              <h1 className="text-2xl font-bold mb-6">Doctor Leave Apply</h1>
-
-              <form>
-                <div className="flex flex-wrap mb-4">
-                  <label htmlFor="date" className="w-full md:w-1/4">
-                    From Date:
-                  </label>
-                  <input
-                    type="date"
-                    id="date"
-                    min={today}
-                    className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
-                  />
-                </div>
-
-                <div className="flex flex-wrap mb-4">
-                  <label htmlFor="date" className="w-full md:w-1/4">
-                    To Date:
-                  </label>
-                  <input
-                    type="date"
-                    id="date"
-                    min={today}
-                    className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
-                  />
-                </div>
-
-                <div className="flex flex-wrap mb-4">
-                  <label htmlFor="email" className="w-full md:w-1/4">
-                    Reason:
-                  </label>
-                  <textarea
-                    type="email"
-                    id="email"
-                    row="3"
-                    className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                >
-                  Submit
-                </button>
-              </form>
-            </div>
-          </div>
-
-
-
-   {/* table code */}
-   <div class="flex w-full mb-4 h-full rounded bg-gray-50 dark:bg-gray-800">
+          {/* table code */}
+          <div class="flex w-full mb-4 h-full rounded bg-gray-50 dark:bg-gray-800">
             <section class="bg-gray-50 dark:bg-gray-900 w-full h-full">
               <div class="mx-auto max-w-screen ">
                 <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
                   <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                     <caption class="w-full p-2 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
-                      Doctor Leave Details
+                      Appointment Details
                     </caption>
                     <div class="w-full md:w-1/2">
                       <form class="flex items-center">
@@ -270,6 +237,10 @@ export const DoctorLeave = () => {
                         </div>
                       </form>
                     </div>
+                    <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
+        
+                      <div class="flex items-center space-x-3 w-full md:w-auto"></div>
+                    </div>
                   </div>
                   <div class="overflow-x-auto">
                     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -288,21 +259,30 @@ export const DoctorLeave = () => {
                             </div>
                           </th>
                           <th scope="col" class="px-4 py-3">
-                            Sn no
+                            Patient Name
                           </th>
                           <th scope="col" class="px-4 py-3">
-                            Doctor Name
+                            Patient Mobile
                           </th>
                           <th scope="col" class="px-4 py-3 ">
-                            from date
+                            Appointment Date
                           </th>
-                          <th scope="col" class="px-4 py-3 ">
-                            To date
-                          </th>
-                                                  
                           <th scope="col" class="px-4 py-3">
-                            Reason
+                            Appointment time
                           </th>
+
+                          <th scope="col" class="px-4 py-3">
+                            Appointment status
+                          </th>
+                          <th scope="col" class="px-4 py-3">
+                            Record status
+                          </th>
+
+                         
+                          <th scope="col" class="px-4 py-3">
+                            Payment Status
+                          </th>
+                          
                           <th scope="col" class="px-4 py-3">
                             Actions
                           </th>
@@ -330,20 +310,19 @@ export const DoctorLeave = () => {
                                 </label>
                               </div>
                             </td>
-                            <td class="px-4 py-3 ">{index+1}</td>
-
                             <th
                               scope="row"
                               class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                             >
-                              {row.date}
+                              {row.doctorName}
                             </th>
-                            <td class="px-4 py-3 text-center ">{row.doctorName}</td>
-                            <td class="px-4 py-3 text-center">{row.designation}</td>
-                            
+                            <td class="px-4 py-3 ">{row.appointmentDate}</td>
+                            <td class="px-4 py-3 ">{row.appointmentTime}</td>
+                            <td class="px-4 py-3 ">{row.appointmentStatus}</td>
+                            <td class="px-4 py-3 ">{row.paymentStatus}</td>
+                            <td class="px-4 py-3 ">{row.paymentStatus}</td>
 
-                            <td class="px-4 py-3 ">{row.remark}</td>
-
+                            <td class="px-4 py-3 ">{row.healthReason}</td>
                             <td className="px-4 py-3">
                               {" "}
                               <div className="flex space-x-2">
@@ -351,7 +330,7 @@ export const DoctorLeave = () => {
                                   View
                                 </button>
                                 <button className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded">
-                                  Delete
+                                  Cancel
                                 </button>
                               </div>
                             </td>
@@ -390,8 +369,6 @@ export const DoctorLeave = () => {
               </div>
             </section>
           </div>
-
-
         </div>
       </div>
     </>
