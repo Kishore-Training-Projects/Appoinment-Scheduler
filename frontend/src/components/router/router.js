@@ -24,9 +24,21 @@ import { DoctorAppointment } from "../pages/doctor/DoctorAppointment";
 import { DoctorMedicalRecords } from "../pages/doctor/DoctorMedicalRecords";
 import { DoctorPrescription } from "../pages/doctor/DoctorPrescritpion";
 import { DoctorLeave } from "../pages/doctor/DoctorLeave";
+import { DoctorProfile } from "../pages/doctor/DoctorProfile";
+
 
 // admin routers
 import { AdminDashboard } from "../pages/admin/AdminDashboard";
+import { AddAdminAppointment } from "../pages/admin/AddAdminAppointment";
+import { AdminAppointment } from "../pages/admin/AdminAppointment";
+import { TodayAdminAppointment } from "../pages/admin/TodayAdminAppointment";
+import { AdminDoctor } from "../pages/admin/AdminDoctor";
+import { AdminPatient } from "../pages/admin/AdminPatient";
+import { AdminMedicalRecords } from "../pages/admin/AdminMedicalRecords";
+import { AdminPrescription } from "../pages/admin/AdminPrescription";
+import { AdminLeave } from "../pages/admin/AdminLeave";
+import { AddAdminPatient } from "../pages/admin/AddAdminPatient";
+import { AddAdminDoctor } from "../pages/admin/AddAdminDoctor";
 
 function Router() {
     return (
@@ -122,6 +134,10 @@ function Router() {
         path: "/doctor/leave/",
         element: <DoctorLeave />,
       },
+      {
+        path: "/doctor/profile/",
+        element: <DoctorProfile />,
+      },
 
 
 
@@ -130,6 +146,48 @@ function Router() {
         path: "/admin/dashboard",
         element: <AdminDashboard />,
       },
+      {
+        path: "/admin/appointment/new",
+        element: <AddAdminAppointment />,
+      },
+      {
+        path: "/admin/appointment/today",
+        element: <TodayAdminAppointment />,
+      },
+      {
+        path: "/admin/appointment/",
+        element: <AdminAppointment />,
+      },
+      {
+        path: "/admin/doctor/",
+        element: <AdminDoctor />,
+      },
+      {
+        path: "/admin/patient/",
+        element: <AdminPatient />,
+      },
+      {
+        path: "/admin/medicalrecords/",
+        element: <AdminMedicalRecords />,
+      },
+      {
+        path: "/admin/prescription/",
+        element: <AdminPrescription />,
+      },
+  
+      {
+        path: "/admin/leave/",
+        element: <AdminLeave />,
+      },
+      {
+        path: "/admin/patient/new",
+        element: <AddAdminPatient />,
+      },
+      {
+        path: "/admin/doctor/new",
+        element: <AddAdminDoctor />,
+      },
+  
   
   ];
   

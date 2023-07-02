@@ -1,84 +1,134 @@
-import React from "react";
-import { useState } from "react";
-import { DoctorSidebar } from "../../layout/sidebar/doctorsidebar";
+import React, { useState } from "react";
 import ReactPaginate from "react-paginate";
+import { useNavigate } from "react-router-dom";
 
-export const DoctorLeave = () => {
-  const today = new Date().toISOString().split("T")[0]; // Get current date in yyyy-mm-dd format
-
+import { AdminSidebar } from "../../layout/sidebar/adminsidebar";
+export const TodayAdminAppointment = () => {
+  const navigate = useNavigate();
 
   const tableData = [
     {
-      doctorName: 'Dr. John Smith',
-      designation: 'Cardiologist',
-      date: '2023-06-28',
-      disease: 'Hypertension',
-      allergy: 'None',
-      prescription: 'Medication X, Medication Y',
-      remark: 'Patient advised to monitor blood pressure regularly.',
+      doctorName: "Dr. John Doe",
+      appointmentDate: "2023-07-01",
+      appointmentTime: "10:00 AM",
+      healthReason: "General Check-up",
+      appointmentStatus: "Confirmed",
+      paymentStatus: "Paid",
     },
     {
-      doctorName: 'Dr. Sarah Johnson',
-      designation: 'Dermatologist',
-      date: '2023-06-30',
-      disease: 'Eczema',
-      allergy: 'Penicillin',
-      prescription: 'Cream A, Cream B',
-      remark: 'Patient to avoid exposure to allergens.',
-    }, {
-      doctorName: 'Dr. Emily Lee',
-      designation: 'Pediatrician',
-      date: '2023-06-29',
-      disease: 'Common Cold',
-      allergy: 'None',
-      prescription: 'Antibiotic X, Syrup Y',
-      remark: 'Patient advised to get plenty of rest and drink fluids.',
+      doctorName: "Dr. Jane Smith",
+      appointmentDate: "2023-07-02",
+      appointmentTime: "11:30 AM",
+      healthReason: "Dental Consultation",
+      appointmentStatus: "Confirmed",
+      paymentStatus: "Pending",
     },
     {
-      doctorName: 'Dr. Michael Johnson',
-      designation: 'Orthopedic Surgeon',
-      date: '2023-06-27',
-      disease: 'Fractured Arm',
-      allergy: 'None',
-      prescription: 'Cast applied, Pain medication',
-      remark: 'Patient to follow up after four weeks for cast removal.',
+      doctorName: "Dr. Mark Johnson",
+      appointmentDate: "2023-07-03",
+      appointmentTime: "2:15 PM",
+      healthReason: "Eye Check-up",
+      appointmentStatus: "Cancelled",
+      paymentStatus: "Not Paid",
     },
     {
-      doctorName: 'Dr. Jennifer Davis',
-      designation: 'Gynecologist',
-      date: '2023-06-26',
-      disease: 'Irregular Menstruation',
-      allergy: 'None',
-      prescription: 'Hormone Therapy',
-      remark: 'Patient advised to maintain a healthy lifestyle and exercise regularly.',
+      doctorName: "Dr. Jane Smith",
+      appointmentDate: "2023-07-02",
+      appointmentTime: "11:30 AM",
+      healthReason: "Dental Consultation",
+      appointmentStatus: "Confirmed",
+      paymentStatus: "Pending",
     },
     {
-      doctorName: 'Dr. Robert Anderson',
-      designation: 'Ophthalmologist',
-      date: '2023-06-25',
-      disease: 'Cataracts',
-      allergy: 'None',
-      prescription: 'Cataract Surgery',
-      remark: 'Patient to attend pre-operative consultation before surgery.',
+      doctorName: "Dr. Mark Johnson",
+      appointmentDate: "2023-07-03",
+      appointmentTime: "2:15 PM",
+      healthReason: "Eye Check-up",
+      appointmentStatus: "Cancelled",
+      paymentStatus: "Not Paid",
     },
     {
-      doctorName: 'Dr. Laura Wilson',
-      designation: 'Psychiatrist',
-      date: '2023-06-24',
-      disease: 'Depression',
-      allergy: 'None',
-      prescription: 'Antidepressant Medication',
-      remark: 'Patient advised to attend therapy sessions regularly.',
+      doctorName: "Dr. Jane Smith",
+      appointmentDate: "2023-07-02",
+      appointmentTime: "11:30 AM",
+      healthReason: "Dental Consultation",
+      appointmentStatus: "Confirmed",
+      paymentStatus: "Pending",
     },
     {
-      doctorName: 'Dr. Christopher Brown',
-      designation: 'Dentist',
-      date: '2023-06-23',
-      disease: 'Cavity',
-      allergy: 'None',
-      prescription: 'Tooth Filling',
-      remark: 'Patient to maintain regular oral hygiene practices.',
+      doctorName: "Dr. Mark Johnson",
+      appointmentDate: "2023-07-03",
+      appointmentTime: "2:15 PM",
+      healthReason: "Eye Check-up",
+      appointmentStatus: "Cancelled",
+      paymentStatus: "Not Paid",
     },
+    {
+      doctorName: "Dr. Jane Smith",
+      appointmentDate: "2023-07-02",
+      appointmentTime: "11:30 AM",
+      healthReason: "Dental Consultation",
+      appointmentStatus: "Confirmed",
+      paymentStatus: "Pending",
+    },
+    {
+      doctorName: "Dr. Mark Johnson",
+      appointmentDate: "2023-07-03",
+      appointmentTime: "2:15 PM",
+      healthReason: "Eye Check-up",
+      appointmentStatus: "Cancelled",
+      paymentStatus: "Not Paid",
+    },
+    {
+      doctorName: "Dr. Jane Smith",
+      appointmentDate: "2023-07-02",
+      appointmentTime: "11:30 AM",
+      healthReason: "Dental Consultation",
+      appointmentStatus: "Confirmed",
+      paymentStatus: "Pending",
+    },
+    {
+      doctorName: "Dr. Mark Johnson",
+      appointmentDate: "2023-07-03",
+      appointmentTime: "2:15 PM",
+      healthReason: "Eye Check-up",
+      appointmentStatus: "Cancelled",
+      paymentStatus: "Not Paid",
+    },
+    {
+      doctorName: "Dr. Jane Smith",
+      appointmentDate: "2023-07-02",
+      appointmentTime: "11:30 AM",
+      healthReason: "Dental Consultation",
+      appointmentStatus: "Confirmed",
+      paymentStatus: "Pending",
+    },
+    {
+      doctorName: "Dr. Mark Johnson",
+      appointmentDate: "2023-07-03",
+      appointmentTime: "2:15 PM",
+      healthReason: "Eye Check-up",
+      appointmentStatus: "Cancelled",
+      paymentStatus: "Not Paid",
+    },
+    {
+      doctorName: "Dr. Jane Smith",
+      appointmentDate: "2023-07-02",
+      appointmentTime: "11:30 AM",
+      healthReason: "Dental Consultation",
+      appointmentStatus: "Confirmed",
+      paymentStatus: "Pending",
+    },
+    {
+      doctorName: "Dr. Mark Johnson",
+      appointmentDate: "2023-07-03",
+      appointmentTime: "2:15 PM",
+      healthReason: "Eye Check-up",
+      appointmentStatus: "Cancelled",
+      paymentStatus: "Not Paid",
+    },
+
+    // Add more appointment objects as needed
   ];
 
   const itemsPerPage = 5; // Number of items to display per page
@@ -92,16 +142,9 @@ export const DoctorLeave = () => {
   const offset = currentPage * itemsPerPage;
   const currentPageData = tableData.slice(offset, offset + itemsPerPage);
 
-
-
-
-
-
-
-
   return (
     <>
-      <DoctorSidebar />
+      <AdminSidebar />
 
       <div class="p-2 md:p-4 min-h-screen bg-gray-200 sm:ml-64">
         <div class=" p-2 md:p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
@@ -144,100 +187,23 @@ export const DoctorLeave = () => {
                         clip-rule="evenodd"
                       ></path>
                     </svg>
-                    <a
-                      href="#"
-                      class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2 dark:text-gray-400 dark:hover:text-white"
-                    >
-                      Leave
+                    <a class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2 dark:text-gray-400 dark:hover:text-white">
+                      Appointments
                     </a>
-                  </div>
-                </li>
-                <li aria-current="page">
-                  <div class="flex items-center">
-                    <svg
-                      aria-hidden="true"
-                      class="w-6 h-6 text-gray-400"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400">
-                      Apply
-                    </span>
                   </div>
                 </li>
               </ol>
             </nav>
           </div>
 
-          {/* form */}
-          <div class="flex mb-4 rounded bg-white dark:bg-gray-800">
-            <div className="w-full p-3 border border-white rounded-lg">
-              <h1 className="text-2xl font-bold mb-6">Doctor Leave Apply</h1>
-
-              <form>
-                <div className="flex flex-wrap mb-4">
-                  <label htmlFor="date" className="w-full md:w-1/4">
-                    From Date:
-                  </label>
-                  <input
-                    type="date"
-                    id="date"
-                    min={today}
-                    className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
-                  />
-                </div>
-
-                <div className="flex flex-wrap mb-4">
-                  <label htmlFor="date" className="w-full md:w-1/4">
-                    To Date:
-                  </label>
-                  <input
-                    type="date"
-                    id="date"
-                    min={today}
-                    className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
-                  />
-                </div>
-
-                <div className="flex flex-wrap mb-4">
-                  <label htmlFor="email" className="w-full md:w-1/4">
-                    Reason:
-                  </label>
-                  <textarea
-                    type="email"
-                    id="email"
-                    row="3"
-                    className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                >
-                  Submit
-                </button>
-              </form>
-            </div>
-          </div>
-
-
-
-   {/* table code */}
-   <div class="flex w-full mb-4 h-full rounded bg-gray-50 dark:bg-gray-800">
+          {/* table code */}
+          <div class="flex w-full mb-4 h-full rounded bg-gray-50 dark:bg-gray-800">
             <section class="bg-gray-50 dark:bg-gray-900 w-full h-full">
               <div class="mx-auto max-w-screen ">
                 <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
                   <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                     <caption class="w-full p-2 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
-                      Doctor Leave Details
+                      Today Appointment Details
                     </caption>
                     <div class="w-full md:w-1/2">
                       <form class="flex items-center">
@@ -270,6 +236,9 @@ export const DoctorLeave = () => {
                         </div>
                       </form>
                     </div>
+                    <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
+                      <div class="flex items-center space-x-3 w-full md:w-auto"></div>
+                    </div>
                   </div>
                   <div class="overflow-x-auto">
                     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -288,21 +257,29 @@ export const DoctorLeave = () => {
                             </div>
                           </th>
                           <th scope="col" class="px-4 py-3">
-                            Sn no
+                            Patient Name
                           </th>
                           <th scope="col" class="px-4 py-3">
-                            Doctor Name
+                            Patient Mobile
                           </th>
                           <th scope="col" class="px-4 py-3 ">
-                            from date
+                            Appointment Date
                           </th>
-                          <th scope="col" class="px-4 py-3 ">
-                            To date
-                          </th>
-                                                  
                           <th scope="col" class="px-4 py-3">
-                            Reason
+                            Appointment time
                           </th>
+
+                          <th scope="col" class="px-4 py-3">
+                            Appointment status
+                          </th>
+                          <th scope="col" class="px-4 py-3">
+                            Record status
+                          </th>
+
+                          <th scope="col" class="px-4 py-3">
+                            Payment Status
+                          </th>
+
                           <th scope="col" class="px-4 py-3">
                             Actions
                           </th>
@@ -330,28 +307,104 @@ export const DoctorLeave = () => {
                                 </label>
                               </div>
                             </td>
-                            <td class="px-4 py-3 ">{index+1}</td>
-
                             <th
                               scope="row"
                               class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                             >
-                              {row.date}
+                              {row.doctorName}
                             </th>
-                            <td class="px-4 py-3 text-center ">{row.doctorName}</td>
-                            <td class="px-4 py-3 text-center">{row.designation}</td>
-                            
+                            <td class="px-4 py-3 ">{row.appointmentDate}</td>
+                            <td class="px-4 py-3 ">{row.appointmentTime}</td>
+                            <td class="px-4 py-3 ">{row.appointmentStatus}</td>
+                            <td class="px-4 py-3 ">{row.paymentStatus}</td>
+                            <td class="px-4 py-3 ">{row.paymentStatus}</td>
 
-                            <td class="px-4 py-3 ">{row.remark}</td>
-
+                            <td class="px-4 py-3 ">{row.healthReason}</td>
                             <td className="px-4 py-3">
                               {" "}
                               <div className="flex space-x-2">
+                                <button
+                                  className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded"
+                                  data-tooltip-target="tooltip-default"
+                                >
+                                  <div
+                                    id="tooltip-default"
+                                    role="tooltip"
+                                    class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+                                  >
+                                    Tooltip content
+                                    <div
+                                      class="tooltip-arrow"
+                                      data-popper-arrow
+                                    ></div>
+                                  </div>
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.5"
+                                    stroke="currentColor"
+                                    class="w-6 h-6"
+                                  >
+                                    <path
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 00-1.883 2.542l.857 6a2.25 2.25 0 002.227 1.932H19.05a2.25 2.25 0 002.227-1.932l.857-6a2.25 2.25 0 00-1.883-2.542m-16.5 0V6A2.25 2.25 0 016 3.75h3.879a1.5 1.5 0 011.06.44l2.122 2.12a1.5 1.5 0 001.06.44H18A2.25 2.25 0 0120.25 9v.776"
+                                    />
+                                  </svg>
+                                </button>
+                                <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.5"
+                                    stroke="currentColor"
+                                    class="w-6 h-6"
+                                  >
+                                    <path
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"
+                                    />
+                                  </svg>
+                                </button>
                                 <button className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded">
-                                  View
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.5"
+                                    stroke="currentColor"
+                                    class="w-6 h-6"
+                                  >
+                                    <path
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"
+                                    />
+                                    <path
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                                    />
+                                  </svg>
                                 </button>
                                 <button className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded">
-                                  Delete
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.5"
+                                    stroke="currentColor"
+                                    class="w-6 h-6"
+                                  >
+                                    <path
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      d="M6 18L18 6M6 6l12 12"
+                                    />
+                                  </svg>
                                 </button>
                               </div>
                             </td>
@@ -390,8 +443,6 @@ export const DoctorLeave = () => {
               </div>
             </section>
           </div>
-
-
         </div>
       </div>
     </>

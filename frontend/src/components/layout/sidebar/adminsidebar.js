@@ -1,7 +1,10 @@
 import React from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const AdminSidebar = () => {
+  const navigate = useNavigate();
+
   const [isOpen, setIsOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -86,7 +89,7 @@ export const AdminSidebar = () => {
           <ul class="space-y-2 font-medium">
             <li>
               <a
-                href="#"
+                onClick={() => navigate("/admin/dashboard/")}
                 class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <svg
@@ -103,9 +106,11 @@ export const AdminSidebar = () => {
               </a>
             </li>
             <li>
-              <a
-                href="#"
-                class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+              <button
+                type="button"
+                className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                aria-controls="dropdown-example"
+                onClick={toggleDropdown}
               >
                 <svg
                   class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
@@ -122,12 +127,60 @@ export const AdminSidebar = () => {
                     d="M7 19H1.933A.97.97 0 0 1 1 18V5.828a2 2 0 0 1 .586-1.414l2.828-2.828A2 2 0 0 1 5.828 1h8.239A.97.97 0 0 1 15 2v4M6 1v4a1 1 0 0 1-1 1H1m11 8h4m-2 2v-4m5 2a5 5 0 1 1-10 0 5 5 0 0 1 10 0Z"
                   />
                 </svg>
-                <span class="flex-1 ml-3 whitespace-nowrap">Appointments</span>
-              </a>
+                <span className="flex-1 ml-3 text-left whitespace-nowrap">
+                  Appointment{" "}
+                </span>
+                <svg
+                  className={`w-6 h-6 ${
+                    isdropdownOpen ? "transform rotate-180" : ""
+                  }`}
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  ></path>
+                </svg>
+              </button>
+              <ul
+                id="dropdown-example"
+                className={` py-2 space-y-2 ${
+                  isdropdownOpen ? "block" : "hidden"
+                }`}
+              >
+                <li></li>
+                <li>
+                  <a
+                    onClick={() => navigate("/admin/appointment/new")}
+                    className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                  >
+                    New Appointment
+                  </a>
+                </li>
+                <li>
+                  <a
+                    onClick={() => navigate("/admin/appointment/today")}
+                    className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                  >
+                    Today Appointments
+                  </a>
+                </li>
+                <li>
+                  <a
+                    onClick={() => navigate("/admin/appointment/")}
+                    className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                  >
+                    All Appointments
+                  </a>
+                </li>
+              </ul>
             </li>
             <li>
               <a
-                href="#"
+                onClick={() => navigate("/admin/doctor/")}
                 class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <svg
@@ -143,7 +196,7 @@ export const AdminSidebar = () => {
             </li>
             <li>
               <a
-                href="#"
+                onClick={() => navigate("/admin/patient")}
                 class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <svg
@@ -166,7 +219,7 @@ export const AdminSidebar = () => {
             </li>
             <li>
               <a
-                href="#"
+                onClick={() => navigate("/admin/medicalrecords")}
                 class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <svg
@@ -301,7 +354,7 @@ export const AdminSidebar = () => {
             </li>
             <li>
               <a
-                href="#"
+                onClick={() => navigate("/admin/prescription")}
                 class="flex items-center p-2  dark:hover:bg-gray-700 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <svg
@@ -324,7 +377,7 @@ export const AdminSidebar = () => {
             </li>
             <li>
               <a
-                href="#"
+                onClick={() => navigate("/admin/leave")}
                 class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <svg

@@ -1,83 +1,66 @@
-import React from "react";
-import { useState } from "react";
-import { DoctorSidebar } from "../../layout/sidebar/doctorsidebar";
+import React, { useState } from "react";
+
 import ReactPaginate from "react-paginate";
 
-export const DoctorLeave = () => {
-  const today = new Date().toISOString().split("T")[0]; // Get current date in yyyy-mm-dd format
+export const AdminPatientSearch = () => {
 
-
+    
   const tableData = [
     {
       doctorName: 'Dr. John Smith',
       designation: 'Cardiologist',
-      date: '2023-06-28',
-      disease: 'Hypertension',
-      allergy: 'None',
-      prescription: 'Medication X, Medication Y',
-      remark: 'Patient advised to monitor blood pressure regularly.',
+      qualification: 'MD, FACC',
+      mobile: '+1 123 456 7890',
+      status: 'Active',
     },
     {
       doctorName: 'Dr. Sarah Johnson',
       designation: 'Dermatologist',
-      date: '2023-06-30',
-      disease: 'Eczema',
-      allergy: 'Penicillin',
-      prescription: 'Cream A, Cream B',
-      remark: 'Patient to avoid exposure to allergens.',
-    }, {
+      qualification: 'MD, FAAD',
+      mobile: '+1 234 567 8901',
+      status: 'Active',
+    },
+    {
       doctorName: 'Dr. Emily Lee',
       designation: 'Pediatrician',
-      date: '2023-06-29',
-      disease: 'Common Cold',
-      allergy: 'None',
-      prescription: 'Antibiotic X, Syrup Y',
-      remark: 'Patient advised to get plenty of rest and drink fluids.',
+      qualification: 'MD, FAAP',
+      mobile: '+1 345 678 9012',
+      status: 'Inactive',
     },
     {
       doctorName: 'Dr. Michael Johnson',
       designation: 'Orthopedic Surgeon',
-      date: '2023-06-27',
-      disease: 'Fractured Arm',
-      allergy: 'None',
-      prescription: 'Cast applied, Pain medication',
-      remark: 'Patient to follow up after four weeks for cast removal.',
+      qualification: 'MD, FRCSC',
+      mobile: '+1 456 789 0123',
+      status: 'Active',
     },
     {
       doctorName: 'Dr. Jennifer Davis',
       designation: 'Gynecologist',
-      date: '2023-06-26',
-      disease: 'Irregular Menstruation',
-      allergy: 'None',
-      prescription: 'Hormone Therapy',
-      remark: 'Patient advised to maintain a healthy lifestyle and exercise regularly.',
+      qualification: 'MD, FACOG',
+      mobile: '+1 567 890 1234',
+      status: 'Active',
     },
     {
       doctorName: 'Dr. Robert Anderson',
       designation: 'Ophthalmologist',
-      date: '2023-06-25',
-      disease: 'Cataracts',
-      allergy: 'None',
-      prescription: 'Cataract Surgery',
-      remark: 'Patient to attend pre-operative consultation before surgery.',
+      qualification: 'MD, FRCS',
+      mobile: '+1 678 901 2345',
+      status: 'Inactive',
     },
     {
       doctorName: 'Dr. Laura Wilson',
       designation: 'Psychiatrist',
-      date: '2023-06-24',
-      disease: 'Depression',
-      allergy: 'None',
-      prescription: 'Antidepressant Medication',
-      remark: 'Patient advised to attend therapy sessions regularly.',
+      qualification: 'MD, FAPA',
+      mobile: '+1 789 012 3456',
+      status: 'Active',
     },
     {
       doctorName: 'Dr. Christopher Brown',
       designation: 'Dentist',
-      date: '2023-06-23',
-      disease: 'Cavity',
-      allergy: 'None',
-      prescription: 'Tooth Filling',
-      remark: 'Patient to maintain regular oral hygiene practices.',
+      qualification: 'DDS',
+      mobile: '+1 890 123 4567',
+      status: 'Active',
     },
   ];
 
@@ -93,151 +76,15 @@ export const DoctorLeave = () => {
   const currentPageData = tableData.slice(offset, offset + itemsPerPage);
 
 
-
-
-
-
-
-
-  return (
-    <>
-      <DoctorSidebar />
-
-      <div class="p-2 md:p-4 min-h-screen bg-gray-200 sm:ml-64">
-        <div class=" p-2 md:p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
-          {/* bread crumbs  */}
-          <div class="flex w-full mb-4 rounded bg-white dark:bg-gray-800">
-            <nav
-              class="flex w-full px-5 py-3 text-gray-700 border border-white rounded-lg bg-white dark:bg-gray-800 dark:border-gray-700"
-              aria-label="Breadcrumb"
-            >
-              <ol class="inline-flex items-center space-x-1 md:space-x-3">
-                <li class="inline-flex items-center">
-                  <a
-                    href="#"
-                    class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      class="w-4 h-4 mr-2"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
-                    </svg>
-                    Dashboard
-                  </a>
-                </li>
-                <li>
-                  <div class="flex items-center">
-                    <svg
-                      aria-hidden="true"
-                      class="w-6 h-6 text-gray-400"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    <a
-                      href="#"
-                      class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2 dark:text-gray-400 dark:hover:text-white"
-                    >
-                      Leave
-                    </a>
-                  </div>
-                </li>
-                <li aria-current="page">
-                  <div class="flex items-center">
-                    <svg
-                      aria-hidden="true"
-                      class="w-6 h-6 text-gray-400"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400">
-                      Apply
-                    </span>
-                  </div>
-                </li>
-              </ol>
-            </nav>
-          </div>
-
-          {/* form */}
-          <div class="flex mb-4 rounded bg-white dark:bg-gray-800">
-            <div className="w-full p-3 border border-white rounded-lg">
-              <h1 className="text-2xl font-bold mb-6">Doctor Leave Apply</h1>
-
-              <form>
-                <div className="flex flex-wrap mb-4">
-                  <label htmlFor="date" className="w-full md:w-1/4">
-                    From Date:
-                  </label>
-                  <input
-                    type="date"
-                    id="date"
-                    min={today}
-                    className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
-                  />
-                </div>
-
-                <div className="flex flex-wrap mb-4">
-                  <label htmlFor="date" className="w-full md:w-1/4">
-                    To Date:
-                  </label>
-                  <input
-                    type="date"
-                    id="date"
-                    min={today}
-                    className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
-                  />
-                </div>
-
-                <div className="flex flex-wrap mb-4">
-                  <label htmlFor="email" className="w-full md:w-1/4">
-                    Reason:
-                  </label>
-                  <textarea
-                    type="email"
-                    id="email"
-                    row="3"
-                    className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                >
-                  Submit
-                </button>
-              </form>
-            </div>
-          </div>
-
-
-
-   {/* table code */}
-   <div class="flex w-full mb-4 h-full rounded bg-gray-50 dark:bg-gray-800">
+    return(
+        <>
+           <div class="flex w-full mb-4 h-full rounded bg-gray-50 dark:bg-gray-800">
             <section class="bg-gray-50 dark:bg-gray-900 w-full h-full">
               <div class="mx-auto max-w-screen ">
                 <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
                   <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                     <caption class="w-full p-2 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
-                      Doctor Leave Details
+                      Patient Details
                     </caption>
                     <div class="w-full md:w-1/2">
                       <form class="flex items-center">
@@ -270,6 +117,9 @@ export const DoctorLeave = () => {
                         </div>
                       </form>
                     </div>
+                    <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
+                      
+                    </div>
                   </div>
                   <div class="overflow-x-auto">
                     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -287,22 +137,21 @@ export const DoctorLeave = () => {
                               </label>
                             </div>
                           </th>
-                          <th scope="col" class="px-4 py-3">
-                            Sn no
-                          </th>
+                         
                           <th scope="col" class="px-4 py-3">
                             Doctor Name
                           </th>
                           <th scope="col" class="px-4 py-3 ">
-                            from date
+                            Doctor Designation
                           </th>
-                          <th scope="col" class="px-4 py-3 ">
-                            To date
-                          </th>
-                                                  
+                          
                           <th scope="col" class="px-4 py-3">
-                            Reason
+                            Doctor Email
                           </th>
+                          
+                          <th scope="col" class="px-4 py-3">
+                            Doctor Status
+                          </th>                          
                           <th scope="col" class="px-4 py-3">
                             Actions
                           </th>
@@ -330,29 +179,26 @@ export const DoctorLeave = () => {
                                 </label>
                               </div>
                             </td>
-                            <td class="px-4 py-3 ">{index+1}</td>
 
                             <th
                               scope="row"
                               class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                             >
-                              {row.date}
+                              {row.doctorName}
                             </th>
-                            <td class="px-4 py-3 text-center ">{row.doctorName}</td>
-                            <td class="px-4 py-3 text-center">{row.designation}</td>
-                            
+                            <td class="px-4 py-3 text-center ">{row.designation}</td>
+                            <td class="px-4 py-3 text-center">{row.status}</td>
+                            <td class="px-4 py-3 text-center">{row.status}</td>
 
-                            <td class="px-4 py-3 ">{row.remark}</td>
 
                             <td className="px-4 py-3">
                               {" "}
                               <div className="flex space-x-2">
-                                <button className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded">
-                                  View
+                               
+                                <button className="bg-green-600 hover:bg-green-800 text-white font-semibold py-2 px-4 rounded">
+                                  SELECT
                                 </button>
-                                <button className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded">
-                                  Delete
-                                </button>
+                                
                               </div>
                             </td>
                           </tr>
@@ -372,7 +218,7 @@ export const DoctorLeave = () => {
                       pageCount={pageCount}
                       onPageChange={handlePageChange}
                       containerClassName={
-                        "pagination flex  justify-center items-start md:items-center space-x-2 p-8"
+                        "pagination flex  justify-center items-start md:items-center space-x-2 p-2"
                       }
                       previousLinkClassName={
                         "text-sm font-normal text-gray-500 dark:text-gray-400 flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
@@ -390,10 +236,6 @@ export const DoctorLeave = () => {
               </div>
             </section>
           </div>
-
-
-        </div>
-      </div>
-    </>
-  );
-};
+        </>
+    );
+}

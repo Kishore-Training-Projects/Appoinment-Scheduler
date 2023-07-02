@@ -1,7 +1,7 @@
 import React from "react";
 
-import { UserSidebar } from "../../layout/sidebar/usersidebar";
-export const UserProfile = () => {
+import { DoctorSidebar } from "../../layout/sidebar/doctorsidebar";
+export const DoctorProfile = () => {
   const profileData = {
     name: "John Doe",
     age: 30,
@@ -15,7 +15,7 @@ export const UserProfile = () => {
 
   return (
     <>
-      <UserSidebar />
+      <DoctorSidebar />
 
       <div class="p-2 md:p-4 min-h-screen bg-gray-200 sm:ml-64">
         <div class=" p-2 md:p-4 border-2 border-gray-300 border-dashed rounded-lg dark:border-gray-700 mt-14">
@@ -129,11 +129,11 @@ export const UserProfile = () => {
                       <div class="px-4 py-2">Jane</div>
                     </div>
                     <div class="grid grid-cols-2">
-                      <div class="px-4 py-2 font-semibold">Age</div>
+                      <div class="px-4 py-2 font-semibold">Qualification</div>
                       <div class="px-4 py-2">Doe</div>
                     </div>
                     <div class="grid grid-cols-2">
-                      <div class="px-4 py-2 font-semibold">Gender</div>
+                      <div class="px-4 py-2 font-semibold">occupation</div>
                       <div class="px-4 py-2">Female</div>
                     </div>
                     <div class="grid grid-cols-2">
@@ -141,8 +141,13 @@ export const UserProfile = () => {
                       <div class="px-4 py-2">+11 998001001</div>
                     </div>
                     <div class="grid grid-cols-2">
-                      <div class="px-4 py-2 font-semibold">bloodGroup</div>
-                      <div class="px-4 py-2">O+ve</div>
+                      <div class="px-4 py-2 font-semibold">Email</div>
+                      <div class="px-4 py-2">
+                      <a class="text-blue-800" href="mailto:jane@example.com">
+                          jane@example.com
+                        </a>
+                      </div>
+                      
                     </div>
                     <div class="grid grid-cols-2">
                       <div class="px-4 py-2 font-semibold">Address</div>
@@ -150,18 +155,7 @@ export const UserProfile = () => {
                         73 , 7th cross street chhennao
                       </div>
                     </div>
-                    <div class="grid grid-cols-2">
-                      <div class="px-4 py-2 font-semibold">Birthday</div>
-                      <div class="px-4 py-2">Feb 06, 1998</div>
-                    </div>
-                    <div class="grid grid-cols-2">
-                      <div class="px-4 py-2 font-semibold">Email:</div>
-                      <div class="px-4 py-2">
-                        <a class="text-blue-800" href="mailto:jane@example.com">
-                          jane@example.com
-                        </a>
-                      </div>
-                    </div>
+                    
                   </div>
                 </div>
               </div>
@@ -169,57 +163,6 @@ export const UserProfile = () => {
           </div>
 
 
-{/* weight counter */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div className="flex items-center justify-center rounded-lg bg-gray-50 h-28 dark:bg-gray-800">
-              <div class="w-full  text-center ">
-                <div class="py-4 h-28 border-2 border-dashed rounded-lg border-red-400">
-                  <h6 class="relative mt-2  mb-0  z-1 bg-clip-text text-purple-800 text-2xl font-bold">
-                    Weight 🏋️
-                  </h6>
-                  <h4 class="font-bold mt-2 dark:text-white">
-                    <span class="text-3.5">30cm </span>
-                  </h4>
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center justify-center rounded-lg bg-gray-50 h-28 dark:bg-gray-800">
-              <div class="w-full  text-center ">
-                <div class="py-4 h-28 border-2 border-dashed rounded-lg border-red-400">
-                  <h6 class="relative mt-2  mb-0  z-1 bg-clip-text text-purple-800 text-2xl font-bold">
-                    Height 🧍
-                  </h6>
-                  <h4 class="font-bold mt-2 dark:text-white">
-                    <span class="text-3.5">30 cm </span>
-                  </h4>
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center justify-center rounded-lg bg-gray-50 h-28 dark:bg-gray-800">
-              <div class="w-full  text-center ">
-                <div class="py-4 h-28 border-2 border-dashed rounded-lg border-red-400">
-                  <h6 class="relative mt-2  mb-0 z-1 bg-clip-text text-purple-800 text-2xl font-bold">
-                    Pressure 😰
-                  </h6>
-                  <h4 class="font-bold mt-2 ">
-                    <span class="text-3.5">30cm </span>
-                  </h4>
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center justify-center rounded-lg bg-gray-50 h-28 dark:bg-gray-800">
-              <div class="w-full  text-center ">
-                <div class="py-4 h-28 border-2 border-dashed rounded-lg border-red-400">
-                  <h6 class="relative mt-2  mb-0  z-1 bg-clip-text text-purple-800 text-2xl font-bold">
-                Temperature🌡️
-                  </h6>
-                  <h4 class="font-bold mt-2">
-                    <span class="text-3.5">30cm </span>
-                  </h4>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </>

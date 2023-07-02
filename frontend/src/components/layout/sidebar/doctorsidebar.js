@@ -8,6 +8,14 @@ export const DoctorSidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isuserOpen, setIsuserOpen] = useState(false);
+  const [isstatusOpen, setIsstatusOpen] = useState(false);
+
+  const [status, setstatus] = useState("Available");
+
+ const statusDropdown = () => {
+    setIsstatusOpen(!isstatusOpen);
+  };
+
 
   const usertoggleDropdown = () => {
     setIsuserOpen(!isuserOpen);
@@ -69,44 +77,57 @@ export const DoctorSidebar = () => {
           <div className="flex items-center lg:order-2">
             <button
               type="button"
-              data-dropdown-toggle="language-dropdown-menu"
+              onClick={statusDropdown}
+              aria-expanded={isstatusOpen}
               class="hidden md:block inline-flex items-center font-medium justify-center px-4 py-2 text-sm text-gray-900 dark:text-white rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
             >
             
-              English (US)
+              {status=="Available"?"🟢 Available":status=="Leave"?" 🔴 Leave ":"🍔 Lunch"}
             </button>
             {/* dropdown */}
+
+            {isstatusOpen && (
+              
             <div
-              class="hidden fixed top-11 z-50  my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700"
+              class=" fixed top-11 z-50  my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700"
               id="language-dropdown-menu"
             >
               <ul class="py-2 font-medium" role="none">
                 <li>
                   <a
-                    href="#"
+                     onClick={()=>{
+                      setstatus("Leave");
+                      setIsstatusOpen(!isstatusOpen);}
+                    }
                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
                     role="menuitem"
                   >
                     <div class="inline-flex items-center">
-                   🔴 Away 
+                   🔴 Leave 
                     </div>
                   </a>
                 </li>
                 <li>
                   <a
-                    href="#"
+                    onClick={()=>{
+                      setstatus("Available");
+                      setIsstatusOpen(!isstatusOpen);}
+                    }
                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
                     role="menuitem"
                   >
                     <div class="inline-flex items-center">
                      
-                    🟢 Active
+                    🟢 Available
                     </div>
                   </a>
                 </li>
                 <li>
                   <a
-                    href="#"
+                     onClick={()=>{
+                      setstatus("Lunch");
+                      setIsstatusOpen(!isstatusOpen);}
+                    }
                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
                     role="menuitem"
                   >
@@ -119,6 +140,8 @@ export const DoctorSidebar = () => {
                
               </ul>
             </div>
+            
+            )}
             <button
               type="button"
               className="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
@@ -150,14 +173,14 @@ export const DoctorSidebar = () => {
                   className="py-1 font-light text-gray-500 dark:text-gray-400"
                   aria-labelledby="dropdown"
                 >
-                  {/* <li>
+                  <li>
                     <a
-                      href="#"
+                      onClick={()=>navigate("/doctor/profile/")}
                       className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white"
                     >
                       My profile
                     </a>
-                  </li> */}
+                  </li>
                   <li>
                     <a
                       href="#"
@@ -315,6 +338,7 @@ export const DoctorSidebar = () => {
                 <span class="flex-1 ml-3 whitespace-nowrap">Prescription</span>
               </a>
             </li>
+
             <li>
               <a
                 onClick={() => navigate("/doctor/leave/")}
