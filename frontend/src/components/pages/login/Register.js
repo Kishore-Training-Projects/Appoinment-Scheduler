@@ -2,31 +2,67 @@ import React, { useState } from "react";
 import firebase from "../../config/firebase-config";
 import Navbar from "../../layout/navbar/navbar";
 import { MobileAuth } from "./components/MobileAuth";
-
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 export const Register = () => {
-  
-  const [otpverify , setOtpverify] = useState(false);
+  const navigate = useNavigate();
+
+  const [otpverify, setOtpverify] = useState(false);
 
   const [formData, setFormData] = useState({
-    name: "",
-    gender: "",
-    DOB: "",
-    Age: "",
-    BloodGroup: "",
-    Mobile: "",
-    Email: "",
-    Address : "",   
+    patientName: "",
+    patientGender: "",
+    patientDOB: "",
+    patientAge: 0,
+    patientBloodGroup: "",
+    patientMobile: "",
+    patientEmail: "",
+    patientAddress: "",
+    patientAccountStatus: true,
   });
 
+  function submitpatient() {
+    console.log(formData);
 
-  function getmobile (value)
-  {
+    fetch("/api/Patient", {
+      method: "post",
+      body: JSON.stringify(formData),
+      headers: {
+        "Content-type": "application/JSON",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status === 404) {
+            throw new Error("Resource not found");
+          } else {
+            throw new Error("Network response was not ok");
+          }
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // Handle the response from the server
+        console.log(data);
+        alert("User registered");
+        navigate("/login");
+      })
+      .catch((error) => {
+        // Handle any errors that occurred during the request
+        console.error("Error:", error.message);
+      });
+  }
+
+  function getmobile(value) {
     setFormData({
       ...formData,
-      Mobile: value, })
-      setOtpverify(true);
+      patientMobile: value,
+    });
+
+    console.log(formData);
+    setOtpverify(true);
   }
-  
 
   return (
     <>
@@ -53,7 +89,7 @@ export const Register = () => {
                       </label>
                       <input
                         type="text"
-                        name="Name"
+                        name="patientName"
                         onChange={(e) =>
                           setFormData({
                             ...formData,
@@ -75,7 +111,7 @@ export const Register = () => {
                       </label>
                       <input
                         type="date"
-                        name="DOB"
+                        name="patientDOB"
                         onChange={(e) =>
                           setFormData({
                             ...formData,
@@ -96,7 +132,7 @@ export const Register = () => {
                       </label>
                       <select
                         id="category"
-                        name="gender"
+                        name="patientGender"
                         onChange={(e) =>
                           setFormData({
                             ...formData,
@@ -119,7 +155,7 @@ export const Register = () => {
                       </label>
                       <input
                         type="number"
-                        name="Age"
+                        name="patientAge"
                         onChange={(e) =>
                           setFormData({
                             ...formData,
@@ -140,6 +176,7 @@ export const Register = () => {
                       </label>
                       <input
                         type="text"
+                        name="patientBloodGroup"
                         onChange={(e) =>
                           setFormData({
                             ...formData,
@@ -160,7 +197,7 @@ export const Register = () => {
                       </label>
                       <input
                         type="email"
-                        name="Email"
+                        name="patientEmail"
                         onChange={(e) =>
                           setFormData({
                             ...formData,
@@ -181,8 +218,7 @@ export const Register = () => {
                         Mobile Number
                       </label>
 
-                    <MobileAuth getmobile={getmobile}/>
-
+                      <MobileAuth getmobile={getmobile} />
                     </div>
 
                     <div className="sm:col-span-3">
@@ -195,7 +231,7 @@ export const Register = () => {
                       <textarea
                         id="description"
                         rows="5"
-                        name="Address"
+                        name="patientAddress"
                         onChange={(e) =>
                           setFormData({
                             ...formData,
@@ -211,20 +247,20 @@ export const Register = () => {
                     <button
                       type="submit"
                       disabled={!otpverify}
-                      className={`w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ${otpverify ? '' : 'opacity-50 cursor-not-allowed'}`}
-                      >
+                      onClick={() => submitpatient()}
+                      className={`w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ${
+                        otpverify ? "" : "opacity-50 cursor-not-allowed"
+                      }`}
+                    >
                       Register
                     </button>
                   </div>
                 </div>
-               
               </div>
             </div>
           </section>
         </div>
       </div>
-
-     
     </>
   );
 };

@@ -25,10 +25,10 @@ export const MobileAuth = ({ getmobile }) => {
       }
     );
   }
-  function onSignInSubmit(e) {
-    e.preventDefault();
 
+  function onSignInSubmit() {
     configureCaptcha();
+
     const phoneNumber = "+91" + mobile;
     console.log(phoneNumber);
     const appVerifier = window.recaptchaVerifier;
@@ -49,6 +49,7 @@ export const MobileAuth = ({ getmobile }) => {
         console.log("SMS not sent");
       });
   }
+
   function onSubmitOTP(e) {
     e.preventDefault();
     const code = otp;
@@ -74,9 +75,34 @@ export const MobileAuth = ({ getmobile }) => {
       });
   }
 
+  // fetch Patient details by mobile
+
+  const fetchData = async (e) => {
+    e.preventDefault();
+    await fetch("/api/Patient/search/" + mobile)
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status === 404) {
+            throw new Error("Resource not found");
+          } else {
+            throw new Error("Network response was not ok");
+          }
+        }
+        return response.json();
+      })
+      .then((data) => {
+        alert("mobile number already exisit");
+      })
+      .catch((error) => {
+        // Handle any errors that occurred during the request
+        onSignInSubmit();
+        console.error("Error:", error.message);
+      });
+  };
+
   return (
     <>
-      <form onSubmit={(e) => onSignInSubmit(e)}>
+      <form onSubmit={(e) => fetchData(e)}>
         <div className="flex items-center">
           <div id="sign-in-button"></div>
 
