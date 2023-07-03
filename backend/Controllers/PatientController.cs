@@ -50,6 +50,29 @@ namespace AppoinmentScheduler.Controllers
             return patientModel;
         }
 
+
+
+        // GET: api/Patient/search/9562513517
+        [HttpGet("search/{mobile}")]
+        public async Task<ActionResult<PatientModel>> GetPatientMobileModel(string mobile)
+        {
+            if (_context.PatientModel == null)
+            {
+                return NotFound();
+            }
+            var patientModel = await _context.PatientModel.Where(x=>x.PatientMobile==mobile).FirstOrDefaultAsync();
+
+            if (patientModel == null)
+            {
+                return NotFound();
+            }
+
+            return patientModel;
+        }
+
+
+
+
         // PUT: api/Patient/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
