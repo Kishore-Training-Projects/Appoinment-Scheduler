@@ -1,138 +1,42 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import ReactPaginate from "react-paginate";
 import { useNavigate } from "react-router-dom";
-
+import axios from "axios";
 import { UserSidebar } from "../../layout/sidebar/usersidebar";
 export const UserAppointment = () => {
   const navigate = useNavigate();
 
-  const tableData = [
-    {
-      doctorName: "Dr. John Doe",
-      appointmentDate: "2023-07-01",
-      appointmentTime: "10:00 AM",
-      healthReason: "General Check-up",
-      appointmentStatus: "Confirmed",
-      paymentStatus: "Paid",
-    },
-    {
-      doctorName: "Dr. Jane Smith",
-      appointmentDate: "2023-07-02",
-      appointmentTime: "11:30 AM",
-      healthReason: "Dental Consultation",
-      appointmentStatus: "Confirmed",
-      paymentStatus: "Pending",
-    },
-    {
-      doctorName: "Dr. Mark Johnson",
-      appointmentDate: "2023-07-03",
-      appointmentTime: "2:15 PM",
-      healthReason: "Eye Check-up",
-      appointmentStatus: "Cancelled",
-      paymentStatus: "Not Paid",
-    },
-    {
-      doctorName: "Dr. Jane Smith",
-      appointmentDate: "2023-07-02",
-      appointmentTime: "11:30 AM",
-      healthReason: "Dental Consultation",
-      appointmentStatus: "Confirmed",
-      paymentStatus: "Pending",
-    },
-    {
-      doctorName: "Dr. Mark Johnson",
-      appointmentDate: "2023-07-03",
-      appointmentTime: "2:15 PM",
-      healthReason: "Eye Check-up",
-      appointmentStatus: "Cancelled",
-      paymentStatus: "Not Paid",
-    },
-    {
-      doctorName: "Dr. Jane Smith",
-      appointmentDate: "2023-07-02",
-      appointmentTime: "11:30 AM",
-      healthReason: "Dental Consultation",
-      appointmentStatus: "Confirmed",
-      paymentStatus: "Pending",
-    },
-    {
-      doctorName: "Dr. Mark Johnson",
-      appointmentDate: "2023-07-03",
-      appointmentTime: "2:15 PM",
-      healthReason: "Eye Check-up",
-      appointmentStatus: "Cancelled",
-      paymentStatus: "Not Paid",
-    },
-    {
-      doctorName: "Dr. Jane Smith",
-      appointmentDate: "2023-07-02",
-      appointmentTime: "11:30 AM",
-      healthReason: "Dental Consultation",
-      appointmentStatus: "Confirmed",
-      paymentStatus: "Pending",
-    },
-    {
-      doctorName: "Dr. Mark Johnson",
-      appointmentDate: "2023-07-03",
-      appointmentTime: "2:15 PM",
-      healthReason: "Eye Check-up",
-      appointmentStatus: "Cancelled",
-      paymentStatus: "Not Paid",
-    },
-    {
-      doctorName: "Dr. Jane Smith",
-      appointmentDate: "2023-07-02",
-      appointmentTime: "11:30 AM",
-      healthReason: "Dental Consultation",
-      appointmentStatus: "Confirmed",
-      paymentStatus: "Pending",
-    },
-    {
-      doctorName: "Dr. Mark Johnson",
-      appointmentDate: "2023-07-03",
-      appointmentTime: "2:15 PM",
-      healthReason: "Eye Check-up",
-      appointmentStatus: "Cancelled",
-      paymentStatus: "Not Paid",
-    },
-    {
-      doctorName: "Dr. Jane Smith",
-      appointmentDate: "2023-07-02",
-      appointmentTime: "11:30 AM",
-      healthReason: "Dental Consultation",
-      appointmentStatus: "Confirmed",
-      paymentStatus: "Pending",
-    },
-    {
-      doctorName: "Dr. Mark Johnson",
-      appointmentDate: "2023-07-03",
-      appointmentTime: "2:15 PM",
-      healthReason: "Eye Check-up",
-      appointmentStatus: "Cancelled",
-      paymentStatus: "Not Paid",
-    },
-    {
-      doctorName: "Dr. Jane Smith",
-      appointmentDate: "2023-07-02",
-      appointmentTime: "11:30 AM",
-      healthReason: "Dental Consultation",
-      appointmentStatus: "Confirmed",
-      paymentStatus: "Pending",
-    },
-    {
-      doctorName: "Dr. Mark Johnson",
-      appointmentDate: "2023-07-03",
-      appointmentTime: "2:15 PM",
-      healthReason: "Eye Check-up",
-      appointmentStatus: "Cancelled",
-      paymentStatus: "Not Paid",
-    },
+  // fetch appointment data
+  const [appointmentdata, setAppointmentdata] = useState([]);
 
-    // Add more appointment objects as needed
-  ];
+  const fetch_appointment_data = async () => {
+    await axios
+      .get("/api/Appointment/patient/"+(JSON.parse(sessionStorage.getItem("student_key"))).userid)
+      .then((response) => {
+        setAppointmentdata(response.data);
+      })
+      .catch((error) => {
+        if (error.response) {
+          if (error.response.status === 404) {
+            console.log("Resource not found");
+          } else {
+            console.log("Network response was not ok");
+          }
+        } else {
+          console.error("Error:", error.message);
+        }
+      });
+  };
+
+  useEffect(() => {
+    fetch_appointment_data();
+  }, []);
+
+  
+
 
   const itemsPerPage = 5; // Number of items to display per page
-  const pageCount = Math.ceil(tableData.length / itemsPerPage);
+  const pageCount = Math.ceil(appointmentdata.length / itemsPerPage);
   const [currentPage, setCurrentPage] = useState(0);
 
   const handlePageChange = ({ selected }) => {
@@ -140,7 +44,7 @@ export const UserAppointment = () => {
   };
 
   const offset = currentPage * itemsPerPage;
-  const currentPageData = tableData.slice(offset, offset + itemsPerPage);
+  const currentPageData = appointmentdata.slice(offset, offset + itemsPerPage);
 
   return (
     <>
@@ -370,6 +274,8 @@ export const UserAppointment = () => {
                           </th>
                         </tr>
                       </thead>
+                      {appointmentdata && (
+
                       <tbody>
                         {currentPageData.map((row, index) => (
                           <tr
@@ -396,27 +302,29 @@ export const UserAppointment = () => {
                               scope="row"
                               class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                             >
-                              {row.doctorName}
+                              {row.doctor.doctorName}
                             </th>
-                            <td class="px-4 py-3 ">{row.appointmentDate}</td>
+                            <td class="px-4 py-3 ">{new Date(row.appointmentDate).toLocaleDateString()}</td>
                             <td class="px-4 py-3 ">{row.appointmentTime}</td>
                             <td class="px-4 py-3 ">{row.appointmentStatus}</td>
                             <td class="px-4 py-3 ">{row.paymentStatus}</td>
-                            <td class="px-4 py-3 ">{row.healthReason}</td>
+                            <td class="px-4 py-3 ">{row.appointmentReason}</td>
                             <td className="px-4 py-3">
                               {" "}
                               <div className="flex space-x-2">
                                 <button className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded">
                                   Delete
                                 </button>
-                                <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
+                                {/* <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
                                   Edit
-                                </button>
+                                </button> */}
                               </div>
                             </td>
                           </tr>
                         ))}
                       </tbody>
+
+                      )}
                     </table>
                   </div>
                   <nav

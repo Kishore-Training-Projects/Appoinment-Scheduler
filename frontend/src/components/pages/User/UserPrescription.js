@@ -1,87 +1,42 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import ReactPaginate from "react-paginate";
 import { useNavigate } from "react-router-dom";
 import UserPrescriptionExport from "./components/UserPrescriptionExport";
 import { UserSidebar } from "../../layout/sidebar/usersidebar";
+import axios from "axios";
+
 export const UserPrescription = () => {
   const navigate = useNavigate();
 
-  const tableData = [
-    {
-      doctorName: 'Dr. John Smith',
-      designation: 'Cardiologist',
-      date: '2023-06-28',
-      disease: 'Hypertension',
-      allergy: 'None',
-      prescription: 'Medication X, Medication Y',
-      remark: 'Patient advised to monitor blood pressure regularly.',
-    },
-    {
-      doctorName: 'Dr. Sarah Johnson',
-      designation: 'Dermatologist',
-      date: '2023-06-30',
-      disease: 'Eczema',
-      allergy: 'Penicillin',
-      prescription: 'Cream A, Cream B',
-      remark: 'Patient to avoid exposure to allergens.',
-    }, {
-      doctorName: 'Dr. Emily Lee',
-      designation: 'Pediatrician',
-      date: '2023-06-29',
-      disease: 'Common Cold',
-      allergy: 'None',
-      prescription: 'Antibiotic X, Syrup Y',
-      remark: 'Patient advised to get plenty of rest and drink fluids.',
-    },
-    {
-      doctorName: 'Dr. Michael Johnson',
-      designation: 'Orthopedic Surgeon',
-      date: '2023-06-27',
-      disease: 'Fractured Arm',
-      allergy: 'None',
-      prescription: 'Cast applied, Pain medication',
-      remark: 'Patient to follow up after four weeks for cast removal.',
-    },
-    {
-      doctorName: 'Dr. Jennifer Davis',
-      designation: 'Gynecologist',
-      date: '2023-06-26',
-      disease: 'Irregular Menstruation',
-      allergy: 'None',
-      prescription: 'Hormone Therapy',
-      remark: 'Patient advised to maintain a healthy lifestyle and exercise regularly.',
-    },
-    {
-      doctorName: 'Dr. Robert Anderson',
-      designation: 'Ophthalmologist',
-      date: '2023-06-25',
-      disease: 'Cataracts',
-      allergy: 'None',
-      prescription: 'Cataract Surgery',
-      remark: 'Patient to attend pre-operative consultation before surgery.',
-    },
-    {
-      doctorName: 'Dr. Laura Wilson',
-      designation: 'Psychiatrist',
-      date: '2023-06-24',
-      disease: 'Depression',
-      allergy: 'None',
-      prescription: 'Antidepressant Medication',
-      remark: 'Patient advised to attend therapy sessions regularly.',
-    },
-    {
-      doctorName: 'Dr. Christopher Brown',
-      designation: 'Dentist',
-      date: '2023-06-23',
-      disease: 'Cavity',
-      allergy: 'None',
-      prescription: 'Tooth Filling',
-      remark: 'Patient to maintain regular oral hygiene practices.',
-    },
-  ];
+  // fetch prescription data
+  const [prescription, setprescription] = useState([]);
+
+  const fetch_prescription_data = async () => {
+    await axios
+      .get("/api/Prescription/patient/"+(JSON.parse(sessionStorage.getItem("student_key"))).userid)
+      .then((response) => {
+        setprescription(response.data);
+      })
+      .catch((error) => {
+        if (error.response) {
+          if (error.response.status === 404) {
+            console.log("Resource not found");
+          } else {
+            console.log("Network response was not ok");
+          }
+        } else {
+          console.error("Error:", error.message);
+        }
+      });
+  };
+
+  useEffect(() => {
+    fetch_prescription_data();
+  }, []);
+
 
   const itemsPerPage = 5; // Number of items to display per page
-  const pageCount = Math.ceil(tableData.length / itemsPerPage);
+  const pageCount = Math.ceil(prescription.length / itemsPerPage);
   const [currentPage, setCurrentPage] = useState(0);
 
   const handlePageChange = ({ selected }) => {
@@ -89,7 +44,7 @@ export const UserPrescription = () => {
   };
 
   const offset = currentPage * itemsPerPage;
-  const currentPageData = tableData.slice(offset, offset + itemsPerPage);
+  const currentPageData = prescription.slice(offset, offset + itemsPerPage);
 
   return (
     <>
@@ -230,6 +185,8 @@ export const UserPrescription = () => {
                           </th>
                         </tr>
                       </thead>
+                      {prescription&&(
+
                       <tbody>
                         {currentPageData.map((row, index) => (
                           <tr
@@ -258,27 +215,28 @@ export const UserPrescription = () => {
                               scope="row"
                               class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                             >
-                              {row.date}
+                              {new Date(row.prescriptionTimestamp).toLocaleDateString()}
                             </th>
-                            <td class="px-4 py-3 text-center ">{row.doctorName}</td>
-                            <td class="px-4 py-3 text-center">{row.designation}</td>
+                            <td class="px-4 py-3 text-center ">{row.doctor.doctorName}</td>
+                            <td class="px-4 py-3 text-center">{row.doctor.doctorDesignation}</td>
                             <td class="px-4 py-3 text-center">{row.disease}</td>
                             <td class="px-4 py-3 text-center">{row.allergy}</td>
 
-                            <td class="px-4 py-3 ">{row.remark}</td>
+                            <td class="px-4 py-3 ">{row.prescriptionRemark}</td>
 
                             <td className="px-4 py-3">
                               {" "}
                               <div className="flex space-x-2">
-                                <button className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded">
+                                {/* <button className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded">
                                   View
-                                </button>
+                                </button> */}
                                 <UserPrescriptionExport rowData={row} />
                               </div>
                             </td>
                           </tr>
                         ))}
                       </tbody>
+                      )}
                     </table>
                   </div>
                   <nav

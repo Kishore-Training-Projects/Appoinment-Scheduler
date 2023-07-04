@@ -1,8 +1,12 @@
 import React from "react";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 export const AdminSidebar = () => {
+  const [profile, setProfile] = useState();
+
+
   const navigate = useNavigate();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -21,6 +25,25 @@ export const AdminSidebar = () => {
   const toggleDropdown = () => {
     setIsDropdownOpen(!isdropdownOpen);
   };
+
+  useEffect(() => {
+    const profile = () => {
+      var item_value = JSON.parse(sessionStorage.getItem("admin_key"));
+      // console.log(item_value.picture)
+      setProfile(item_value);
+    };
+
+    profile();
+  }, []);
+
+  const signout = () => {
+    sessionStorage.clear();
+    navigate("/login");
+  };
+
+
+    if (!sessionStorage.getItem("admin_key")) return <Navigate to="/login" />;
+
 
   return (
     <>
@@ -64,13 +87,13 @@ export const AdminSidebar = () => {
             </div>
             <div class="flex items-center">
               <div class="flex items-center ml-3">
-                <span className="mr-2 hidden md:block">admin@gmail.com</span>
+                <span className="mr-2 hidden md:block">{profile?profile.email:""}</span>
 
                 <button
                   type="button"
                   class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 uppercase"
                 >
-                  🔐 Logout
+                Logout
                 </button>
               </div>
             </div>

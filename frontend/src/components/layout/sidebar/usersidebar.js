@@ -1,8 +1,11 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 export const UserSidebar = () => {
+  const [profile, setProfile] = useState();
+
   const navigate = useNavigate();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -26,6 +29,25 @@ export const UserSidebar = () => {
   const toggleDropdown = () => {
     setIsDropdownOpen(!isdropdownOpen);
   };
+
+  useEffect(() => {
+    const profile = () => {
+      var item_value = JSON.parse(sessionStorage.getItem("student_key"));
+      // console.log(item_value.picture)
+      setProfile(item_value);
+    };
+
+    profile();
+  }, []);
+
+  const signout = () => {
+    sessionStorage.clear();
+    navigate("/login");
+  };
+
+
+  if (!sessionStorage.getItem("student_key")) return <Navigate to="/login" />;
+
 
   return (
     <>
@@ -88,10 +110,10 @@ export const UserSidebar = () => {
               >
                 <div className="py-3 px-4">
                   <span className="block text-sm font-semibold text-gray-900 dark:text-white">
-                    Neil sims
+                    {profile.name}
                   </span>
                   <span className="block text-sm font-light text-gray-500 truncate dark:text-gray-400">
-                    name@flowbite.com
+                   {profile.mobile}
                   </span>
                 </div>
                 <ul
@@ -108,15 +130,13 @@ export const UserSidebar = () => {
                   </li> */}
                   <li>
                     <a
-                      href="#"
+                      onClick={()=>signout()}
                       className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     >
                       Sign out
                     </a>
                   </li>
                 </ul>
-             
-               
               </div>
             )}
           </div>

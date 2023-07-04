@@ -1,21 +1,72 @@
-import React from "react";
-
+import {React,useEffect} from "react";
+import { useState } from "react";
 import { UserSidebar } from "../../layout/sidebar/usersidebar";
+import axios from "axios";
+
+
 export const UserProfile = () => {
-  const profileData = {
-    name: "John Doe",
-    age: 30,
-    dob: "1993-07-01",
-    address: "123 Main St, City, State, Country",
-    bloodGroup: "A+",
-    email: "johndoe@example.com",
-    number: "+1 123 456 7890",
-    profileImage: "profile.jpg", // Provide the path or URL to the profile image
-  };
+
+    const [profile, setProfile] = useState();
+
+
+
+    // fetch user data
+
+    const fetch_patient_data = async (id) => {
+      console.log("hi");
+      try {
+        const response = await axios.get(`/api/Patient/${id}`);
+        setProfile(response.data);
+      } catch (error) {
+        if (error.response) {
+          if (error.response.status === 404) {
+            console.log("Resource not found");
+          } else {
+            console.log("Network response was not ok");
+          }
+        } else {
+          console.error("Error:", error.message);
+        }
+      }
+    };
+
+    // fetch medical records 
+    const [medicalrecords, setmedicalrecords] = useState();
+
+
+    const fetch_medicalrecord_data = async (id) => {
+      await axios
+        .get(`/api/MedicalRecord/patient/last/${id}`)
+        .then((response) => {
+          setmedicalrecords(response.data);
+        })
+        .catch((error) => {
+          if (error.response) {
+            if (error.response.status === 404) {
+              console.log("Resource not found");
+            } else {
+              console.log("Network response was not ok");
+            }
+          } else {
+            console.log("Error:", error.message);
+          }
+        });
+    };
+  
+
+  useEffect(() => {
+    const profile = () => {
+      var item_value = JSON.parse(sessionStorage.getItem("student_key"));
+      fetch_patient_data(item_value.userid);
+      fetch_medicalrecord_data(item_value.userid);
+    };
+    profile();
+  }, []);
 
   return (
     <>
       <UserSidebar />
+  { profile && (
 
       <div class="p-2 md:p-4 min-h-screen bg-gray-200 sm:ml-64">
         <div class=" p-2 md:p-4 border-2 border-gray-300 border-dashed rounded-lg dark:border-gray-700 mt-14">
@@ -81,7 +132,7 @@ export const UserProfile = () => {
                     alt="Bonnie image"
                   />
                   <h5 class="mt-2 text-xl font-medium text-gray-900 dark:text-white">
-                    Bonnie Green
+                  {profile.patientName}
                   </h5>
 
                   <div class="flex mt-3 space-x-3 md:mt-3">
@@ -126,39 +177,39 @@ export const UserProfile = () => {
                   <div class="grid md:grid-cols-2 text-sm">
                     <div class="grid grid-cols-2">
                       <div class="px-4 py-2 font-semibold">Full Name</div>
-                      <div class="px-4 py-2">Jane</div>
+                      <div class="px-4 py-2">{profile.patientName}</div>
                     </div>
                     <div class="grid grid-cols-2">
                       <div class="px-4 py-2 font-semibold">Age</div>
-                      <div class="px-4 py-2">Doe</div>
+                      <div class="px-4 py-2">{profile.patientAge}</div>
                     </div>
                     <div class="grid grid-cols-2">
                       <div class="px-4 py-2 font-semibold">Gender</div>
-                      <div class="px-4 py-2">Female</div>
+                      <div class="px-4 py-2">{profile.patientGender}</div>
                     </div>
                     <div class="grid grid-cols-2">
                       <div class="px-4 py-2 font-semibold">Contact No.</div>
-                      <div class="px-4 py-2">+11 998001001</div>
+                      <div class="px-4 py-2">+91 {profile.patientMobile}</div>
                     </div>
                     <div class="grid grid-cols-2">
                       <div class="px-4 py-2 font-semibold">bloodGroup</div>
-                      <div class="px-4 py-2">O+ve</div>
+                      <div class="px-4 py-2">{profile.patientBloodGroup}</div>
                     </div>
                     <div class="grid grid-cols-2">
                       <div class="px-4 py-2 font-semibold">Address</div>
                       <div class="px-4 py-2">
-                        73 , 7th cross street chhennao
+                        {profile.patientAddress}
                       </div>
                     </div>
                     <div class="grid grid-cols-2">
                       <div class="px-4 py-2 font-semibold">Birthday</div>
-                      <div class="px-4 py-2">Feb 06, 1998</div>
+                      <div class="px-4 py-2">{new Date(profile.patientDOB).toLocaleDateString()}</div>
                     </div>
                     <div class="grid grid-cols-2">
                       <div class="px-4 py-2 font-semibold">Email:</div>
                       <div class="px-4 py-2">
                         <a class="text-blue-800" href="mailto:jane@example.com">
-                          jane@example.com
+                          {profile.patientEmail}
                         </a>
                       </div>
                     </div>
@@ -178,7 +229,7 @@ export const UserProfile = () => {
                     Weight 🏋️
                   </h6>
                   <h4 class="font-bold mt-2 dark:text-white">
-                    <span class="text-3.5">30cm </span>
+                    <span class="text-3.5">{medicalrecords?medicalrecords.weight+"cm":"NIL"}</span>
                   </h4>
                 </div>
               </div>
@@ -190,7 +241,7 @@ export const UserProfile = () => {
                     Height 🧍
                   </h6>
                   <h4 class="font-bold mt-2 dark:text-white">
-                    <span class="text-3.5">30 cm </span>
+                    <span class="text-3.5">{medicalrecords?medicalrecords.height+"cm":"NIL"}</span>
                   </h4>
                 </div>
               </div>
@@ -202,7 +253,7 @@ export const UserProfile = () => {
                     Pressure 😰
                   </h6>
                   <h4 class="font-bold mt-2 ">
-                    <span class="text-3.5">30cm </span>
+                    <span class="text-3.5">{medicalrecords?medicalrecords.pressure+"cm":"NIL"}</span>
                   </h4>
                 </div>
               </div>
@@ -214,7 +265,7 @@ export const UserProfile = () => {
                 Temperature🌡️
                   </h6>
                   <h4 class="font-bold mt-2">
-                    <span class="text-3.5">30cm </span>
+                    <span class="text-3.5">{medicalrecords?medicalrecords.temperature+"cm":"NIL"}</span>
                   </h4>
                 </div>
               </div>
@@ -222,6 +273,7 @@ export const UserProfile = () => {
           </div>
         </div>
       </div>
+  ) }
     </>
   );
 };

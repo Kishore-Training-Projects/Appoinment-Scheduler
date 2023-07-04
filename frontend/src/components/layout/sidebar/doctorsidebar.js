@@ -1,8 +1,14 @@
 import React from "react";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 export const DoctorSidebar = () => {
+
+  const [profile, setProfile] = useState();
+
+
+
   const navigate = useNavigate();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -12,10 +18,9 @@ export const DoctorSidebar = () => {
 
   const [status, setstatus] = useState("Available");
 
- const statusDropdown = () => {
+  const statusDropdown = () => {
     setIsstatusOpen(!isstatusOpen);
   };
-
 
   const usertoggleDropdown = () => {
     setIsuserOpen(!isuserOpen);
@@ -34,6 +39,24 @@ export const DoctorSidebar = () => {
   const toggleDropdown = () => {
     setIsDropdownOpen(!isdropdownOpen);
   };
+
+
+  useEffect(() => {
+    const profile = () => {
+      var item_value = JSON.parse(sessionStorage.getItem("doctor_key"));
+      // console.log(item_value.picture)
+      setProfile(item_value);
+    };
+
+    profile();
+  }, []);
+
+  const signout = () => {
+    sessionStorage.clear();
+    navigate("/login");
+  };
+
+  if (!sessionStorage.getItem("doctor_key")) return <Navigate to="/login" />;
 
   return (
     <>
@@ -81,66 +104,58 @@ export const DoctorSidebar = () => {
               aria-expanded={isstatusOpen}
               class="hidden md:block inline-flex items-center font-medium justify-center px-4 py-2 text-sm text-gray-900 dark:text-white rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
             >
-            
-              {status=="Available"?"🟢 Available":status=="Leave"?" 🔴 Leave ":"🍔 Lunch"}
+              {status == "Available"
+                ? "🟢 Available"
+                : status == "Leave"
+                ? " 🔴 Leave "
+                : "🍔 Lunch"}
             </button>
             {/* dropdown */}
 
             {isstatusOpen && (
-              
-            <div
-              class=" fixed top-11 z-50  my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700"
-              id="language-dropdown-menu"
-            >
-              <ul class="py-2 font-medium" role="none">
-                <li>
-                  <a
-                     onClick={()=>{
-                      setstatus("Leave");
-                      setIsstatusOpen(!isstatusOpen);}
-                    }
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
-                    role="menuitem"
-                  >
-                    <div class="inline-flex items-center">
-                   🔴 Leave 
-                    </div>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    onClick={()=>{
-                      setstatus("Available");
-                      setIsstatusOpen(!isstatusOpen);}
-                    }
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
-                    role="menuitem"
-                  >
-                    <div class="inline-flex items-center">
-                     
-                    🟢 Available
-                    </div>
-                  </a>
-                </li>
-                <li>
-                  <a
-                     onClick={()=>{
-                      setstatus("Lunch");
-                      setIsstatusOpen(!isstatusOpen);}
-                    }
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
-                    role="menuitem"
-                  >
-                    <div class="inline-flex items-center">
-                     
-                    🍔 Lunch
-                    </div>
-                  </a>
-                </li>
-               
-              </ul>
-            </div>
-            
+              <div
+                class=" fixed top-11 z-50  my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700"
+                id="language-dropdown-menu"
+              >
+                <ul class="py-2 font-medium" role="none">
+                  <li>
+                    <a
+                      onClick={() => {
+                        setstatus("Leave");
+                        setIsstatusOpen(!isstatusOpen);
+                      }}
+                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
+                      role="menuitem"
+                    >
+                      <div class="inline-flex items-center">🔴 Leave</div>
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      onClick={() => {
+                        setstatus("Available");
+                        setIsstatusOpen(!isstatusOpen);
+                      }}
+                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
+                      role="menuitem"
+                    >
+                      <div class="inline-flex items-center">🟢 Available</div>
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      onClick={() => {
+                        setstatus("Lunch");
+                        setIsstatusOpen(!isstatusOpen);
+                      }}
+                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
+                      role="menuitem"
+                    >
+                      <div class="inline-flex items-center">🍔 Lunch</div>
+                    </a>
+                  </li>
+                </ul>
+              </div>
             )}
             <button
               type="button"
@@ -163,10 +178,10 @@ export const DoctorSidebar = () => {
               >
                 <div className="py-3 px-4">
                   <span className="block text-sm font-semibold text-gray-900 dark:text-white">
-                    Neil sims
+                   {profile.name}
                   </span>
                   <span className="block text-sm font-light text-gray-500 truncate dark:text-gray-400">
-                    name@flowbite.com
+                {profile.email}
                   </span>
                 </div>
                 <ul
@@ -175,7 +190,7 @@ export const DoctorSidebar = () => {
                 >
                   <li>
                     <a
-                      onClick={()=>navigate("/doctor/profile/")}
+                      onClick={() => navigate("/doctor/profile/")}
                       className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white"
                     >
                       My profile
@@ -183,7 +198,7 @@ export const DoctorSidebar = () => {
                   </li>
                   <li>
                     <a
-                      href="#"
+                      onClick={() => signout()}
                       className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     >
                       Sign out

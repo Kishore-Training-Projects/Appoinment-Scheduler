@@ -1,10 +1,19 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { UserSidebar } from "../../layout/sidebar/usersidebar";
-
+import { UserDoctorSearch } from "./components/UserDoctorSearch";
+import { useNavigate } from "react-router-dom";
+import axios  from "axios";
 export const AddUserAppointment = () => {
+  const navigate = useNavigate();
+
+  const [profile, setprofile] = useState();
   const today = new Date().toISOString().split("T")[0]; // Get current date in yyyy-mm-dd format
   const [selectedDate, setSelectedDate] = useState("");
+
+  const [doctor, setDoctor] = useState("");
+
+  const [DoctorshowModal, setDoctorshowModal] = React.useState(false);
 
   const handleDateChange = (event) => {
     const selected = new Date(event.target.value);
@@ -13,9 +22,90 @@ export const AddUserAppointment = () => {
       setSelectedDate("");
       alert("Sundays are holiday 🎉. Please select another date. 📅");
     } else {
-      setSelectedDate(event.target.value);
+      setFormData({
+        ...formData,
+        appointmentDate: event.target.value,
+      });
     }
   };
+
+  const [formData, setFormData] = useState({
+    appointmentStatus: "booked",
+    appointmentRemark: "booked by patient",
+    paymentStatus: "not paid",
+    medicalrecordStatus: false,
+  });
+
+
+  function submitpatient(e) {
+    console.log(formData);
+    e.preventDefault();
+
+    axios.post('/api/Appointment', formData, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status === 404) {
+            throw new Error('Resource not found');
+          }
+          if (response.status === 201) {
+            return response.data;
+          }
+          else {
+            throw new Error('Network response was not ok');
+          }
+        }
+        return response.data;
+      })
+      .then((data) => {
+        // Handle the response from the server
+        console.log(data);
+        alert('Appoint registered');
+        navigate('/user/appointment');
+      })
+      .catch((error) => {
+        // Handle any errors that occurred during the request
+        console.error('Error:', error.message);
+      });
+  }
+
+  useEffect(() => {
+    const profile = () => {
+      var item_value = JSON.parse(sessionStorage.getItem("student_key"));
+      const patientdata = {
+        patient: {
+          patientId: item_value.userid,
+        },
+      };
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        ...patientdata,
+      }));
+      setprofile(item_value);
+    };
+    profile();
+  }, []);
+
+  function selecteddoctor(data) {
+    const doctordata = {
+      appointmentFees: data.doctorFees,
+      doctor: {
+        doctorId: data.doctorId,
+        doctorName: data.doctorName,
+      },
+    };
+    console.log(data);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      ...doctordata,
+    }));
+    setDoctorshowModal(false);
+  }
+
+  console.log(formData);
 
   return (
     <>
@@ -97,16 +187,22 @@ export const AddUserAppointment = () => {
           {/* form */}
           <div class="flex mb-4 rounded bg-white dark:bg-gray-800">
             <div className="w-full p-3 border border-white rounded-lg">
-            <h1 className="text-2xl font-bold mb-6">Appointment Schedule</h1>
+              <h1 className="text-2xl font-bold mb-6">Appointment Schedule</h1>
 
-              <form>
+              <form onSubmit={(e)=>submitpatient(e)}>
                 <div className="flex flex-wrap mb-4">
                   <label htmlFor="name" className="w-full md:w-1/4">
-                    Name: <p className="text-sm	 text-gray-400"><small> [ Full Name ] </small></p>
+                    Name:{" "}
+                    <p className="text-sm	 text-gray-400">
+                      <small> [ Full Name ] </small>
+                    </p>
                   </label>
                   <input
                     type="text"
-                    id="name"
+                    name=""
+                    disabled
+                    value={profile ? profile.name : ""}
+                    placeholder={profile ? profile.name : ""}
                     className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
                   />
                 </div>
@@ -117,13 +213,15 @@ export const AddUserAppointment = () => {
                   <input
                     type="email"
                     id="email"
+                    value={profile ? profile.mobile : ""}
+                    disabled
+
                     className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
                   />
                 </div>
                 <div className="flex flex-wrap mb-4 items-center">
                   <label htmlFor="email" className="w-full md:w-1/4">
                     Doctor:
-
                   </label>
 
                   <div className="flex w-full md:w-3/4">
@@ -131,25 +229,35 @@ export const AddUserAppointment = () => {
                       type="text"
                       id="username-success"
                       disabled
+
+                      placeholder={
+                        formData.doctor
+                          ? formData.doctor.doctorName
+                          : "select doctor"
+                      }
                       className="flex-grow px-2 py-1 border border-gray-300 rounded"
                     />
 
-                    <button className="ml-3 w-34 text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                    <a
+                      onClick={() => setDoctorshowModal(true)}
+                      className="ml-3 w-34 text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                    >
                       select doctor
-                    </button>
+                    </a>
                   </div>
                 </div>
 
                 <div className="flex flex-wrap mb-4">
                   <label htmlFor="date" className="w-full md:w-1/4">
                     Date:
-                    <p  className="text-sm	 text-red-400">
-                        <small>[ Sunday are holiday ]</small>
-                        </p>
+                    <p className="text-sm	 text-red-400">
+                      <small>[ Sunday are holiday ]</small>
+                    </p>
                   </label>
                   <input
                     type="date"
                     id="date"
+                    required
                     min={today}
                     onChange={handleDateChange}
                     className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
@@ -158,18 +266,24 @@ export const AddUserAppointment = () => {
                 <div className="flex flex-wrap mb-4">
                   <label htmlFor="time" className="w-full md:w-1/4">
                     Time:
-                    <p  className="text-sm	 text-red-400">
-                        <small>[ working hours are 9am to 6pm ]</small>
-                        </p>
+                    <p className="text-sm	 text-red-400">
+                      <small>[ working hours are 9am to 6pm ]</small>
+                    </p>
                   </label>
                   <input
                     type="time"
                     id="time"
                     min="08:00"
+                    required
                     max="20:00"
-                    disabled={!selectedDate}
+                    disabled={!formData.appointmentDate}
                     step="1800" // 30-minute interval
-                    onChange={(e) => console.log(e.target.value)}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        appointmentTime: e.target.value,
+                      })
+                    }
                     className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
                   />
                 </div>
@@ -180,6 +294,13 @@ export const AddUserAppointment = () => {
                   <textarea
                     type="email"
                     id="email"
+                    required
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        appointmentReason: e.target.value,
+                      })
+                    }
                     row="3"
                     className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
                   />
@@ -194,10 +315,56 @@ export const AddUserAppointment = () => {
               </form>
             </div>
           </div>
-
-          
         </div>
       </div>
+
+      {/* select doctor modal */}
+      {DoctorshowModal ? (
+        <>
+          <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+            <div className="relative w-full max-w-3xl max-h-full">
+              {/* <!-- Modal content --> */}
+              <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <button
+                  type="button"
+                  className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
+                  data-modal-hide="authentication-modal"
+                  onClick={() => setDoctorshowModal(false)}
+                >
+                  <svg
+                    aria-hidden="true"
+                    className="w-5 h-5"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                      clipRule="evenodd"
+                    ></path>
+                  </svg>
+                  <span className="sr-only">Close modal</span>
+                </button>
+                <div className="pt-4 py-3 lg:px-5">
+                  <h3 className="pb-2 text-xl font-medium border-b text-gray-900 dark:text-white">
+                    Search Doctor
+                  </h3>
+                  <div>
+                    <UserDoctorSearch
+                      selecteddoctor={selecteddoctor}
+                      setDoctor={setDoctor}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+        </>
+      ) : null}
+
+      {/* end of select doctor modal */}
     </>
   );
 };
