@@ -1,10 +1,21 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AdminSidebar } from "../../layout/sidebar/adminsidebar";
 import { AdminDoctorSearch } from "./components/AdminDoctorSearch";
 import { AdminPatientSearch } from "./components/AdminPatientSearch";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export const AddAdminAppointment = () => {
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    appointmentStatus: "booked",
+    appointmentRemark: "booked by resceptionist",
+    paymentStatus: "not paid",
+    medicalrecordStatus: false,
+  });
+
   const today = new Date().toISOString().split("T")[0]; // Get current date in yyyy-mm-dd format
   const [selectedDate, setSelectedDate] = useState("");
   const [PatientshowModal, setPatientshowModal] = React.useState(false);
@@ -17,9 +28,80 @@ export const AddAdminAppointment = () => {
       setSelectedDate("");
       alert("Sundays are holiday 🎉. Please select another date. 📅");
     } else {
-      setSelectedDate(event.target.value);
+      setFormData({
+        ...formData,
+        appointmentDate: event.target.value,
+      });
     }
   };
+
+  function submitappointment(e) {
+    console.log(formData);
+    e.preventDefault();
+
+    axios.post('/api/Appointment', formData, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status === 404) {
+            throw new Error('Resource not found');
+          }
+          if (response.status === 201) {
+            return response.data;
+          }
+          else {
+            throw new Error('Network response was not ok');
+          }
+        }
+        return response.data;
+      })
+      .then((data) => {
+        // Handle the response from the server
+        console.log(data);
+        alert('Appoint registered');
+        navigate('/admin/appointment');
+      })
+      .catch((error) => {
+        // Handle any errors that occurred during the request
+        console.error('Error:', error.message);
+      });
+  }
+
+  function selectedpatient(data) {
+    const patientdata = {
+      patient: {
+        patientId: data.patientId,
+        patientName: data.patientName,
+      },
+    };
+    // console.log(data);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      ...patientdata,
+    }));
+    setPatientshowModal(false);
+  }
+
+  function selecteddoctor(data) {
+    const doctordata = {
+      appointmentFees: data.doctorFees,
+      doctor: {
+        doctorId: data.doctorId,
+        doctorName: data.doctorName,
+      },
+    };
+    console.log(data);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      ...doctordata,
+    }));
+    setDoctorshowModal(false);
+  }
+
+  console.log(formData);
 
   return (
     <>
@@ -103,15 +185,20 @@ export const AddAdminAppointment = () => {
             <div className="w-full p-3 border border-white rounded-lg">
               <h1 className="text-2xl font-bold mb-6">Appointment Schedule</h1>
 
-              <form action="#">
+              <form onSubmit={(e)=>submitappointment(e)}>
                 <div className="flex flex-wrap mb-4">
                   <label htmlFor="name" className="w-full md:w-1/4">
-                    Name & mobile number
+                    Name 
                   </label>
                   <div className="flex w-full md:w-3/4">
                     <input
                       type="text"
                       id="username-success"
+                      placeholder={
+                        formData.patient
+                          ? formData.patient.patientName
+                          : "select patient"
+                      }
                       disabled
                       className="flex-grow px-2 py-1 border border-gray-300 rounded"
                     />
@@ -133,7 +220,11 @@ export const AddAdminAppointment = () => {
                   <div className="flex w-full md:w-3/4">
                     <input
                       type="text"
-                      id="username-success"
+                      placeholder={
+                        formData.doctor
+                          ? formData.doctor.doctorName
+                          : "select doctor"
+                      }
                       disabled
                       className="flex-grow px-2 py-1 border border-gray-300 rounded"
                     />
@@ -157,6 +248,7 @@ export const AddAdminAppointment = () => {
                   <input
                     type="date"
                     id="date"
+                    required
                     min={today}
                     onChange={handleDateChange}
                     className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
@@ -174,9 +266,15 @@ export const AddAdminAppointment = () => {
                     id="time"
                     min="08:00"
                     max="20:00"
-                    disabled={!selectedDate}
+                    disabled={!formData.appointmentDate}
                     step="1800" // 30-minute interval
-                    onChange={(e) => console.log(e.target.value)}
+                    required
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        appointmentTime: e.target.value,
+                      })
+                    }
                     className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
                   />
                 </div>
@@ -186,7 +284,13 @@ export const AddAdminAppointment = () => {
                   </label>
                   <textarea
                     type="email"
-                    id="email"
+                    required
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        appointmentReason: e.target.value,
+                      })
+                    }
                     row="3"
                     className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
                   />
@@ -206,45 +310,45 @@ export const AddAdminAppointment = () => {
 
       {/* select patient modal */}
       {PatientshowModal ? (
-         <>
-         <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-           <div className="relative w-full max-w-3xl max-h-full">
-             {/* <!-- Modal content --> */}
-             <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-               <button
-                 type="button"
-                 className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
-                 data-modal-hide="authentication-modal"
-                 onClick={() => setPatientshowModal(false)}
-               >
-                 <svg
-                   aria-hidden="true"
-                   className="w-5 h-5"
-                   fill="currentColor"
-                   viewBox="0 0 20 20"
-                   xmlns="http://www.w3.org/2000/svg"
-                 >
-                   <path
-                     fillRule="evenodd"
-                     d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                     clipRule="evenodd"
-                   ></path>
-                 </svg>
-                 <span className="sr-only">Close modal</span>
-               </button>
-               <div className="pt-4 py-3 lg:px-5">
-                 <h3 className="pb-2 text-xl font-medium border-b text-gray-900 dark:text-white">
-                   Search Patient
-                 </h3>
-                <div>
-                 <AdminPatientSearch/>
+        <>
+          <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+            <div className="relative w-full max-w-3xl max-h-full">
+              {/* <!-- Modal content --> */}
+              <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <button
+                  type="button"
+                  className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
+                  data-modal-hide="authentication-modal"
+                  onClick={() => setPatientshowModal(false)}
+                >
+                  <svg
+                    aria-hidden="true"
+                    className="w-5 h-5"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                      clipRule="evenodd"
+                    ></path>
+                  </svg>
+                  <span className="sr-only">Close modal</span>
+                </button>
+                <div className="pt-4 py-3 lg:px-5">
+                  <h3 className="pb-2 text-xl font-medium border-b text-gray-900 dark:text-white">
+                    Search Patient
+                  </h3>
+                  <div>
+                    <AdminPatientSearch selectedpatient={selectedpatient} />
+                  </div>
                 </div>
-               </div>
-             </div>
-           </div>
-         </div>
-         <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-       </>
+              </div>
+            </div>
+          </div>
+          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+        </>
       ) : null}
 
       {/* end of select patient modal */}
@@ -281,9 +385,9 @@ export const AddAdminAppointment = () => {
                   <h3 className="pb-2 text-xl font-medium border-b text-gray-900 dark:text-white">
                     Search Doctor
                   </h3>
-                 <div>
-                  <AdminDoctorSearch/>
-                 </div>
+                  <div>
+                    <AdminDoctorSearch selecteddoctor={selecteddoctor} />
+                  </div>
                 </div>
               </div>
             </div>

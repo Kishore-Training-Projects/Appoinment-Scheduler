@@ -1,21 +1,54 @@
 import React from "react";
 import { useState } from "react";
 import { AdminSidebar } from "../../layout/sidebar/adminsidebar";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export const AddAdminPatient = () => {
-  const today = new Date().toISOString().split("T")[0]; // Get current date in yyyy-mm-dd format
-  const [selectedDate, setSelectedDate] = useState("");
+  const navigate = useNavigate();
 
-  const handleDateChange = (event) => {
-    const selected = new Date(event.target.value);
-    if (selected.getDay() === 0) {
-      event.target.value = "";
-      setSelectedDate("");
-      alert("Sundays are holiday 🎉. Please select another date. 📅");
-    } else {
-      setSelectedDate(event.target.value);
-    }
-  };
+  const [formData, setFormData] = useState({
+    patientAccountStatus:true
+  });
+
+  // formsubmit
+
+  function SubmitPatient(e) {
+    console.log(formData);
+    e.preventDefault();
+
+    axios.post('/api/Patient', formData, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status === 404) {
+            throw new Error('Resource not found');
+          }
+          if (response.status === 201) {
+            return response.data;
+          }
+          else {
+            throw new Error('Network response was not ok');
+          }
+        }
+        return response.data;
+      })
+      .then((data) => {
+        // Handle the response from the server
+        console.log(data);
+        alert('Patient create');
+        navigate('/admin/patient');
+      })
+      .catch((error) => {
+        // Handle any errors that occurred during the request
+        console.error('Error:', error.message);
+      });
+
+
+  }
 
   return (
     <>
@@ -99,15 +132,20 @@ export const AddAdminPatient = () => {
             <div className="w-full p-3 border border-white rounded-lg">
               <h1 className="text-2xl font-bold mb-6">New Patient</h1>
 
-              <form>
+              <form onSubmit={(e)=>SubmitPatient(e)}>
                 <div className="flex flex-wrap mb-4">
                   <label htmlFor="date" className="w-full md:w-1/4">
                     Full Name :
                   </label>
                   <input
                     type="text"
-                    id="date"
-                    name="name"
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        patientName: e.target.value,
+                      })
+                    }
+                    required
                     className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
                   />
                 </div>
@@ -117,8 +155,13 @@ export const AddAdminPatient = () => {
                   </label>
                   <input
                     type="text"
-                    id="date"
-                    name="name"
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        patientAge: e.target.value,
+                      })
+                    }
+                    required
                     className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
                   />
                 </div>
@@ -128,8 +171,13 @@ export const AddAdminPatient = () => {
                   </label>
                   <input
                     type="date"
-                    id="date"
-                    name="name"
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        patientMobile: e.target.value,
+                      })
+                    }
+                    required
                     className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
                   />
                 </div>
@@ -139,7 +187,13 @@ export const AddAdminPatient = () => {
                   </label>
                   <select
                     id="date"
-                    name="name"
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        patientGender: e.target.value,
+                      })
+                    }
+                    required
                     className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
                   >
                     <option defaultChecked>select option</option>
@@ -155,8 +209,13 @@ export const AddAdminPatient = () => {
                   </label>
                   <input
                     type="text"
-                    id="date"
-                    name="name"
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        patientBloodGroup: e.target.value,
+                      })
+                    }
+                    required
                     className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
                   />
                 </div>
@@ -166,8 +225,13 @@ export const AddAdminPatient = () => {
                   </label>
                   <input
                     type="email"
-                    id="date"
-                    name="name"
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        patientEmail: e.target.value,
+                      })
+                    }
+                    required
                     className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
                   />
                 </div>
@@ -176,18 +240,23 @@ export const AddAdminPatient = () => {
                     Mobile Number :
                   </label>
                   <div className="flex w-full md:w-3/4">
-                  <input
-                    type="number"
-                  disabled
-                  placeholder="+91"
-                    className="w-14 mr-2  px-2 py-1 border border-gray-300 rounded"
-                  />
-                  <input
-                    type="number"
-                    id="date"
-                    name="name"
-                    className="w-full  px-2 py-1 border border-gray-300 rounded"
-                  />
+                    <input
+                      type="number"
+                      disabled
+                      placeholder="+91"
+                      className="w-14 mr-2  px-2 py-1 border border-gray-300 rounded"
+                    />
+                    <input
+                      type="number"
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          patientMobile: e.target.value,
+                        })
+                      }
+                      required
+                      className="w-full  px-2 py-1 border border-gray-300 rounded"
+                    />
                   </div>
                 </div>
                 <div className="flex flex-wrap mb-4">
@@ -196,7 +265,13 @@ export const AddAdminPatient = () => {
                   </label>
                   <textarea
                     type="text"
-                    id="email"
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        patientAddress: e.target.value,
+                      })
+                    }
+                    required
                     row="3"
                     className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
                   />

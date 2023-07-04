@@ -105,7 +105,6 @@ export const AddUserAppointment = () => {
     setDoctorshowModal(false);
   }
 
-  console.log(formData);
 
   return (
     <>
@@ -353,7 +352,6 @@ export const AddUserAppointment = () => {
                   <div>
                     <UserDoctorSearch
                       selecteddoctor={selecteddoctor}
-                      setDoctor={setDoctor}
                     />
                   </div>
                 </div>

@@ -16,9 +16,9 @@ export const UserDoctorSearch = ({selecteddoctor}) => {
       .catch((error) => {
         if (error.response) {
           if (error.response.status === 404) {
-            throw new Error("Resource not found");
+            console.log("Resource not found");
           } else {
-            throw new Error("Network response was not ok");
+            console.log("Network response was not ok");
           }
         } else {
           console.error("Error:", error.message);

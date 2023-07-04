@@ -1,138 +1,41 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import ReactPaginate from "react-paginate";
 import { useNavigate } from "react-router-dom";
-
+import axios from "axios";
+import { AddAdminMedicalrecord } from "./components/AddAdminMedicalrecord";
 import { AdminSidebar } from "../../layout/sidebar/adminsidebar";
 export const TodayAdminAppointment = () => {
   const navigate = useNavigate();
 
-  const tableData = [
-    {
-      doctorName: "Dr. John Doe",
-      appointmentDate: "2023-07-01",
-      appointmentTime: "10:00 AM",
-      healthReason: "General Check-up",
-      appointmentStatus: "Confirmed",
-      paymentStatus: "Paid",
-    },
-    {
-      doctorName: "Dr. Jane Smith",
-      appointmentDate: "2023-07-02",
-      appointmentTime: "11:30 AM",
-      healthReason: "Dental Consultation",
-      appointmentStatus: "Confirmed",
-      paymentStatus: "Pending",
-    },
-    {
-      doctorName: "Dr. Mark Johnson",
-      appointmentDate: "2023-07-03",
-      appointmentTime: "2:15 PM",
-      healthReason: "Eye Check-up",
-      appointmentStatus: "Cancelled",
-      paymentStatus: "Not Paid",
-    },
-    {
-      doctorName: "Dr. Jane Smith",
-      appointmentDate: "2023-07-02",
-      appointmentTime: "11:30 AM",
-      healthReason: "Dental Consultation",
-      appointmentStatus: "Confirmed",
-      paymentStatus: "Pending",
-    },
-    {
-      doctorName: "Dr. Mark Johnson",
-      appointmentDate: "2023-07-03",
-      appointmentTime: "2:15 PM",
-      healthReason: "Eye Check-up",
-      appointmentStatus: "Cancelled",
-      paymentStatus: "Not Paid",
-    },
-    {
-      doctorName: "Dr. Jane Smith",
-      appointmentDate: "2023-07-02",
-      appointmentTime: "11:30 AM",
-      healthReason: "Dental Consultation",
-      appointmentStatus: "Confirmed",
-      paymentStatus: "Pending",
-    },
-    {
-      doctorName: "Dr. Mark Johnson",
-      appointmentDate: "2023-07-03",
-      appointmentTime: "2:15 PM",
-      healthReason: "Eye Check-up",
-      appointmentStatus: "Cancelled",
-      paymentStatus: "Not Paid",
-    },
-    {
-      doctorName: "Dr. Jane Smith",
-      appointmentDate: "2023-07-02",
-      appointmentTime: "11:30 AM",
-      healthReason: "Dental Consultation",
-      appointmentStatus: "Confirmed",
-      paymentStatus: "Pending",
-    },
-    {
-      doctorName: "Dr. Mark Johnson",
-      appointmentDate: "2023-07-03",
-      appointmentTime: "2:15 PM",
-      healthReason: "Eye Check-up",
-      appointmentStatus: "Cancelled",
-      paymentStatus: "Not Paid",
-    },
-    {
-      doctorName: "Dr. Jane Smith",
-      appointmentDate: "2023-07-02",
-      appointmentTime: "11:30 AM",
-      healthReason: "Dental Consultation",
-      appointmentStatus: "Confirmed",
-      paymentStatus: "Pending",
-    },
-    {
-      doctorName: "Dr. Mark Johnson",
-      appointmentDate: "2023-07-03",
-      appointmentTime: "2:15 PM",
-      healthReason: "Eye Check-up",
-      appointmentStatus: "Cancelled",
-      paymentStatus: "Not Paid",
-    },
-    {
-      doctorName: "Dr. Jane Smith",
-      appointmentDate: "2023-07-02",
-      appointmentTime: "11:30 AM",
-      healthReason: "Dental Consultation",
-      appointmentStatus: "Confirmed",
-      paymentStatus: "Pending",
-    },
-    {
-      doctorName: "Dr. Mark Johnson",
-      appointmentDate: "2023-07-03",
-      appointmentTime: "2:15 PM",
-      healthReason: "Eye Check-up",
-      appointmentStatus: "Cancelled",
-      paymentStatus: "Not Paid",
-    },
-    {
-      doctorName: "Dr. Jane Smith",
-      appointmentDate: "2023-07-02",
-      appointmentTime: "11:30 AM",
-      healthReason: "Dental Consultation",
-      appointmentStatus: "Confirmed",
-      paymentStatus: "Pending",
-    },
-    {
-      doctorName: "Dr. Mark Johnson",
-      appointmentDate: "2023-07-03",
-      appointmentTime: "2:15 PM",
-      healthReason: "Eye Check-up",
-      appointmentStatus: "Cancelled",
-      paymentStatus: "Not Paid",
-    },
+// fetch appointment data
+const [appointmentdata, setAppointmentdata] = useState([]);
 
-    // Add more appointment objects as needed
-  ];
+const fetch_appointment_data = async () => {
+  await axios
+    .get("/api/Appointment/today/")
+    .then((response) => {
+      setAppointmentdata(response.data);
+    })
+    .catch((error) => {
+      if (error.response) {
+        if (error.response.status === 404) {
+          console.log("Resource not found");
+        } else {
+          console.log("Network response was not ok");
+        }
+      } else {
+        console.error("Error:", error.message);
+      }
+    });
+};
+
+useEffect(() => {
+  fetch_appointment_data();
+}, []);
+
 
   const itemsPerPage = 5; // Number of items to display per page
-  const pageCount = Math.ceil(tableData.length / itemsPerPage);
+  const pageCount = Math.ceil(appointmentdata.length / itemsPerPage);
   const [currentPage, setCurrentPage] = useState(0);
 
   const handlePageChange = ({ selected }) => {
@@ -140,7 +43,7 @@ export const TodayAdminAppointment = () => {
   };
 
   const offset = currentPage * itemsPerPage;
-  const currentPageData = tableData.slice(offset, offset + itemsPerPage);
+  const currentPageData = appointmentdata.slice(offset, offset + itemsPerPage);
 
   return (
     <>
@@ -311,48 +214,25 @@ export const TodayAdminAppointment = () => {
                               scope="row"
                               class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                             >
-                              {row.doctorName}
+                              {row.patient.patientName}
                             </th>
-                            <td class="px-4 py-3 ">{row.appointmentDate}</td>
+                            <td class="px-4 py-3 "> {row.patient.patientMobile}</td>
+                            <td class="px-4 py-3 ">
+                            {new Date(row.appointmentDate).toLocaleDateString()}
+                              </td>
+
                             <td class="px-4 py-3 ">{row.appointmentTime}</td>
                             <td class="px-4 py-3 ">{row.appointmentStatus}</td>
-                            <td class="px-4 py-3 ">{row.paymentStatus}</td>
+                            <td class="px-4 py-3 ">{row.medicalrecordStatus==true?"recorded":"not recorded"}</td>
                             <td class="px-4 py-3 ">{row.paymentStatus}</td>
 
-                            <td class="px-4 py-3 ">{row.healthReason}</td>
                             <td className="px-4 py-3">
                               {" "}
                               <div className="flex space-x-2">
-                                <button
-                                  className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded"
-                                  data-tooltip-target="tooltip-default"
-                                >
-                                  <div
-                                    id="tooltip-default"
-                                    role="tooltip"
-                                    class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
-                                  >
-                                    Tooltip content
-                                    <div
-                                      class="tooltip-arrow"
-                                      data-popper-arrow
-                                    ></div>
-                                  </div>
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke-width="1.5"
-                                    stroke="currentColor"
-                                    class="w-6 h-6"
-                                  >
-                                    <path
-                                      stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                      d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 00-1.883 2.542l.857 6a2.25 2.25 0 002.227 1.932H19.05a2.25 2.25 0 002.227-1.932l.857-6a2.25 2.25 0 00-1.883-2.542m-16.5 0V6A2.25 2.25 0 016 3.75h3.879a1.5 1.5 0 011.06.44l2.122 2.12a1.5 1.5 0 001.06.44H18A2.25 2.25 0 0120.25 9v.776"
-                                    />
-                                  </svg>
-                                </button>
+                               
+
+                          <AddAdminMedicalrecord id = {row.appointmentId}/>
+
                                 <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
                                   <svg
                                     xmlns="http://www.w3.org/2000/svg"
