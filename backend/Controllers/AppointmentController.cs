@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AppoinmentScheduler.Data;
 using AppoinmentScheduler.Model;
+using System.Reflection;
 
 namespace AppoinmentScheduler.Controllers
 {
@@ -29,8 +30,68 @@ namespace AppoinmentScheduler.Controllers
           {
               return NotFound();
           }
-            return await _context.AppointmentModel.ToListAsync();
+            return await _context.AppointmentModel.Include(x=>x.Doctor).Include(x => x.Patient).ToListAsync();
         }
+
+        // GET: api/Appointment/patient
+        [HttpGet("patient/{id}")]
+        public async Task<ActionResult<IEnumerable<AppointmentModel>>> GetAppointmentModelbypatient(int id)
+        {
+            if (_context.AppointmentModel == null)
+            {
+                return NotFound();
+            }
+            return await _context.AppointmentModel.Include(x => x.Doctor).Where(x=>x.Patient.PatientId==id).ToListAsync();
+        }
+
+
+
+        // GET: api/Appointment/doctor
+        [HttpGet("doctor/{id}")]
+        public async Task<ActionResult<IEnumerable<AppointmentModel>>> GetAppointmentModelbydoctor(int id)
+
+        {
+
+
+            if (_context.AppointmentModel == null)
+            {
+                return NotFound();
+            }
+            return await _context.AppointmentModel.Include(x => x.Patient).Where(x => x.Doctor.DoctorId == id).ToListAsync();
+        }
+
+
+        // GET: api/Appointment/doctor
+        [HttpGet("doctor/today/{id}")]
+        public async Task<ActionResult<IEnumerable<AppointmentModel>>> GettodayAppointmentModelbydoctor(int id)
+        {
+            DateTime today = DateTime.Today;
+
+
+            if (_context.AppointmentModel == null)
+            {
+                return NotFound();
+            }
+            return await _context.AppointmentModel.Include(x => x.Patient).Where(x => x.Doctor.DoctorId == id && x.AppointmentDate == today).ToListAsync();
+        }
+
+
+        // GET: api/Appointment/doctor
+        [HttpGet("today")]
+        public async Task<ActionResult<IEnumerable<AppointmentModel>>> GettodayAppointmentModel()
+        {
+            DateTime today = DateTime.Today;
+
+
+            if (_context.AppointmentModel == null)
+            {
+                return NotFound();
+            }
+            return await _context.AppointmentModel.Include(x => x.Patient).Where(x=> x.AppointmentDate == today).ToListAsync();
+        }
+
+
+
 
         // GET: api/Appointment/5
         [HttpGet("{id}")]
@@ -89,8 +150,16 @@ namespace AppoinmentScheduler.Controllers
           if (_context.AppointmentModel == null)
           {
               return Problem("Entity set 'AppoinmentSchedulerContext.AppointmentModel'  is null.");
-          }
+            }
+
+            var patientModel = await _context.PatientModel.Where(x => x.PatientId == appointmentModel.Patient.PatientId).FirstOrDefaultAsync();
+            var doctorModel = await _context.DoctorModel.Where(x => x.DoctorId == appointmentModel.Doctor.DoctorId).FirstOrDefaultAsync();
+
+            appointmentModel.Patient = patientModel;
+            appointmentModel.Doctor = doctorModel;
+
             _context.AppointmentModel.Add(appointmentModel);
+
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetAppointmentModel", new { id = appointmentModel.AppointmentId }, appointmentModel);

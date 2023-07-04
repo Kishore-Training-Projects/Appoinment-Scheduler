@@ -86,19 +86,72 @@ namespace AppoinmentScheduler.Controllers
         [HttpPost]
         public async Task<ActionResult<UserModel>> PostUserModel(UserModel userModel)
         {
-            Console.WriteLine("Doctor ID: " + userModel.Doctor.DoctorId);
+            //Console.WriteLine("Doctor ID: " + userModel.Doctor.DoctorId);
 
-            var DoctorModel = await _context.DoctorModel.FindAsync(userModel.Doctor.DoctorId);
-
-            userModel.Doctor = DoctorModel;
+            if(userModel.UserRole == "admin")
+            {
 
              _context.UserModel.Add(userModel);
              await _context.SaveChangesAsync();
 
-              return CreatedAtAction("GetUserModel", new { id = userModel.UserId }, userModel);
+            }
+            else
+            {
+
+                DoctorModel dm = new DoctorModel();
+
+                dm.DoctorName = userModel.Doctor.DoctorName;
+                dm.DoctorQualification = userModel.Doctor.DoctorQualification;
+                dm.DoctorDesignation = userModel.Doctor.DoctorDesignation;
+                dm.DoctorEmail = userModel.Doctor.DoctorEmail;
+                dm.DoctorFees = userModel.Doctor.DoctorFees;
+                dm.DoctorMobile = userModel.Doctor.DoctorMobile;
+                dm.DoctorAddress = userModel.Doctor.DoctorAddress;
+                dm.DoctorStatus = userModel.Doctor.DoctorStatus;
+
+
+
+
+                userModel.Doctor = dm;
+
+
+                _context.UserModel.Add(userModel);
+            await _context.SaveChangesAsync();
+            }
+
+
+            return CreatedAtAction("GetUserModel", new { id = userModel.UserId }, userModel);
 
             //return NoContent();
         }
+
+
+
+
+
+        // POST: api/User/login
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost("login")]
+        public async Task<ActionResult<UserModel>> PostUserLogin(UserModel userModel)
+        {
+          
+            var UserModel = await _context.UserModel.Include(x=>x.Doctor).Where(x=>x.UserEmail==userModel.UserEmail).Where(x=>x.UserPassword==userModel.UserPassword).FirstOrDefaultAsync();
+
+            if (userModel == null)
+            {
+                return NotFound();
+            }
+
+            return UserModel;
+
+            //return NoContent();
+        }
+
+
+
+
+
+
 
         // DELETE: api/User/5
         [HttpDelete("{id}")]

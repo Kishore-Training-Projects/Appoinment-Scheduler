@@ -29,7 +29,7 @@ namespace AppoinmentScheduler.Controllers
           {
               return NotFound();
           }
-            return await _context.MedicalRecordModel.ToListAsync();
+            return await _context.MedicalRecordModel.Include(x=>x.Appointment).Include(x=>x.Patient).Include(x=>x.Appointment.Doctor).ToListAsync();
         }
 
         // GET: api/MedicalRecord/5
@@ -49,6 +49,40 @@ namespace AppoinmentScheduler.Controllers
 
             return medicalRecordModel;
         }
+
+        // GET: api/MedicalRecord/5
+        [HttpGet("patient/last/{id}")]
+        public async Task<ActionResult<MedicalRecordModel>> GetlastMedicalRecordModelofpatient(int id)
+        {
+            if (_context.MedicalRecordModel == null)
+            {
+                return NotFound();
+            }
+            var medicalRecordModel = await _context.MedicalRecordModel.Where(x=>x.Patient.PatientId == id).OrderByDescending(x => x.MedicalRecordTimestamp).FirstOrDefaultAsync();
+
+            if (medicalRecordModel == null)
+            {
+                return NotFound();
+            }
+
+            return medicalRecordModel;
+        }
+
+
+        // GET: api/MedicalRecord/5
+        [HttpGet("patient/{id}")]
+        public async Task<ActionResult<IEnumerable<MedicalRecordModel>>> GetMedicalRecordModelbypatient(int id)
+        {
+            if (_context.MedicalRecordModel == null)
+            {
+                return NotFound();
+            }
+            return await _context.MedicalRecordModel.Include(x => x.Appointment).Where(x=>x.Patient.PatientId == id).ToListAsync();
+        }
+
+
+   
+
 
         // PUT: api/MedicalRecord/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -90,8 +124,48 @@ namespace AppoinmentScheduler.Controllers
           {
               return Problem("Entity set 'AppoinmentSchedulerContext.MedicalRecordModel'  is null.");
           }
+
+
+            DateTime currentTimestamp = DateTime.Now;
+
+
+            medicalRecordModel.MedicalRecordTimestamp = currentTimestamp;
+
+            
+
+            var appointmentModel = await _context.AppointmentModel.Where(x => x.AppointmentId == medicalRecordModel.Appointment.AppointmentId).Include(x=>x.Patient).FirstOrDefaultAsync();
+            var patientModel = await _context.PatientModel.Where(x => x.PatientId == appointmentModel.Patient.PatientId).FirstOrDefaultAsync();
+
+            medicalRecordModel.Patient = patientModel;
+            medicalRecordModel.Appointment = appointmentModel;
+
+            appointmentModel.MedicalrecordStatus = true;
+            appointmentModel.AppointmentStatus = "waiting";
+
+            try
+            {
+
             _context.MedicalRecordModel.Add(medicalRecordModel);
             await _context.SaveChangesAsync();
+
+
+                _context.Entry(appointmentModel).State = EntityState.Modified;
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    return NotFound();
+                }
+
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
 
             return CreatedAtAction("GetMedicalRecordModel", new { id = medicalRecordModel.MedicalRecordId }, medicalRecordModel);
         }

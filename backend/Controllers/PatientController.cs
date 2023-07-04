@@ -71,6 +71,24 @@ namespace AppoinmentScheduler.Controllers
         }
 
 
+        // GET: api/Patient/search/9562513517
+        [HttpGet("login/{mobile}")]
+        public async Task<ActionResult<PatientModel>> GetPatientLoginMobile(string mobile)
+        {
+            if (_context.PatientModel == null)
+            {
+                return NotFound();
+            }
+            var patientModel = await _context.PatientModel.Where(x => x.PatientMobile == mobile).Where(x=>x.PatientAccountStatus==true).FirstOrDefaultAsync();
+
+            if (patientModel == null)
+            {
+                return NotFound();
+            }
+
+            return patientModel;
+        }
+
 
 
         // PUT: api/Patient/5

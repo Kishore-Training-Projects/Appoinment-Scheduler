@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace AppoinmentScheduler.Model
 {
@@ -23,5 +24,14 @@ namespace AppoinmentScheduler.Model
 
         public String? DoctorStatus { get; set; }
 
+        internal void PostDoctorModel()
+        {
+            throw new NotImplementedException();
+        }
+
+        public static implicit operator DoctorModel(CreatedAtActionResult v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
