@@ -2,57 +2,55 @@ import React from "react";
 import { useState } from "react";
 import axios from "axios";
 
-export const AddAdminMedicalrecord = (id) => {
+export const AddDoctorPrescription = ({id ,setPrescription}) => {
   const [showModal, setShowModal] = React.useState(false);
   const [formData, setFormData] = useState({
-  height: 0,
-  weight: 0,
-  pressure: 0,
-  temperature: 0,
-  medicalRecordRemark: "",
-  attenderName: "",
-  appointment: {
-    appointmentId: id.id
-  },
-
+    disease: "",
+    allergy: "",
+    prescription: "",
+    prescriptionRemark: "",
+    doctor: {
+      doctorId: (JSON.parse(sessionStorage.getItem("doctor_key"))).userid,
+    },
+    appointment: {
+      appointmentId: id,
+    },
   });
 
-  function submitrecord(e)
-  {
+  function submitrecord(e) {
     e.preventDefault();
     console.log(formData);
 
-    axios.post('/api/MedicalRecord', formData, {
+    axios
+      .post("/api/Prescription", formData, {
         headers: {
-          'Content-Type': 'application/json'
-        }
+          "Content-Type": "application/json",
+        },
       })
-        .then((response) => {
-          if (!response.ok) {
-            if (response.status === 404) {
-              throw new Error('Resource not found');
-            }
-            if (response.status === 201) {
-              return response.data;
-            }
-            else {
-              throw new Error('Network response was not ok');
-            }
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status === 404) {
+            throw new Error("Resource not found");
           }
-          return response.data;
-        })
-        .then((data) => {
-          // Handle the response from the server
-          console.log(data);
-          alert('Record Inserted Done');
-         setShowModal(false)
-        })
-        .catch((error) => {
-          // Handle any errors that occurred during the request
-          console.error('Error:', error.message);
-        });
-
-
+          if (response.status === 201) {
+            return response.data;
+          } else {
+            throw new Error("Network response was not ok");
+          }
+        }
+        return response.data;
+      })
+      .then((data) => {
+        // Handle the response from the server
+        console.log(data);
+        alert("Record Inserted Done");
+        setShowModal(false);
+        setPrescription(data);
+      })
+      .catch((error) => {
+        // Handle any errors that occurred during the request
+        console.error("Error:", error.message);
+      });
   }
 
   return (
@@ -91,129 +89,102 @@ export const AddAdminMedicalrecord = (id) => {
                   </h3>
                   <div>
                     <div className="p-3">
-                      <form onSubmit={(e)=>submitrecord(e)} className=" grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <form
+                        onSubmit={(e) => submitrecord(e)}
+                        className=" grid grid-cols-1 md:grid-cols-2 gap-4"
+                      >
                         <div>
                           <label
                             htmlFor="email"
                             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                           >
-                            Height
+                            Disease
                           </label>
-                          <input
+                          <select
                             type="text"
                             onChange={(e) =>
-                                setFormData({
-                                  ...formData,
-                                  height: e.target.value,
-                                })
-                              }
+                              setFormData({
+                                ...formData,
+                                disease: e.target.value,
+                              })
+                            }
                             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-                           
                             required
-                          />
+                          >
+                            <option value="Diabetes">Diabetes</option>
+                            <option value="Depression">Depression</option>
+                            <option value="Anxiety">Anxiety</option>
+                            <option value="Colds and Flu">Colds and Flu</option>
+                            <option value="Headaches">Headaches</option>
+
+                            </select>
                         </div>
                         <div>
                           <label
                             htmlFor="password"
                             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                           >
-                            Weight
+                            Allergy
                           </label>
                           <input
                             type="text"
                             onChange={(e) =>
-                                setFormData({
-                                  ...formData,
-                                  weight: e.target.value,
-                                })
-                              }
+                              setFormData({
+                                ...formData,
+                                allergy: e.target.value,
+                              })
+                            }
                             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
                             required
                           />
                         </div>
-                        <div>
+                        <div className="col-span-2">
                           <label
                             htmlFor="repeat-password"
                             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                           >
-                            Pressure
-                          </label>
-                          <input
-                            type="text"
-                            onChange={(e) =>
-                                setFormData({
-                                  ...formData,
-                                  pressure: e.target.value,
-                                })
-                              }
-                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-                            required
-                          />
-                        </div>
-                        <div>
-                          <label
-                            htmlFor="input4"
-                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                          >
-                            Temperature
-                          </label>
-                          <input
-                            type="text"
-                            onChange={(e) =>
-                                setFormData({
-                                  ...formData,
-                                  temperature: e.target.value,
-                                })
-                              }
-                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-                            required
-                          />
-                        </div>
-                        <div >
-                          <label
-                            htmlFor="input5"
-                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                          >
-                            Remark
+                            Prescription
                           </label>
                           <textarea
                             type="text"
                             onChange={(e) =>
-                                setFormData({
-                                  ...formData,
-                                  medicalRecordRemark: e.target.value,
-                                })
-                              }
+                              setFormData({
+                                ...formData,
+                                prescription: e.target.value,
+                              })
+                            }
                             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
                             required
                           >
                             </textarea>
                         </div>
-                        <div>
+                       
+                        <div className="col-span-2">
                           <label
-                            htmlFor="input4"
+                            htmlFor="input5"
                             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                           >
-                            Attender Name
+                            Prescription Remark
                           </label>
-                          <input
+                          <textarea
                             type="text"
                             onChange={(e) =>
-                                setFormData({
-                                  ...formData,
-                                  attenderName: e.target.value,
-                                })
-                              }
+                              setFormData({
+                                ...formData,
+                                prescriptionRemark: e.target.value,
+                              })
+                            }
                             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
                             required
-                          />
+                          ></textarea>
                         </div>
+                      
                         <div className="col-span-2 sm:flex sm:flex-row-reverse">
                           <button
                             type="submit"
-                            className="inline-flex w-full justify-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
+                            className="inline-flex w-full justify-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
                           >
-                            Add record
+                            Add Prescription
                           </button>
                           <button
                             className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"

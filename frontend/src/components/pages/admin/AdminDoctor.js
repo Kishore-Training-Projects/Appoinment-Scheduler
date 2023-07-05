@@ -2,7 +2,8 @@ import React, { useState,useEffect } from "react";
 import ReactPaginate from "react-paginate";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import DeleteAdminDoctor from "./components/DeleteAdminDoctor";
+import { EditAdminDoctor } from "./components/EditAdminDoctor";
 import { AdminSidebar } from "../../layout/sidebar/adminsidebar";
 export const AdminDoctor = () => {
   const navigate = useNavigate();
@@ -239,12 +240,9 @@ export const AdminDoctor = () => {
                               {" "}
                               <div className="flex space-x-2">
                                
-                                <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
-                                  Edit
-                                </button>
-                                <button className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded">
-                                  Delete
-                                </button>
+                                                              <EditAdminDoctor id={row.doctorId} fetch_doctor_data={fetch_doctor_data} />
+
+                                <DeleteAdminDoctor id={row.doctorId} fetch_doctor_data={fetch_doctor_data} />
                               </div>
                             </td>
                           </tr>

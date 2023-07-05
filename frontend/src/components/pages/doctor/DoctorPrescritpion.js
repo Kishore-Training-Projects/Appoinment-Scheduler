@@ -156,7 +156,7 @@ export const DoctorPrescription = () => {
                             </div>
                           </th>
                           <th scope="col" class="px-4 py-3">
-                            Sn no
+                            appointment No
                           </th>
                           <th scope="col" class="px-4 py-3">
                             Date
@@ -179,9 +179,11 @@ export const DoctorPrescription = () => {
                           <th scope="col" class="px-4 py-3">
                             Allergy
                           </th>
-
                           <th scope="col" class="px-4 py-3">
-                            Actions
+                            Prescription
+                          </th>
+                          <th scope="col" class="px-4 py-3">
+                            Remark
                           </th>
                         </tr>
                       </thead>
@@ -207,7 +209,10 @@ export const DoctorPrescription = () => {
                                 </label>
                               </div>
                             </td>
-                            <td class="px-4 py-3 ">{index + 1}</td>
+                            <td class="px-4 py-3 ">
+                              {" "}
+                              {row.appointment.appointmentId}
+                            </td>
 
                             <th
                               scope="row"
@@ -221,21 +226,24 @@ export const DoctorPrescription = () => {
                               {row.appointment.patient.patientName}
                             </td>
                             <td class="px-4 py-3 text-center">
-                            {row.appointment.patient.patientMobile}
+                              {row.appointment.patient.patientMobile}
                             </td>
-                            <td class="px-4 py-3 text-center">{row.doctor.doctorName}</td>
-                            <td class="px-4 py-3 text-center">{row.doctor.doctorDesignation}</td>
+                            <td class="px-4 py-3 text-center">
+                              {row.doctor.doctorName}
+                            </td>
+                            <td class="px-4 py-3 text-center">
+                              {row.doctor.doctorDesignation}
+                            </td>
                             <td class="px-4 py-3 text-center">{row.disease}</td>
                             <td class="px-4 py-3 text-center">{row.allergy}</td>
-
-                            <td className="px-4 py-3">
-                              {" "}
-                              <div className="flex space-x-2">
-                                <button className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded">
-                                  View
-                                </button>
-                              </div>
+                            <td class="px-4 py-3 text-center">
+                              {row.prescription}
                             </td>
+                            <td class="px-4 py-3 text-center">
+                              {row.prescriptionRemark}
+                            </td>
+
+                          
                           </tr>
                         ))}
                       </tbody>

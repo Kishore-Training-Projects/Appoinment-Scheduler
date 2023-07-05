@@ -1,59 +1,68 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
-export const AddAdminMedicalrecord = (id) => {
+export const EditAdminDoctor = ({ id , fetch_doctor_data}) => {
   const [showModal, setShowModal] = React.useState(false);
-  const [formData, setFormData] = useState({
-  height: 0,
-  weight: 0,
-  pressure: 0,
-  temperature: 0,
-  medicalRecordRemark: "",
-  attenderName: "",
-  appointment: {
-    appointmentId: id.id
-  },
 
-  });
-
-  function submitrecord(e)
-  {
+  function submitrecord(e) {
     e.preventDefault();
-    console.log(formData);
+    console.log(doctordata);
 
-    axios.post('/api/MedicalRecord', formData, {
+    axios
+      .put(`/api/Doctor/${id}`, doctordata, {
         headers: {
-          'Content-Type': 'application/json'
-        }
+          "Content-Type": "application/json",
+        },
       })
-        .then((response) => {
-          if (!response.ok) {
-            if (response.status === 404) {
-              throw new Error('Resource not found');
-            }
-            if (response.status === 201) {
-              return response.data;
-            }
-            else {
-              throw new Error('Network response was not ok');
-            }
+      .then((response) => {
+        if (response.ok) {
+          if (response.status === 404) {
+            throw new Error("Resource not found");
           }
-          return response.data;
-        })
-        .then((data) => {
-          // Handle the response from the server
-          console.log(data);
-          alert('Record Inserted Done');
-         setShowModal(false)
-        })
-        .catch((error) => {
-          // Handle any errors that occurred during the request
-          console.error('Error:', error.message);
-        });
-
-
+          if (response.status === 201) {
+            return response.data;
+          } else {
+            throw new Error("Network response was not ok");
+          }
+        }
+        return response.data;
+      })
+      .then((data) => {
+        // Handle the response from the server
+        console.log(data);
+        alert("Record Updated Done");
+        setShowModal(false);
+        fetch_doctor_data();
+      })
+      .catch((error) => {
+        // Handle any errors that occurred during the request
+        console.error("Error:", error.message);
+      });
   }
+
+  const [doctordata, setDoctordata] = useState();
+
+  const fetch_doctors_data = async (id) => {
+    try {
+      const response = await axios.get(`/api/Doctor/${id}`);
+      setDoctordata(response.data);
+    } catch (error) {
+      if (error.response) {
+        if (error.response.status === 404) {
+          console.log("Resource not found");
+        } else {
+          console.log("Network response was not ok");
+        }
+      } else {
+        console.error("Error:", error.message);
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetch_doctors_data(id);
+  }, []);
 
   return (
     <>
@@ -91,24 +100,27 @@ export const AddAdminMedicalrecord = (id) => {
                   </h3>
                   <div>
                     <div className="p-3">
-                      <form onSubmit={(e)=>submitrecord(e)} className=" grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <form
+                        onSubmit={(e) => submitrecord(e)}
+                        className=" grid grid-cols-1 md:grid-cols-2 gap-4"
+                      >
                         <div>
                           <label
                             htmlFor="email"
                             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                           >
-                            Height
+                            Doctor Name
                           </label>
                           <input
                             type="text"
+                            value={doctordata.doctorName}
                             onChange={(e) =>
-                                setFormData({
-                                  ...formData,
-                                  height: e.target.value,
-                                })
-                              }
+                              setDoctordata({
+                                ...doctordata,
+                                doctorName: e.target.value,
+                              })
+                            }
                             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-                           
                             required
                           />
                         </div>
@@ -117,16 +129,18 @@ export const AddAdminMedicalrecord = (id) => {
                             htmlFor="password"
                             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                           >
-                            Weight
+                            Doctor Designation
                           </label>
                           <input
                             type="text"
+                            value={doctordata.doctorDesignation}
+
                             onChange={(e) =>
-                                setFormData({
-                                  ...formData,
-                                  weight: e.target.value,
-                                })
-                              }
+                              setDoctordata({
+                                ...doctordata,
+                                doctorDesignation: e.target.value,
+                              })
+                            }
                             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
                             required
                           />
@@ -136,16 +150,18 @@ export const AddAdminMedicalrecord = (id) => {
                             htmlFor="repeat-password"
                             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                           >
-                            Pressure
+                            Doctor Qualification
                           </label>
                           <input
                             type="text"
+                            value={doctordata.doctorQualification}
+
                             onChange={(e) =>
-                                setFormData({
-                                  ...formData,
-                                  pressure: e.target.value,
-                                })
-                              }
+                              setDoctordata({
+                                ...doctordata,
+                                doctorQualification: e.target.value,
+                              })
+                            }
                             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
                             required
                           />
@@ -155,68 +171,94 @@ export const AddAdminMedicalrecord = (id) => {
                             htmlFor="input4"
                             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                           >
-                            Temperature
+                            Doctor Fees
                           </label>
                           <input
-                            type="text"
+                            type="number"
+                            value={doctordata.doctorFees}
+
                             onChange={(e) =>
-                                setFormData({
-                                  ...formData,
-                                  temperature: e.target.value,
-                                })
-                              }
+                              setDoctordata({
+                                ...doctordata,
+                                doctorFees: e.target.value,
+                              })
+                            }
                             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
                             required
                           />
                         </div>
-                        <div >
+                        <div>
                           <label
                             htmlFor="input5"
                             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                           >
-                            Remark
+                            Doctor Email
                           </label>
-                          <textarea
+                          <input
                             type="text"
+                            value={doctordata.doctorEmail}
                             onChange={(e) =>
-                                setFormData({
-                                  ...formData,
-                                  medicalRecordRemark: e.target.value,
-                                })
-                              }
+                              setDoctordata({
+                                ...doctordata,
+                                doctorEmail: e.target.value,
+                              })
+                            }
                             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
                             required
-                          >
-                            </textarea>
+                          />
                         </div>
                         <div>
                           <label
                             htmlFor="input4"
                             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                           >
-                            Attender Name
+                            Doctor Status
                           </label>
-                          <input
-                            type="text"
+                          <select
                             onChange={(e) =>
-                                setFormData({
-                                  ...formData,
-                                  attenderName: e.target.value,
-                                })
-                              }
+                              setDoctordata({
+                                ...doctordata,
+                                doctorStatus: e.target.value,
+                              })
+                            }
                             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
                             required
-                          />
+                          >
+                            <option value="Lunch">Lunch</option>
+                            <option value="Available">Available</option>
+                            <option value="Leave">Leave</option>
+                          </select>
                         </div>
+
+                        <div className="col-span-2">
+                          <label
+                            htmlFor="input4"
+                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                          >
+                            Doctor Address
+                          </label>
+                          <textarea
+                            value={doctordata.doctorAddress}
+                            onChange={(e) =>
+                              setDoctordata({
+                                ...doctordata,
+                                doctorAddress: e.target.value,
+                              })
+                            }
+                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                            required
+                          ></textarea>
+                        </div>
+
                         <div className="col-span-2 sm:flex sm:flex-row-reverse">
                           <button
                             type="submit"
-                            className="inline-flex w-full justify-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
+                            className="inline-flex w-full justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
                           >
-                            Add record
+                            Update
                           </button>
                           <button
-                            className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                            className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
                             onClick={() => setShowModal(false)}
                           >
                             Cancel
@@ -238,23 +280,9 @@ export const AddAdminMedicalrecord = (id) => {
       {/* button */}
       <button
         onClick={() => setShowModal(true)}
-        className="text-xs bg-green-500 hover:bg-green-600 text-white font-semibold py-1 px-2 rounded"
-        data-tooltip-target="tooltip-default"
+        className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="w-6 h-6"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 00-1.883 2.542l.857 6a2.25 2.25 0 002.227 1.932H19.05a2.25 2.25 0 002.227-1.932l.857-6a2.25 2.25 0 00-1.883-2.542m-16.5 0V6A2.25 2.25 0 016 3.75h3.879a1.5 1.5 0 011.06.44l2.122 2.12a1.5 1.5 0 001.06.44H18A2.25 2.25 0 0120.25 9v.776"
-          />
-        </svg>
+        Edit
       </button>
     </>
   );

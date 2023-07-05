@@ -3,6 +3,7 @@ import ReactPaginate from "react-paginate";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { UserSidebar } from "../../layout/sidebar/usersidebar";
+import CancelUserAppointment from "./components/CancelUserAppointment";
 export const UserAppointment = () => {
   const navigate = useNavigate();
 
@@ -312,9 +313,8 @@ export const UserAppointment = () => {
                             <td className="px-4 py-3">
                               {" "}
                               <div className="flex space-x-2">
-                                <button className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded">
-                                  Delete
-                                </button>
+                                <CancelUserAppointment id={row.appointmentId} fetch_appointment_data={fetch_appointment_data}/>
+                               
                                 {/* <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
                                   Edit
                                 </button> */}

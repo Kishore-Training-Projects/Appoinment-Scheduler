@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -8,32 +8,31 @@ import { AdminSidebar } from "../../layout/sidebar/adminsidebar";
 export const AdminPrescription = () => {
   const navigate = useNavigate();
 
- // fetch prescription data
- const [prescription, setprescription] = useState([]);
+  // fetch prescription data
+  const [prescription, setprescription] = useState([]);
 
- const fetch_prescription_data = async () => {
-   await axios
-     .get("/api/Prescription/")
-     .then((response) => {
-       setprescription(response.data);
-     })
-     .catch((error) => {
-       if (error.response) {
-         if (error.response.status === 404) {
-           console.log("Resource not found");
-         } else {
-           console.log("Network response was not ok");
-         }
-       } else {
-         console.error("Error:", error.message);
-       }
-     });
- };
+  const fetch_prescription_data = async () => {
+    await axios
+      .get("/api/Prescription/")
+      .then((response) => {
+        setprescription(response.data);
+      })
+      .catch((error) => {
+        if (error.response) {
+          if (error.response.status === 404) {
+            console.log("Resource not found");
+          } else {
+            console.log("Network response was not ok");
+          }
+        } else {
+          console.error("Error:", error.message);
+        }
+      });
+  };
 
- useEffect(() => {
-   fetch_prescription_data();
- }, []);
-
+  useEffect(() => {
+    fetch_prescription_data();
+  }, []);
 
   const itemsPerPage = 5; // Number of items to display per page
   const pageCount = Math.ceil(prescription.length / itemsPerPage);
@@ -100,8 +99,6 @@ export const AdminPrescription = () => {
             </nav>
           </div>
 
-    
-
           {/* table code */}
           <div class="flex w-full mb-4 h-full rounded bg-gray-50 dark:bg-gray-800">
             <section class="bg-gray-50 dark:bg-gray-900 w-full h-full">
@@ -160,7 +157,7 @@ export const AdminPrescription = () => {
                             </div>
                           </th>
                           <th scope="col" class="px-4 py-3">
-                            Sn no
+                            Appointment No
                           </th>
                           <th scope="col" class="px-4 py-3">
                             Date
@@ -175,9 +172,14 @@ export const AdminPrescription = () => {
                             Disease
                           </th>
                           <th scope="col" class="px-4 py-3">
-                           Allergy
-                          </th>                         
-                         
+                            Allergy
+                          </th>
+                          <th scope="col" class="px-4 py-3">
+                            prescription
+                          </th>
+                          <th scope="col" class="px-4 py-3">
+                            remark
+                          </th>
                           <th scope="col" class="px-4 py-3">
                             Actions
                           </th>
@@ -205,26 +207,32 @@ export const AdminPrescription = () => {
                                 </label>
                               </div>
                             </td>
-                            <td class="px-4 py-3 ">{index+1}</td>
+                            <td class="px-4 py-3 ">{row.appointment.appointmentId}</td>
 
                             <th
                               scope="row"
                               class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                             >
-  {new Date(
+                              {new Date(
                                 row.prescriptionTimestamp
-                              ).toLocaleDateString()}                            </th>
-                            <td class="px-4 py-3 text-center ">{row.appointment.patient.patientName}</td>
-                            <td class="px-4 py-3 text-center">{row.appointment.patient.patientMobile}</td>
+                              ).toLocaleDateString()}{" "}
+                            </th>
+                            <td class="px-4 py-3 text-center ">
+                              {row.appointment.patient.patientName}
+                            </td>
+                            <td class="px-4 py-3 text-center">
+                              {row.appointment.patient.patientMobile}
+                            </td>
                             <td class="px-4 py-3 text-center">{row.disease}</td>
                             <td class="px-4 py-3 text-center">{row.allergy}</td>
-
+                            <td class="px-4 py-3 text-center">{row.prescription}</td>
+                            <td class="px-4 py-3 text-center">{row.prescriptionRemark}</td>
 
                             <td className="px-4 py-3">
                               {" "}
                               <div className="flex space-x-2">
-                                <button className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded">
-                                  View
+                                <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
+                                  Export
                                 </button>
                               </div>
                             </td>

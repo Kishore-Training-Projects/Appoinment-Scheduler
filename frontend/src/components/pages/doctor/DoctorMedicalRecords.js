@@ -158,7 +158,9 @@ export const DoctorMedicalRecords = () => {
                               </label>
                             </div>
                           </th>
-                         
+                          <th scope="col" class="px-4 py-3">
+                            Appointment No
+                          </th>
                           <th scope="col" class="px-4 py-3">
                             Patient Name
                           </th>
@@ -181,9 +183,11 @@ export const DoctorMedicalRecords = () => {
                           <th scope="col" class="px-4 py-3">
                             Temperature ( ∘C )
                           </th>
-                         
                           <th scope="col" class="px-4 py-3">
-                            Actions
+                            Remark
+                          </th>
+                          <th scope="col" class="px-4 py-3">
+                            Attender Name
                           </th>
                         </tr>
                       </thead>
@@ -209,7 +213,12 @@ export const DoctorMedicalRecords = () => {
                                 </label>
                               </div>
                             </td>
-
+                            <th
+                              scope="row"
+                              class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                            >
+                              {row.appointment.appointmentId}
+                            </th>
                             <th
                               scope="row"
                               class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -226,15 +235,10 @@ export const DoctorMedicalRecords = () => {
                             <td class="px-4 py-3 text-center">{row.pressure}</td>
                             <td class="px-4 py-3 text-center">{row.temperature}</td>
                            
+                            <td class="px-4 py-3 text-center">{row.medicalRecordRemark}</td>
+                            <td class="px-4 py-3 text-center">{row.attenderName}</td>
 
-                            <td className="px-4 py-3">
-                              {" "}
-                              <div className="flex space-x-2">
-                                <button className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded">
-                                  View
-                                </button>
-                              </div>
-                            </td>
+                            
                           </tr>
                         ))}
                       </tbody>

@@ -158,8 +158,8 @@ export const AdminMedicalRecords = () => {
                               </label>
                             </div>
                           </th>
-                          <th scope="col" class="px-4 py-3">
-                            Sn no
+                          <th scope="col" class="px-4 py-3 text-center">
+                           Appointment No
                           </th>
                           <th scope="col" class="px-4 py-3">
                             Patient Name
@@ -167,8 +167,8 @@ export const AdminMedicalRecords = () => {
                           <th scope="col" class="px-4 py-3">
                             Patient Mbile
                           </th>
-                          <th scope="col" class="px-4 py-3">
-                            Date
+                          <th scope="col" class="px-4 py-3 text-center">
+                            TimeStamp
                           </th>
                           <th scope="col" class="px-4 py-3 ">
                             Height ( CM )
@@ -183,10 +183,11 @@ export const AdminMedicalRecords = () => {
                           <th scope="col" class="px-4 py-3">
                             Temperature ( ∘C )
                           </th>
-                         
-                         
                           <th scope="col" class="px-4 py-3">
-                            Actions
+                            MedicalRecord 
+                          </th>
+                          <th scope="col" class="px-4 py-3">
+                            Attender Name
                           </th>
                         </tr>
                       </thead>
@@ -212,7 +213,7 @@ export const AdminMedicalRecords = () => {
                                 </label>
                               </div>
                             </td>
-                            <td class="px-4 py-3 ">{index+1}</td>
+                            <td class="px-4 py-3 text-center">{row.appointment.appointmentId}</td>
                             <th
                               scope="row"
                               class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -231,17 +232,12 @@ export const AdminMedicalRecords = () => {
                             <td class="px-4 py-3 text-center">{row.weight}</td>
                             <td class="px-4 py-3 text-center">{row.pressure}</td>
                             <td class="px-4 py-3 text-center">{row.temperature}</td>
+                            <td class="px-4 py-3 text-center">{row.medicalRecordRemark}</td>
+                            <td class="px-4 py-3 text-center">{row.attenderName}</td>
 
                             <td className="px-4 py-3">
                               {" "}
-                              <div className="flex space-x-2">
-                                <button className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded">
-                                  View
-                                </button>
-                                <button className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded">
-                                  Delete
-                                </button>
-                              </div>
+                              
                             </td>
                           </tr>
                         ))}

@@ -234,12 +234,13 @@ useEffect(() => {
                             <td className="px-4 py-3">
                               {" "}
                               <div className="flex space-x-2">
-                                <button className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded">
+                                <button 
+                                                                onClick={()=>navigate("/admin/appointment/view/"+row.appointmentId)}
+
+                                className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded">
                                   View
                                 </button>
-                                <button className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded">
-                                  Cancel
-                                </button>
+                           
                               </div>
                             </td>
                           </tr>

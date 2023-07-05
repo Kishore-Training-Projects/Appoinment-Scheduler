@@ -25,7 +25,7 @@ import { DoctorMedicalRecords } from "../pages/doctor/DoctorMedicalRecords";
 import { DoctorPrescription } from "../pages/doctor/DoctorPrescritpion";
 import { DoctorLeave } from "../pages/doctor/DoctorLeave";
 import { DoctorProfile } from "../pages/doctor/DoctorProfile";
-
+import { ViewDoctorAppointment } from "../pages/doctor/components/viewDoctorAppointment";
 
 // admin routers
 import { AdminDashboard } from "../pages/admin/AdminDashboard";
@@ -39,6 +39,8 @@ import { AdminPrescription } from "../pages/admin/AdminPrescription";
 import { AdminLeave } from "../pages/admin/AdminLeave";
 import { AddAdminPatient } from "../pages/admin/AddAdminPatient";
 import { AddAdminDoctor } from "../pages/admin/AddAdminDoctor";
+import { ViewAdminAppointment } from "../pages/admin/components/ViewAdminAppointment";
+
 
 function Router() {
     return (
@@ -123,6 +125,10 @@ function Router() {
         element: <DoctorAppointment />,
       },
       {
+        path: "/doctor/appointment/view/:id",
+        element: <ViewDoctorAppointment />,
+      },
+      {
         path: "/doctor/medicalrecords/",
         element: <DoctorMedicalRecords />,
       },
@@ -157,6 +163,10 @@ function Router() {
       {
         path: "/admin/appointment/",
         element: <AdminAppointment />,
+      },
+      {
+        path: "/admin/appointment/view/:id",
+        element: <ViewAdminAppointment />,
       },
       {
         path: "/admin/doctor/",

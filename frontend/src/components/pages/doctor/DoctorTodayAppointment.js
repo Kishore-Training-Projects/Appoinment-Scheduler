@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -7,31 +7,34 @@ import { DoctorSidebar } from "../../layout/sidebar/doctorsidebar";
 export const DoctorTodayAppointment = () => {
   const navigate = useNavigate();
 
-// fetch appointment data
-const [appointmentdata, setAppointmentdata] = useState([]);
+  // fetch appointment data
+  const [appointmentdata, setAppointmentdata] = useState([]);
 
-const fetch_appointment_data = async () => {
-  await axios
-    .get("/api/Appointment/doctor/today/"+(JSON.parse(sessionStorage.getItem("doctor_key"))).userid)
-    .then((response) => {
-      setAppointmentdata(response.data);
-    })
-    .catch((error) => {
-      if (error.response) {
-        if (error.response.status === 404) {
-          console.log("Resource not found");
+  const fetch_appointment_data = async () => {
+    await axios
+      .get(
+        "/api/Appointment/doctor/today/" +
+          JSON.parse(sessionStorage.getItem("doctor_key")).userid
+      )
+      .then((response) => {
+        setAppointmentdata(response.data);
+      })
+      .catch((error) => {
+        if (error.response) {
+          if (error.response.status === 404) {
+            console.log("Resource not found");
+          } else {
+            console.log("Network response was not ok");
+          }
         } else {
-          console.log("Network response was not ok");
+          console.error("Error:", error.message);
         }
-      } else {
-        console.error("Error:", error.message);
-      }
-    });
-};
+      });
+  };
 
-useEffect(() => {
-  fetch_appointment_data();
-}, []);
+  useEffect(() => {
+    fetch_appointment_data();
+  }, []);
 
   const itemsPerPage = 5; // Number of items to display per page
   const pageCount = Math.ceil(appointmentdata.length / itemsPerPage);
@@ -97,7 +100,6 @@ useEffect(() => {
               </ol>
             </nav>
           </div>
-       
 
           {/* table code */}
           <div class="flex w-full mb-4 h-full rounded bg-gray-50 dark:bg-gray-800">
@@ -140,7 +142,6 @@ useEffect(() => {
                       </form>
                     </div>
                     <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-        
                       <div class="flex items-center space-x-3 w-full md:w-auto"></div>
                     </div>
                   </div>
@@ -177,11 +178,10 @@ useEffect(() => {
                             Appointment status
                           </th>
 
-                         
                           <th scope="col" class="px-4 py-3">
                             Appointment Reason
                           </th>
-                          
+
                           <th scope="col" class="px-4 py-3">
                             Actions
                           </th>
@@ -215,22 +215,31 @@ useEffect(() => {
                             >
                               {row.patient.patientName}
                             </th>
-                            <td class="px-4 py-3 ">{row.patient.patientMobile}</td>
+                            <td class="px-4 py-3 ">
+                              {row.patient.patientMobile}
+                            </td>
 
                             <td class="px-4 py-3 ">
-                            {new Date(row.appointmentDate).toLocaleDateString()}
-                              </td>
+                              {new Date(
+                                row.appointmentDate
+                              ).toLocaleDateString()}
+                            </td>
                             <td class="px-4 py-3 ">{row.appointmentTime}</td>
                             <td class="px-4 py-3 ">{row.appointmentStatus}</td>
                             <td class="px-4 py-3 ">{row.appointmentReason}</td>
                             <td className="px-4 py-3">
                               {" "}
                               <div className="flex space-x-2">
-                                <button className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded">
+                                <button
+                                  onClick={() =>
+                                    navigate(
+                                      "/doctor/appointment/view/" +
+                                        row.appointmentId
+                                    )
+                                  }
+                                  className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded"
+                                >
                                   View
-                                </button>
-                                <button className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded">
-                                  Cancel
                                 </button>
                               </div>
                             </td>

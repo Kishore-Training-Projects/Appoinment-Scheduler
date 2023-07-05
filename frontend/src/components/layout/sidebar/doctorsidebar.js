@@ -2,7 +2,7 @@ import React from "react";
 import { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navigate } from "react-router-dom";
-
+import axios from "axios";
 export const DoctorSidebar = () => {
 
   const [profile, setProfile] = useState();
@@ -41,15 +41,55 @@ export const DoctorSidebar = () => {
   };
 
 
-  useEffect(() => {
-    const profile = () => {
-      var item_value = JSON.parse(sessionStorage.getItem("doctor_key"));
-      // console.log(item_value.picture)
-      setProfile(item_value);
-    };
+  const profiles = () => {
+    var item_value = JSON.parse(sessionStorage.getItem("doctor_key"));
+    // console.log(item_value.picture)
+    setProfile(item_value);
+  };
 
-    profile();
+  useEffect(() => {
+    profiles();
   }, []);
+
+  const handlestatus = (status) => {
+
+    const temp = profile;
+    temp.status = status;
+    // setProfile({
+    //   ...profile,
+    //   status: status,
+    // });
+    console.log(temp);
+    
+    sessionStorage.setItem("doctor_key", JSON.stringify(temp));
+    
+    setIsstatusOpen(!isstatusOpen);
+    update_status(temp.userid,status);
+
+
+
+
+  }
+
+      
+  const update_status =  (id,status) => {
+     axios
+      .put(`/api/Doctor?id=${id}&status=${status}`)
+      .then((response) => {
+        console.log("Status updated");
+      })
+      .catch((error) => {
+        if (error.response) {
+          if (error.response.status === 404) {
+            console.log("Resource not found");
+          } else {
+            console.log("Network response was not ok");
+          }
+        } else {
+          console.log("Error:", error.message);
+        }
+      });
+  };
 
   const signout = () => {
     sessionStorage.clear();
@@ -101,14 +141,17 @@ export const DoctorSidebar = () => {
             <button
               type="button"
               onClick={statusDropdown}
-              aria-expanded={isstatusOpen}
               class="hidden md:block inline-flex items-center font-medium justify-center px-4 py-2 text-sm text-gray-900 dark:text-white rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
             >
-              {status == "Available"
-                ? "🟢 Available"
-                : status == "Leave"
-                ? " 🔴 Leave "
-                : "🍔 Lunch"}
+             {profile&&(
+               
+               profile.status == "Available"
+                 ? "🟢 Available"
+                 :profile.status == "Leave"
+                 ? " 🔴 Leave "
+                 : "🍔 Lunch"
+              )} 
+
             </button>
             {/* dropdown */}
 
@@ -121,8 +164,7 @@ export const DoctorSidebar = () => {
                   <li>
                     <a
                       onClick={() => {
-                        setstatus("Leave");
-                        setIsstatusOpen(!isstatusOpen);
+                        handlestatus("Leave");
                       }}
                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
                       role="menuitem"
@@ -133,8 +175,7 @@ export const DoctorSidebar = () => {
                   <li>
                     <a
                       onClick={() => {
-                        setstatus("Available");
-                        setIsstatusOpen(!isstatusOpen);
+                        handlestatus("Available");
                       }}
                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
                       role="menuitem"
@@ -145,8 +186,7 @@ export const DoctorSidebar = () => {
                   <li>
                     <a
                       onClick={() => {
-                        setstatus("Lunch");
-                        setIsstatusOpen(!isstatusOpen);
+                        handlestatus("Lunch");
                       }}
                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
                       role="menuitem"
