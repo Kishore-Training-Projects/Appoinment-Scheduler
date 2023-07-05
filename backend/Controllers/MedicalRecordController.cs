@@ -51,6 +51,25 @@ namespace AppoinmentScheduler.Controllers
         }
 
         // GET: api/MedicalRecord/5
+        [HttpGet("reception")]
+        public async Task<ActionResult<MedicalRecordModel>> GetMedicalRecordModelpatient(int id1,int id2)
+        {
+            if (_context.MedicalRecordModel == null)
+            {
+                return NotFound();
+            }
+            var medicalRecordModel = await _context.MedicalRecordModel.Where(x=>x.Patient.PatientId==id1 && x.Appointment.AppointmentId == id2).FirstOrDefaultAsync();
+
+            if (medicalRecordModel == null)
+            {
+                return NotFound();
+            }
+
+            return medicalRecordModel;
+        }
+
+
+        // GET: api/MedicalRecord/5
         [HttpGet("patient/last/{id}")]
         public async Task<ActionResult<MedicalRecordModel>> GetlastMedicalRecordModelofpatient(int id)
         {

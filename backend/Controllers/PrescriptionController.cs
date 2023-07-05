@@ -46,6 +46,26 @@ namespace AppoinmentScheduler.Controllers
 
 
 
+        // GET: api/Prescription/doctor
+        [HttpGet("doctor")]
+        public async Task<ActionResult<PrescriptionModel>> GetPrescriptionModelbyDoctor(int id1, int id2)
+        {
+            if (_context.PrescriptionModel == null)
+            {
+                return NotFound();
+            }
+            var prescriptionModel = await _context.PrescriptionModel.Where(x => x.Appointment.Patient.PatientId == id1 && x.Appointment.AppointmentId == id2).FirstOrDefaultAsync();
+
+            if (prescriptionModel == null)
+            {
+                return NotFound();
+            }
+
+            return prescriptionModel;
+        }
+
+
+
         // GET: api/Prescription/5
         [HttpGet("{id}")]
         public async Task<ActionResult<PrescriptionModel>> GetPrescriptionModel(int id)
@@ -105,6 +125,8 @@ namespace AppoinmentScheduler.Controllers
               return Problem("Entity set 'AppoinmentSchedulerContext.PrescriptionModel'  is null.");
           }
 
+            DateTime time = DateTime.Today;
+
             var doctorModel = await _context.DoctorModel.Where(x => x.DoctorId == prescriptionModel.Doctor.DoctorId).FirstOrDefaultAsync();
 
             var appointmentModel = await _context.AppointmentModel.Where(x => x.AppointmentId == prescriptionModel.Appointment.AppointmentId).FirstOrDefaultAsync();
@@ -113,6 +135,8 @@ namespace AppoinmentScheduler.Controllers
             prescriptionModel.Appointment = appointmentModel;
 
             appointmentModel.AppointmentStatus = "completed";
+
+            prescriptionModel.PrescriptionTimestamp = time;
 
             try
             {

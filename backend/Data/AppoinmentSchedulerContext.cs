@@ -42,5 +42,9 @@ namespace AppoinmentScheduler.Data
         public DbSet<AppoinmentScheduler.Model.PrescriptionModel>? PrescriptionModel { get; set; }
 
         public DbSet<AppoinmentScheduler.Model.AppointmentModel>? AppointmentModel { get; set; }
+
+        public DbSet<AppoinmentScheduler.Model.DoctorLeaveModel>? DoctorLeaveModel { get; set; }
+
+        public DbSet<AppoinmentScheduler.Model.PaymentModel>? PaymentModel { get; set; }
     }
 }

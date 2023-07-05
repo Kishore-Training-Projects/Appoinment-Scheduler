@@ -81,6 +81,39 @@ namespace AppoinmentScheduler.Controllers
             return NoContent();
         }
 
+
+        // PUT: api/Doctor/5
+        // update doctor status
+        [HttpPut]
+        public async Task<IActionResult> updatedoctorstatus(int id,string status)
+        {
+            var doctorModel = await _context.DoctorModel.FindAsync(id);
+
+            doctorModel.DoctorStatus = status;
+
+            _context.Entry(doctorModel).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!DoctorModelExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+
+
         // POST: api/Doctor
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -105,10 +138,23 @@ namespace AppoinmentScheduler.Controllers
                 return NotFound();
             }
             var doctorModel = await _context.DoctorModel.FindAsync(id);
+
+            var userModel = await _context.UserModel.Where(x=>x.Doctor.DoctorId == id).FirstOrDefaultAsync();
+
+
             if (doctorModel == null)
             {
                 return NotFound();
             }
+
+            if (userModel == null)
+            {
+                return NotFound();
+            }
+
+            _context.UserModel.Remove(userModel);
+            await _context.SaveChangesAsync();
+
 
             _context.DoctorModel.Remove(doctorModel);
             await _context.SaveChangesAsync();

@@ -101,7 +101,7 @@ namespace AppoinmentScheduler.Controllers
           {
               return NotFound();
           }
-            var appointmentModel = await _context.AppointmentModel.FindAsync(id);
+            var appointmentModel = await _context.AppointmentModel.Include(x=>x.Patient).Include(x=>x.Doctor).Where(x=>x.AppointmentId==id).FirstOrDefaultAsync();
 
             if (appointmentModel == null)
             {
@@ -141,6 +141,174 @@ namespace AppoinmentScheduler.Controllers
 
             return NoContent();
         }
+
+
+
+
+        // PUT: api/Appointment/5
+       // cancel the appointment
+        [HttpPut("Reception/{id}")]
+        public async Task<IActionResult> ReceptionCancelAppointmentModel(int id)
+        {
+
+            var appointmentModel = await _context.AppointmentModel.FindAsync(id);
+
+
+            if (id != appointmentModel.AppointmentId)
+            {
+                return BadRequest();
+            }
+
+            appointmentModel.AppointmentStatus = "cancelled";
+            appointmentModel.AppointmentRemark = "Cancelled by receptionist";
+
+            _context.Entry(appointmentModel).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!AppointmentModelExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+
+
+        // PUT: api/Appointment/5
+        // cancel the appointment by patient
+        [HttpPut("Doctor/{id}")]
+        public async Task<IActionResult> DoctorsCancelAppointmentModel(int id)
+        {
+
+            var appointmentModel = await _context.AppointmentModel.FindAsync(id);
+
+
+            if (id != appointmentModel.AppointmentId)
+            {
+                return BadRequest();
+            }
+
+            appointmentModel.AppointmentStatus = "cancelled";
+            appointmentModel.AppointmentRemark = "Cancelled by Doctor";
+
+            _context.Entry(appointmentModel).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!AppointmentModelExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+
+
+        // PUT: api/Appointment/5
+        // cancel the appointment by patient
+        [HttpPut("Patient/{id}")]
+        public async Task<IActionResult> PatientCancelAppointmentModel(int id)
+        {
+
+            var appointmentModel = await _context.AppointmentModel.FindAsync(id);
+
+
+            if (id != appointmentModel.AppointmentId)
+            {
+                return BadRequest();
+            }
+
+            appointmentModel.AppointmentStatus = "cancelled";
+            appointmentModel.AppointmentRemark = "Cancelled by Patient";
+
+            _context.Entry(appointmentModel).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!AppointmentModelExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+
+
+
+
+        // PUT: api/Appointment/5
+        // cancel the appointment by patient
+        [HttpPut("payment/{id}")]
+        public async Task<IActionResult> paymentstatusupdate(int id)
+        {
+
+            var appointmentModel = await _context.AppointmentModel.FindAsync(id);
+
+
+            if (id != appointmentModel.AppointmentId)
+            {
+                return BadRequest();
+            }
+
+            appointmentModel.PaymentStatus = "paid";
+
+            _context.Entry(appointmentModel).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!AppointmentModelExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+
+
+
+
+
 
         // POST: api/Appointment
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -184,6 +352,8 @@ namespace AppoinmentScheduler.Controllers
 
             return NoContent();
         }
+
+
 
         private bool AppointmentModelExists(int id)
         {
