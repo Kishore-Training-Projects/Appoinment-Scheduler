@@ -1,80 +1,79 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import ReactPaginate from "react-paginate";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import DeleteAdminDoctor from "./components/DeleteAdminDoctor";
+import { EditAdminDoctor } from "./components/EditAdminDoctor";
 import { AdminSidebar } from "../../layout/sidebar/adminsidebar";
 export const AdminDoctor = () => {
   const navigate = useNavigate();
 
-  const tableData = [
-    {
-      doctorName: 'Dr. John Smith',
-      designation: 'Cardiologist',
-      qualification: 'MD, FACC',
-      mobile: '+1 123 456 7890',
-      status: 'Active',
-    },
-    {
-      doctorName: 'Dr. Sarah Johnson',
-      designation: 'Dermatologist',
-      qualification: 'MD, FAAD',
-      mobile: '+1 234 567 8901',
-      status: 'Active',
-    },
-    {
-      doctorName: 'Dr. Emily Lee',
-      designation: 'Pediatrician',
-      qualification: 'MD, FAAP',
-      mobile: '+1 345 678 9012',
-      status: 'Inactive',
-    },
-    {
-      doctorName: 'Dr. Michael Johnson',
-      designation: 'Orthopedic Surgeon',
-      qualification: 'MD, FRCSC',
-      mobile: '+1 456 789 0123',
-      status: 'Active',
-    },
-    {
-      doctorName: 'Dr. Jennifer Davis',
-      designation: 'Gynecologist',
-      qualification: 'MD, FACOG',
-      mobile: '+1 567 890 1234',
-      status: 'Active',
-    },
-    {
-      doctorName: 'Dr. Robert Anderson',
-      designation: 'Ophthalmologist',
-      qualification: 'MD, FRCS',
-      mobile: '+1 678 901 2345',
-      status: 'Inactive',
-    },
-    {
-      doctorName: 'Dr. Laura Wilson',
-      designation: 'Psychiatrist',
-      qualification: 'MD, FAPA',
-      mobile: '+1 789 012 3456',
-      status: 'Active',
-    },
-    {
-      doctorName: 'Dr. Christopher Brown',
-      designation: 'Dentist',
-      qualification: 'DDS',
-      mobile: '+1 890 123 4567',
-      status: 'Active',
-    },
-  ];
+  // fetch prescription data
+  const [doctordata, setdoctordata] = useState([]);
+
+  const fetch_doctor_data = async () => {
+    await axios
+      .get("/api/Doctor")
+      .then((response) => {
+        setdoctordata(response.data);
+        setSearchResults(response.data);
+      })
+      .catch((error) => {
+        if (error.response) {
+          if (error.response.status === 404) {
+            console.log("Resource not found");
+          } else {
+            console.log("Network response was not ok");
+          }
+        } else {
+          console.error("Error:", error.message);
+        }
+      });
+  };
+
+  useEffect(() => {
+    fetch_doctor_data();
+  }, []);
 
   const itemsPerPage = 5; // Number of items to display per page
-  const pageCount = Math.ceil(tableData.length / itemsPerPage);
+  const pageCount = Math.ceil(doctordata.length / itemsPerPage);
   const [currentPage, setCurrentPage] = useState(0);
 
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected);
   };
+  
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
 
   const offset = currentPage * itemsPerPage;
-  const currentPageData = tableData.slice(offset, offset + itemsPerPage);
+  var currentPageData = searchResults.slice(offset, offset + itemsPerPage);
 
+
+  // Function to handle search query changes
+  const handleSearchQueryChange = (event) => {
+    setSearchQuery(event.target.value);
+    handleSearch(event.target.value);
+  };
+
+  // Function to handle search
+  const handleSearch = (search) => {
+    console.log(search)
+    // Perform search logic here using searchQuery
+    const filteredResults = doctordata.filter(
+      (doctor) =>
+        doctor.doctorName.toLowerCase().includes(search.toLowerCase()) ||
+        doctor.doctorMobile.includes(search)
+    );
+    console.log(filteredResults)
+  
+    setSearchResults(filteredResults);
+
+    // Reset pagination to the first page
+    setCurrentPage(0);
+  };
+
+ 
   return (
     <>
       <AdminSidebar />
@@ -141,7 +140,7 @@ export const AdminDoctor = () => {
                       Doctor Details
                     </caption>
                     <div class="w-full md:w-1/2">
-                      <form class="flex items-center">
+                      <div class="flex items-center">
                         <label for="simple-search" class="sr-only">
                           Search
                         </label>
@@ -166,29 +165,20 @@ export const AdminDoctor = () => {
                             id="simple-search"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="Search"
-                            required=""
+                            value={searchQuery}
+        onChange={handleSearchQueryChange}
+        
                           />
                         </div>
-                      </form>
+                      </div>
                     </div>
                     <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
                       <button
                         type="button"
+                        onClick={() => navigate("/admin/doctor/new")}
                         class="flex items-center justify-center text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800"
                       >
-                        <svg
-                          class="h-3.5 w-3.5 mr-2"
-                          fill="currentColor"
-                          viewbox="0 0 20 20"
-                          xmlns="http://www.w3.org/2000/svg"
-                          aria-hidden="true"
-                        >
-                          <path
-                            clip-rule="evenodd"
-                            fill-rule="evenodd"
-                            d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                          />
-                        </svg>
+                       
                         Add Doctor
                       </button>
                       <div class="flex items-center space-x-3 w-full md:w-auto"></div>
@@ -221,6 +211,9 @@ export const AdminDoctor = () => {
                           </th>
                           <th scope="col" class="px-4 py-3">
                             Doctor Qualification
+                          </th>
+                          <th scope="col" class="px-4 py-3">
+                            Doctor Fees
                           </th>
                           <th scope="col" class="px-4 py-3">
                             Doctor Email
@@ -266,23 +259,22 @@ export const AdminDoctor = () => {
                             >
                               {row.doctorName}
                             </th>
-                            <td class="px-4 py-3 text-center ">{row.designation}</td>
-                            <td class="px-4 py-3 text-center">{row.qualification}</td>
-                            <td class="px-4 py-3 text-center">{row.status}</td>
-                            <td class="px-4 py-3 text-center">{row.status}</td>
-                            <td class="px-4 py-3 text-center">{row.status}</td>
+                            <td class="px-4 py-3 text-center ">{row.doctorFees}</td>
+
+                            <td class="px-4 py-3 text-center ">{row.doctorDesignation}</td>
+                            <td class="px-4 py-3 text-center">{row.doctorQualification}</td>
+                            <td class="px-4 py-3 text-center">{row.doctorEmail}</td>
+                            <td class="px-4 py-3 text-center">{row.doctorAddress}</td>
+                            <td class="px-4 py-3 text-center">{row.doctorStatus}</td>
 
 
                             <td className="px-4 py-3">
                               {" "}
                               <div className="flex space-x-2">
                                
-                                <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
-                                  Edit
-                                </button>
-                                <button className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded">
-                                  Delete
-                                </button>
+                                                              <EditAdminDoctor id={row.doctorId} fetch_doctor_data={fetch_doctor_data} />
+
+                                <DeleteAdminDoctor id={row.doctorId} fetch_doctor_data={fetch_doctor_data} />
                               </div>
                             </td>
                           </tr>

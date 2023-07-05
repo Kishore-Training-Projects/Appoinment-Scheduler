@@ -1,6 +1,10 @@
 import React, { useState } from "react";
+import logo from "../../images/logo.png";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => {
@@ -11,20 +15,23 @@ const Navbar = () => {
     <>
       <nav className="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 left-0 border-b border-gray-200 dark:border-gray-600 shadow-lg">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-          <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
-            Doctor Appointment
-          </span>
+          <a class="flex mr-4">
+            <img src={logo} class="mr-3 h-8" alt="FlowBite Logo" />
+            <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+              New 🩺 Life
+            </span>
+          </a>
           <div className="flex md:order-2">
             <div className="hidden md:block">
               <a
-                href="/login"
+                onClick={() => navigate("/login")}
                 type="button"
                 className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
                 Login
               </a>
               <a
-                href="/register"
+                onClick={() => navigate("/register")}
                 type="button"
                 className="ml-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
@@ -96,16 +103,16 @@ const Navbar = () => {
                 </a>
               </li>
               <li className="block md:hidden">
-                <button
-                  href="#"
+                <a
+                  onClick={() => navigate("/login")}
                   className="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                 >
                   Login
-                </button>
+                </a>
               </li>
               <li className="block md:hidden">
                 <a
-                  href="#"
+                  onClick={() => navigate("/register")}
                   className="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                 >
                   Register

@@ -1,88 +1,45 @@
 import React from "react";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { AdminSidebar } from "../../layout/sidebar/adminsidebar";
 import ReactPaginate from "react-paginate";
-
+import axios from "axios";
+import DeleteAdminLeave from "./components/DeleteAdminLeave";
 export const AdminLeave = () => {
   const today = new Date().toISOString().split("T")[0]; // Get current date in yyyy-mm-dd format
 
 
-  const tableData = [
-    {
-      doctorName: 'Dr. John Smith',
-      designation: 'Cardiologist',
-      date: '2023-06-28',
-      disease: 'Hypertension',
-      allergy: 'None',
-      prescription: 'Medication X, Medication Y',
-      remark: 'Patient advised to monitor blood pressure regularly.',
-    },
-    {
-      doctorName: 'Dr. Sarah Johnson',
-      designation: 'Dermatologist',
-      date: '2023-06-30',
-      disease: 'Eczema',
-      allergy: 'Penicillin',
-      prescription: 'Cream A, Cream B',
-      remark: 'Patient to avoid exposure to allergens.',
-    }, {
-      doctorName: 'Dr. Emily Lee',
-      designation: 'Pediatrician',
-      date: '2023-06-29',
-      disease: 'Common Cold',
-      allergy: 'None',
-      prescription: 'Antibiotic X, Syrup Y',
-      remark: 'Patient advised to get plenty of rest and drink fluids.',
-    },
-    {
-      doctorName: 'Dr. Michael Johnson',
-      designation: 'Orthopedic Surgeon',
-      date: '2023-06-27',
-      disease: 'Fractured Arm',
-      allergy: 'None',
-      prescription: 'Cast applied, Pain medication',
-      remark: 'Patient to follow up after four weeks for cast removal.',
-    },
-    {
-      doctorName: 'Dr. Jennifer Davis',
-      designation: 'Gynecologist',
-      date: '2023-06-26',
-      disease: 'Irregular Menstruation',
-      allergy: 'None',
-      prescription: 'Hormone Therapy',
-      remark: 'Patient advised to maintain a healthy lifestyle and exercise regularly.',
-    },
-    {
-      doctorName: 'Dr. Robert Anderson',
-      designation: 'Ophthalmologist',
-      date: '2023-06-25',
-      disease: 'Cataracts',
-      allergy: 'None',
-      prescription: 'Cataract Surgery',
-      remark: 'Patient to attend pre-operative consultation before surgery.',
-    },
-    {
-      doctorName: 'Dr. Laura Wilson',
-      designation: 'Psychiatrist',
-      date: '2023-06-24',
-      disease: 'Depression',
-      allergy: 'None',
-      prescription: 'Antidepressant Medication',
-      remark: 'Patient advised to attend therapy sessions regularly.',
-    },
-    {
-      doctorName: 'Dr. Christopher Brown',
-      designation: 'Dentist',
-      date: '2023-06-23',
-      disease: 'Cavity',
-      allergy: 'None',
-      prescription: 'Tooth Filling',
-      remark: 'Patient to maintain regular oral hygiene practices.',
-    },
-  ];
+
+  // fetch doctor leave data
+  const [doctorleave, setDoctorLeave] = useState([]);
+
+  const fetch_doctorLeave_data = async () => {
+    await axios
+      .get(
+        "/api/DoctorLeave/" 
+      )
+      .then((response) => {
+        console.log(response.data);
+        setDoctorLeave(response.data);
+      })
+      .catch((error) => {
+        if (error.response) {
+          if (error.response.status === 404) {
+            console.log("Resource not found");
+          } else {
+            console.log("Network response was not ok");
+          }
+        } else {
+          console.error("Error:", error.message);
+        }
+      });
+  };
+
+  useEffect(() => {
+    fetch_doctorLeave_data();
+  }, []);
 
   const itemsPerPage = 5; // Number of items to display per page
-  const pageCount = Math.ceil(tableData.length / itemsPerPage);
+  const pageCount = Math.ceil(doctorleave.length / itemsPerPage);
   const [currentPage, setCurrentPage] = useState(0);
 
   const handlePageChange = ({ selected }) => {
@@ -90,9 +47,7 @@ export const AdminLeave = () => {
   };
 
   const offset = currentPage * itemsPerPage;
-  const currentPageData = tableData.slice(offset, offset + itemsPerPage);
-
-
+  const currentPageData = doctorleave.slice(offset, offset + itemsPerPage);
 
 
 
@@ -176,78 +131,6 @@ export const AdminLeave = () => {
             </nav>
           </div>
 
-          {/* form */}
-          <div class="flex mb-4 rounded bg-white dark:bg-gray-800">
-            <div className="w-full p-3 border border-white rounded-lg">
-              <h1 className="text-2xl font-bold mb-6">Doctor Leave Apply</h1>
-
-              <form>
-                  
-              <div className="flex flex-wrap mb-4 items-center">
-                  <label htmlFor="email" className="w-full md:w-1/4">
-                    Doctor:
-
-                  </label>
-
-                  <div className="flex w-full md:w-3/4">
-                    <input
-                      type="text"
-                      id="username-success"
-                      disabled
-                      className="flex-grow px-2 py-1 border border-gray-300 rounded"
-                    />
-
-                    <button className="ml-3 w-34 text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-                      select doctor
-                    </button>
-                  </div>
-                </div>
-                <div className="flex flex-wrap mb-4">
-                  <label htmlFor="date" className="w-full md:w-1/4">
-                    From Date:
-                  </label>
-                  <input
-                    type="date"
-                    id="date"
-                    min={today}
-                    className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
-                  />
-                </div>
-
-                <div className="flex flex-wrap mb-4">
-                  <label htmlFor="date" className="w-full md:w-1/4">
-                    To Date:
-                  </label>
-                  <input
-                    type="date"
-                    id="date"
-                    min={today}
-                    className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
-                  />
-                </div>
-
-                <div className="flex flex-wrap mb-4">
-                  <label htmlFor="email" className="w-full md:w-1/4">
-                    Reason:
-                  </label>
-                  <textarea
-                    type="email"
-                    id="email"
-                    row="3"
-                    className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                >
-                  Submit
-                </button>
-              </form>
-            </div>
-          </div>
-
 
 
    {/* table code */}
@@ -313,6 +196,9 @@ export const AdminLeave = () => {
                           <th scope="col" class="px-4 py-3">
                             Doctor Name
                           </th>
+                          <th scope="col" class="px-4 py-3">
+                            Doctor Designation
+                          </th>
                           <th scope="col" class="px-4 py-3 ">
                             from date
                           </th>
@@ -328,56 +214,53 @@ export const AdminLeave = () => {
                           </th>
                         </tr>
                       </thead>
-                      <tbody>
-                        {currentPageData.map((row, index) => (
-                          <tr
-                            key={index}
-                            class="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                          >
-                            <td class="w-4 px-4 py-3">
-                              <div class="flex items-center">
-                                <input
-                                  id="checkbox-table-search-1"
-                                  type="checkbox"
-                                  onclick="event.stopPropagation()"
-                                  class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                />
-                                <label
-                                  for="checkbox-table-search-1"
-                                  class="sr-only"
-                                >
-                                  checkbox
-                                </label>
-                              </div>
-                            </td>
-                            <td class="px-4 py-3 ">{index+1}</td>
-
-                            <th
-                              scope="row"
-                              class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                      {doctorleave && (
+                        <tbody>
+                          {currentPageData.map((row, index) => (
+                            <tr
+                              key={index}
+                              class="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                             >
-                              {row.date}
-                            </th>
-                            <td class="px-4 py-3 text-center ">{row.doctorName}</td>
-                            <td class="px-4 py-3 text-center">{row.designation}</td>
-                            
+                              <td class="w-4 px-4 py-3">
+                                <div class="flex items-center">
+                                  <input
+                                    id="checkbox-table-search-1"
+                                    type="checkbox"
+                                    onclick="event.stopPropagation()"
+                                    class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                  />
+                                  <label
+                                    for="checkbox-table-search-1"
+                                    class="sr-only"
+                                  >
+                                    checkbox
+                                  </label>
+                                </div>
+                              </td>
+                              <td class="px-4 py-3 ">{index + 1}</td>
+                              <td class="px-4 py-3 ">{row.doctor.doctorName}</td>
+                              <td class="px-4 py-3 ">{row.doctor.doctorDesignation}</td>
 
-                            <td class="px-4 py-3 ">{row.remark}</td>
+                              <td class="px-4 py-3  ">
+                                {new Date(row.leaveFrom).toLocaleDateString()}
+                              </td>
+                              <td class="px-4 py-3 ">
+                                {" "}
+                                {new Date(row.leaveTo).toLocaleDateString()}
+                              </td>
 
-                            <td className="px-4 py-3">
-                              {" "}
-                              <div className="flex space-x-2">
-                                <button className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded">
-                                  View
-                                </button>
-                                <button className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded">
-                                  Delete
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
+                              <td class="px-4 py-3 ">{row.leaveReason}</td>
+
+                              <td className="px-4 py-3">
+                                {" "}
+                                <div className="flex space-x-2">
+                                  <DeleteAdminLeave id={row.leaveId} fetch_doctorLeave_data={fetch_doctorLeave_data} />
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      )}
                     </table>
                   </div>
                   <nav

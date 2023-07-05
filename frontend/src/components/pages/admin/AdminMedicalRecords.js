@@ -1,107 +1,41 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import ReactPaginate from "react-paginate";
 import { useNavigate } from "react-router-dom";
 
+import axios from "axios";
 
 import { AdminSidebar } from "../../layout/sidebar/adminsidebar";
 export const AdminMedicalRecords = () => {
   const navigate = useNavigate();
 
-  const tableData = [
-    {
-      height: 160,
-      Date: "2023-07-02",
+  // fetch medical records data
+  const [medicalrecords, setmedicalrecords] = useState([]);
 
-      weight: 70,
-      pressure: 120,
-      temperature: 98.6,
-      remark: "Normal",
-      attenderName: "John Doe"
-    },
-    {
-      height: 170,
-      weight: 65,
-      Date: "2023-07-02",
+  const fetch_medicalrecord_data = async () => {
+    await axios
+      .get("/api/MedicalRecord/")
+      .then((response) => {
+        setmedicalrecords(response.data);
+      })
+      .catch((error) => {
+        if (error.response) {
+          if (error.response.status === 404) {
+            console.log("Resource not found");
+          } else {
+            console.log("Network response was not ok");
+          }
+        } else {
+          console.error("Error:", error.message);
+        }
+      });
+  };
 
-      pressure: 130,
-      temperature: 99.1,
-      remark: "Normal",
-      attenderName: "Jane Smith"
-    },
-    {
-        height: 160,
-        weight: 70,
-        Date: "2023-07-02",
-
-        pressure: 120,
-        temperature: 98.6,
-        remark: "Normal",
-        attenderName: "John Doe"
-      },
-      {
-        height: 170,
-        weight: 65,
-        Date: "2023-07-02",
-
-        pressure: 130,
-        temperature: 99.1,
-        remark: "Normal",
-        attenderName: "Jane Smith"
-      },
-      {
-        height: 160,
-        weight: 70,
-        pressure: 120,
-        temperature: 98.6,
-        Date: "2023-07-02",
-
-        remark: "Normal",
-        attenderName: "John Doe"
-      },
-      {
-        height: 170,
-        weight: 65,
-        Date: "2023-07-02",
-
-        pressure: 130,
-        temperature: 99.1,
-        remark: "Normal",
-        attenderName: "Jane Smith"
-      },
-    {
-      height: 155,
-      weight: 60,
-      pressure: 115,
-      temperature: 98.2,
-      Date: "2023-07-02",
-
-      remark: "Normal",
-      attenderName: "Michael Johnson"
-    },
-    {
-      height: 175,
-      weight: 80,
-      pressure: 140,
-      temperature: 98.9,
-      Date: "2023-07-02",
-
-      remark: "Normal",
-      attenderName: "Emily Davis"
-    },
-    {
-      height: 165,
-      weight: 75,
-      pressure: 125,
-      Date: "2023-07-02",
-
-      temperature: 98.4,
-      remark: "Normal",
-      attenderName: "Robert Wilson"
-    }
-  ];
+  useEffect(() => {
+    fetch_medicalrecord_data();
+  }, []);
 
   const itemsPerPage = 5; // Number of items to display per page
-  const pageCount = Math.ceil(tableData.length / itemsPerPage);
+  const pageCount = Math.ceil(medicalrecords.length / itemsPerPage);
   const [currentPage, setCurrentPage] = useState(0);
 
   const handlePageChange = ({ selected }) => {
@@ -109,7 +43,7 @@ export const AdminMedicalRecords = () => {
   };
 
   const offset = currentPage * itemsPerPage;
-  const currentPageData = tableData.slice(offset, offset + itemsPerPage);
+  const currentPageData = medicalrecords.slice(offset, offset + itemsPerPage);
 
   return (
     <>
@@ -224,8 +158,8 @@ export const AdminMedicalRecords = () => {
                               </label>
                             </div>
                           </th>
-                          <th scope="col" class="px-4 py-3">
-                            Sn no
+                          <th scope="col" class="px-4 py-3 text-center">
+                           Appointment No
                           </th>
                           <th scope="col" class="px-4 py-3">
                             Patient Name
@@ -233,8 +167,8 @@ export const AdminMedicalRecords = () => {
                           <th scope="col" class="px-4 py-3">
                             Patient Mbile
                           </th>
-                          <th scope="col" class="px-4 py-3">
-                            Date
+                          <th scope="col" class="px-4 py-3 text-center">
+                            TimeStamp
                           </th>
                           <th scope="col" class="px-4 py-3 ">
                             Height ( CM )
@@ -249,10 +183,11 @@ export const AdminMedicalRecords = () => {
                           <th scope="col" class="px-4 py-3">
                             Temperature ( ∘C )
                           </th>
-                         
-                         
                           <th scope="col" class="px-4 py-3">
-                            Actions
+                            MedicalRecord 
+                          </th>
+                          <th scope="col" class="px-4 py-3">
+                            Attender Name
                           </th>
                         </tr>
                       </thead>
@@ -278,31 +213,31 @@ export const AdminMedicalRecords = () => {
                                 </label>
                               </div>
                             </td>
-                            <td class="px-4 py-3 ">{index+1}</td>
-
+                            <td class="px-4 py-3 text-center">{row.appointment.appointmentId}</td>
                             <th
                               scope="row"
                               class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                             >
-                              {row.Date}
+                              {row.patient.patientName}
                             </th>
+                            <th
+                              scope="row"
+                              class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                            >
+                              {row.patient.patientMobile}
+                            </th>
+                            <td class="px-4 py-3 text-center ">{row.medicalRecordTimestamp}</td>
+
                             <td class="px-4 py-3 text-center ">{row.height}</td>
                             <td class="px-4 py-3 text-center">{row.weight}</td>
                             <td class="px-4 py-3 text-center">{row.pressure}</td>
                             <td class="px-4 py-3 text-center">{row.temperature}</td>
-                            <td class="px-4 py-3 ">{row.attenderName}</td>
-                            <td class="px-4 py-3 ">{row.attenderName}</td>
+                            <td class="px-4 py-3 text-center">{row.medicalRecordRemark}</td>
+                            <td class="px-4 py-3 text-center">{row.attenderName}</td>
 
                             <td className="px-4 py-3">
                               {" "}
-                              <div className="flex space-x-2">
-                                <button className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded">
-                                  View
-                                </button>
-                                <button className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded">
-                                  Delete
-                                </button>
-                              </div>
+                              
                             </td>
                           </tr>
                         ))}

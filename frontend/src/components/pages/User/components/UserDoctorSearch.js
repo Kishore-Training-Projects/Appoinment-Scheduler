@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 import ReactPaginate from "react-paginate";
 
-export const AdminDoctorSearch = ({ selecteddoctor }) => {
+export const UserDoctorSearch = ({selecteddoctor}) => {
   // fetch doctor data
-  const [doctordetails, setDoctordetails] = useState([]);
+  const [doctordetails, setDoctorDetails] = useState([]);
 
   const fetch_doctor_data = async () => {
     await axios
-      .get("/api/doctor/")
+      .get("/api/Doctor/")
       .then((response) => {
-        setDoctordetails(response.data);
+        setDoctorDetails(response.data);
       })
       .catch((error) => {
         if (error.response) {
@@ -30,23 +30,28 @@ export const AdminDoctorSearch = ({ selecteddoctor }) => {
     fetch_doctor_data();
   }, []);
 
-  const sliceDoctorbyId = (id) => {
-    //  console.log(id);
-    selecteddoctor(doctordetails.find((doctor) => doctor.doctorId === id));
+
+  const sliceDoctorById = (doctorId) => {
+
+    selecteddoctor(doctordetails.find(doctor => doctor.doctorId === doctorId));
   };
 
-  const itemsPerPage = 5; // Number of items to display per page
-  const pageCount = Math.ceil(doctordetails.length / itemsPerPage);
-  const [currentPage, setCurrentPage] = useState(0);
 
-  const handlePageChange = ({ selected }) => {
-    setCurrentPage(selected);
-  };
 
-  const offset = currentPage * itemsPerPage;
-  const currentPageData = doctordetails.slice(offset, offset + itemsPerPage);
+   const itemsPerPage = 5; // Number of items to display per page
+   const pageCount = Math.ceil(doctordetails.length / itemsPerPage);
+   const [currentPage, setCurrentPage] = useState(0);
+ 
+   const handlePageChange = ({ selected }) => {
+     setCurrentPage(selected);
+   };
+ 
+   const offset = currentPage * itemsPerPage;
+   const currentPageData = doctordetails.slice(offset, offset + itemsPerPage);
 
-  return (
+ 
+
+return (
     <>
       <div class="flex w-full mb-4 h-full rounded bg-gray-50 dark:bg-gray-800">
         <section class="bg-gray-50 dark:bg-gray-900 w-full h-full">
@@ -112,11 +117,11 @@ export const AdminDoctorSearch = ({ selecteddoctor }) => {
                       <th scope="col" class="px-4 py-3 ">
                         Doctor Designation
                       </th>
-                      <th scope="col" class="px-4 py-3 ">
-                        Doctor Fees
+                      <th scope="col" class="px-4 py-3">
+                        Doctor Qualification
                       </th>
                       <th scope="col" class="px-4 py-3">
-                        Doctor Email
+                        Doctor Fees
                       </th>
 
                       <th scope="col" class="px-4 py-3">
@@ -127,6 +132,8 @@ export const AdminDoctorSearch = ({ selecteddoctor }) => {
                       </th>
                     </tr>
                   </thead>
+                  {doctordetails && (
+
                   <tbody>
                     {currentPageData.map((row, index) => (
                       <tr
@@ -159,20 +166,17 @@ export const AdminDoctorSearch = ({ selecteddoctor }) => {
                         <td class="px-4 py-3 text-center ">
                           {row.doctorDesignation}
                         </td>
-                        <td class="px-4 py-3 text-center ">{row.doctorFees}</td>
-
-                        <td class="px-4 py-3 text-center">{row.doctorEmail}</td>
-                        <td class="px-4 py-3 text-center">
-                          {row.doctorStatus}
-                        </td>
+                        <td class="px-4 py-3 text-center">{row.doctorQualification}</td>
+                        <td class="px-4 py-3 text-center">{row.doctorFees}</td>
+                        <td class="px-4 py-3 text-center">{row.doctorStatus}</td>
 
                         <td className="px-4 py-3">
                           {" "}
                           <div className="flex space-x-2">
-                            <button
-                              onClick={() => sliceDoctorbyId(row.doctorId)}
-                              className="bg-green-600 hover:bg-green-800 text-white font-semibold py-2 px-4 rounded"
-                            >
+                            <button 
+                                    onClick={() => sliceDoctorById(row.doctorId)}
+
+                            className="bg-green-600 hover:bg-green-800 text-white font-semibold py-2 px-4 rounded">
                               SELECT
                             </button>
                           </div>
@@ -180,6 +184,7 @@ export const AdminDoctorSearch = ({ selecteddoctor }) => {
                       </tr>
                     ))}
                   </tbody>
+                  )}
                 </table>
               </div>
               <nav

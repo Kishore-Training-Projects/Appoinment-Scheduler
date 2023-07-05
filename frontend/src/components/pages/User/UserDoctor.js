@@ -1,72 +1,41 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import ReactPaginate from "react-paginate";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 import { UserSidebar } from "../../layout/sidebar/usersidebar";
 export const UserDoctor = () => {
   const navigate = useNavigate();
 
-  const tableData = [
-    {
-      doctorName: 'Dr. John Smith',
-      designation: 'Cardiologist',
-      qualification: 'MD, FACC',
-      mobile: '+1 123 456 7890',
-      status: 'Active',
-    },
-    {
-      doctorName: 'Dr. Sarah Johnson',
-      designation: 'Dermatologist',
-      qualification: 'MD, FAAD',
-      mobile: '+1 234 567 8901',
-      status: 'Active',
-    },
-    {
-      doctorName: 'Dr. Emily Lee',
-      designation: 'Pediatrician',
-      qualification: 'MD, FAAP',
-      mobile: '+1 345 678 9012',
-      status: 'Inactive',
-    },
-    {
-      doctorName: 'Dr. Michael Johnson',
-      designation: 'Orthopedic Surgeon',
-      qualification: 'MD, FRCSC',
-      mobile: '+1 456 789 0123',
-      status: 'Active',
-    },
-    {
-      doctorName: 'Dr. Jennifer Davis',
-      designation: 'Gynecologist',
-      qualification: 'MD, FACOG',
-      mobile: '+1 567 890 1234',
-      status: 'Active',
-    },
-    {
-      doctorName: 'Dr. Robert Anderson',
-      designation: 'Ophthalmologist',
-      qualification: 'MD, FRCS',
-      mobile: '+1 678 901 2345',
-      status: 'Inactive',
-    },
-    {
-      doctorName: 'Dr. Laura Wilson',
-      designation: 'Psychiatrist',
-      qualification: 'MD, FAPA',
-      mobile: '+1 789 012 3456',
-      status: 'Active',
-    },
-    {
-      doctorName: 'Dr. Christopher Brown',
-      designation: 'Dentist',
-      qualification: 'DDS',
-      mobile: '+1 890 123 4567',
-      status: 'Active',
-    },
-  ];
+
+  // fetch prescription data
+  const [doctordata, setdoctordata] = useState([]);
+
+  const fetch_doctor_data = async () => {
+    await axios
+      .get("/api/Doctor")
+      .then((response) => {
+        setdoctordata(response.data);
+      })
+      .catch((error) => {
+        if (error.response) {
+          if (error.response.status === 404) {
+            console.log("Resource not found");
+          } else {
+            console.log("Network response was not ok");
+          }
+        } else {
+          console.error("Error:", error.message);
+        }
+      });
+  };
+
+  useEffect(() => {
+    fetch_doctor_data();
+  }, []);
 
   const itemsPerPage = 5; // Number of items to display per page
-  const pageCount = Math.ceil(tableData.length / itemsPerPage);
+  const pageCount = Math.ceil(doctordata.length / itemsPerPage);
   const [currentPage, setCurrentPage] = useState(0);
 
   const handlePageChange = ({ selected }) => {
@@ -74,7 +43,7 @@ export const UserDoctor = () => {
   };
 
   const offset = currentPage * itemsPerPage;
-  const currentPageData = tableData.slice(offset, offset + itemsPerPage);
+  const currentPageData = doctordata.slice(offset, offset + itemsPerPage);
 
   return (
     <>
@@ -209,6 +178,8 @@ export const UserDoctor = () => {
                           </th>
                         </tr>
                       </thead>
+                      {doctordata&&(
+
                       <tbody>
                         {currentPageData.map((row, index) => (
                           <tr
@@ -239,15 +210,15 @@ export const UserDoctor = () => {
                             >
                               {row.doctorName}
                             </th>
-                            <td class="px-4 py-3 text-center ">{row.designation}</td>
-                            <td class="px-4 py-3 text-center">{row.qualification}</td>
-                            <td class="px-4 py-3 text-center">{row.status}</td>
+                            <td class="px-4 py-3 text-center ">{row.doctorDesignation}</td>
+                            <td class="px-4 py-3 text-center">{row.doctorQualification}</td>
+                            <td class="px-4 py-3 text-center">{row.doctorStatus}</td>
 
 
                             <td className="px-4 py-3">
                               {" "}
                               <div className="flex space-x-2">
-                                <a href={"tel:"+row.mobile}
+                                <a href={"tel:"+row.doctorMobile}
                                  className="bg-green-800 hover:bg-green-800 text-white font-semibold py-2 px-4 rounded">
                                 ✆ Call 
                                 </a>
@@ -257,6 +228,7 @@ export const UserDoctor = () => {
                           </tr>
                         ))}
                       </tbody>
+                      )}
                     </table>
                   </div>
                   <nav

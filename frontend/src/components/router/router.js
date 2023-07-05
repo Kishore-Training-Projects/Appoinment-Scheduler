@@ -16,6 +16,7 @@ import { UserPrescription } from "../pages/User/UserPrescription";
 import { UserDoctor } from "../pages/User/UserDoctor";
 import { UserPayment } from "../pages/User/UserPayment";
 import { UserProfile } from "../pages/User/UserProfile";
+import { ViewUserAppointment } from "../pages/User/components/ViewUserAppointment";
 
 // doctor routers
 import { DoctorDashboard } from "../pages/doctor/DoctorDashboard";
@@ -25,7 +26,7 @@ import { DoctorMedicalRecords } from "../pages/doctor/DoctorMedicalRecords";
 import { DoctorPrescription } from "../pages/doctor/DoctorPrescritpion";
 import { DoctorLeave } from "../pages/doctor/DoctorLeave";
 import { DoctorProfile } from "../pages/doctor/DoctorProfile";
-
+import { ViewDoctorAppointment } from "../pages/doctor/components/viewDoctorAppointment";
 
 // admin routers
 import { AdminDashboard } from "../pages/admin/AdminDashboard";
@@ -39,6 +40,9 @@ import { AdminPrescription } from "../pages/admin/AdminPrescription";
 import { AdminLeave } from "../pages/admin/AdminLeave";
 import { AddAdminPatient } from "../pages/admin/AddAdminPatient";
 import { AddAdminDoctor } from "../pages/admin/AddAdminDoctor";
+import { ViewAdminAppointment } from "../pages/admin/components/ViewAdminAppointment";
+import { AdminPayment } from "../pages/admin/AdminPayment";
+
 
 function Router() {
     return (
@@ -86,6 +90,10 @@ function Router() {
         element: <AddUserAppointment />,
       },
       {
+        path: "/user/appointment/view/:id",
+        element: <ViewUserAppointment />,
+      },
+      {
         path: "/user/medicalrecords",
         element: <UserMedicalRecords />,
       },
@@ -121,6 +129,10 @@ function Router() {
       {
         path: "/doctor/appointment/",
         element: <DoctorAppointment />,
+      },
+      {
+        path: "/doctor/appointment/view/:id",
+        element: <ViewDoctorAppointment />,
       },
       {
         path: "/doctor/medicalrecords/",
@@ -159,6 +171,10 @@ function Router() {
         element: <AdminAppointment />,
       },
       {
+        path: "/admin/appointment/view/:id",
+        element: <ViewAdminAppointment />,
+      },
+      {
         path: "/admin/doctor/",
         element: <AdminDoctor />,
       },
@@ -186,6 +202,10 @@ function Router() {
       {
         path: "/admin/doctor/new",
         element: <AddAdminDoctor />,
+      },
+      {
+        path: "/admin/payment",
+        element: <AdminPayment />,
       },
   
   

@@ -1,116 +1,77 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
 import { useNavigate } from "react-router-dom";
-
-
+import axios from "axios";
+import DeleteAdminPatient from "./components/DeleteAdminPatient";
+import { EditAdminPatient } from "./components/EditAdminPatient";
 import { AdminSidebar } from "../../layout/sidebar/adminsidebar";
 
 export const AdminPatient = () => {
   const navigate = useNavigate();
 
-  const tableData = [
-    {
-      height: 160,
-      Date: "2023-07-02",
+  // fetch patient data
+  const [patientdata, setpatientdata] = useState([]);
 
-      weight: 70,
-      pressure: 120,
-      temperature: 98.6,
-      remark: "Normal",
-      attenderName: "John Doe"
-    },
-    {
-      height: 170,
-      weight: 65,
-      Date: "2023-07-02",
+  const fetch_doctor_data = async () => {
+    await axios
+      .get("/api/Patient")
+      .then((response) => {
+        setpatientdata(response.data);
+        setSearchResults(response.data);
+      })
+      .catch((error) => {
+        if (error.response) {
+          if (error.response.status === 404) {
+            console.log("Resource not found");
+          } else {
+            console.log("Network response was not ok");
+          }
+        } else {
+          console.error("Error:", error.message);
+        }
+      });
+  };
 
-      pressure: 130,
-      temperature: 99.1,
-      remark: "Normal",
-      attenderName: "Jane Smith"
-    },
-    {
-        height: 160,
-        weight: 70,
-        Date: "2023-07-02",
-
-        pressure: 120,
-        temperature: 98.6,
-        remark: "Normal",
-        attenderName: "John Doe"
-      },
-      {
-        height: 170,
-        weight: 65,
-        Date: "2023-07-02",
-
-        pressure: 130,
-        temperature: 99.1,
-        remark: "Normal",
-        attenderName: "Jane Smith"
-      },
-      {
-        height: 160,
-        weight: 70,
-        pressure: 120,
-        temperature: 98.6,
-        Date: "2023-07-02",
-
-        remark: "Normal",
-        attenderName: "John Doe"
-      },
-      {
-        height: 170,
-        weight: 65,
-        Date: "2023-07-02",
-
-        pressure: 130,
-        temperature: 99.1,
-        remark: "Normal",
-        attenderName: "Jane Smith"
-      },
-    {
-      height: 155,
-      weight: 60,
-      pressure: 115,
-      temperature: 98.2,
-      Date: "2023-07-02",
-
-      remark: "Normal",
-      attenderName: "Michael Johnson"
-    },
-    {
-      height: 175,
-      weight: 80,
-      pressure: 140,
-      temperature: 98.9,
-      Date: "2023-07-02",
-
-      remark: "Normal",
-      attenderName: "Emily Davis"
-    },
-    {
-      height: 165,
-      weight: 75,
-      pressure: 125,
-      Date: "2023-07-02",
-
-      temperature: 98.4,
-      remark: "Normal",
-      attenderName: "Robert Wilson"
-    }
-  ];
+  useEffect(() => {
+    fetch_doctor_data();
+  }, []);
 
   const itemsPerPage = 5; // Number of items to display per page
-  const pageCount = Math.ceil(tableData.length / itemsPerPage);
+  const pageCount = Math.ceil(patientdata.length / itemsPerPage);
   const [currentPage, setCurrentPage] = useState(0);
 
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected);
   };
 
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+
   const offset = currentPage * itemsPerPage;
-  const currentPageData = tableData.slice(offset, offset + itemsPerPage);
+  var currentPageData = searchResults.slice(offset, offset + itemsPerPage);
+
+  // Function to handle search query changes
+  const handleSearchQueryChange = (event) => {
+    setSearchQuery(event.target.value);
+    handleSearch(event.target.value);
+  };
+
+  // Function to handle search
+  const handleSearch = (search) => {
+    console.log(search);
+    // Perform search logic here using searchQuery
+    const filteredResults = patientdata.filter(
+      (patient) =>
+        patient.patientName.toLowerCase().includes(search.toLowerCase()) ||
+        patient.patientMobile.includes(search)
+    );
+    console.log(filteredResults);
+
+    setSearchResults(filteredResults);
+
+    // Reset pagination to the first page
+    setCurrentPage(0);
+  };
 
   return (
     <>
@@ -166,8 +127,6 @@ export const AdminPatient = () => {
             </nav>
           </div>
 
-    
-
           {/* table code */}
           <div class="flex w-full mb-4 h-full rounded bg-gray-50 dark:bg-gray-800">
             <section class="bg-gray-50 dark:bg-gray-900 w-full h-full">
@@ -203,7 +162,9 @@ export const AdminPatient = () => {
                             id="simple-search"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="Search"
-                            required=""
+                            value={searchQuery}
+                             onChange={handleSearchQueryChange}
+        
                           />
                         </div>
                       </form>
@@ -211,6 +172,7 @@ export const AdminPatient = () => {
                     <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
                       <button
                         type="button"
+                        onClick={() => navigate("/admin/patient/new")}
                         class="flex items-center justify-center text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800"
                       >
                         <svg
@@ -260,14 +222,13 @@ export const AdminPatient = () => {
                             Patient Email
                           </th>
                           <th scope="col" class="px-4 py-3">
-                          Patient age
-
+                            Patient age
                           </th>
                           <th scope="col" class="px-4 py-3 ">
-                          Patient bloodGroup
+                            Patient bloodGroup
                           </th>
                           <th scope="col" class="px-4 py-3 ">
-                          Patient DOB
+                            Patient DOB
                           </th>
                           <th scope="col" class="px-4 py-3">
                             Actions
@@ -296,30 +257,42 @@ export const AdminPatient = () => {
                                 </label>
                               </div>
                             </td>
-                            <td class="px-4 py-3 ">{index+1}</td>
+                            <td class="px-4 py-3 ">{index + 1}</td>
 
                             <th
                               scope="row"
                               class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                             >
-                              {row.Date}
+                              {row.patientName}
                             </th>
-                            <td class="px-4 py-3 text-center ">{row.height}</td>
-                            <td class="px-4 py-3 text-center">{row.weight}</td>
-                            <td class="px-4 py-3 text-center">{row.pressure}</td>
-                           
-                            <td class="px-4 py-3 ">{row.remark}</td>
-                            <td class="px-4 py-3 ">{row.attenderName}</td>
+                            <td class="px-4 py-3 text-center ">
+                              {row.patientMobile}
+                            </td>
+                            <td class="px-4 py-3 text-center">
+                              {row.patientEmail}
+                            </td>
+                            <td class="px-4 py-3 text-center">
+                              {row.patientAge}
+                            </td>
+
+                            <td class="px-4 py-3 ">{row.patientBloodGroup}</td>
+                            <td class="px-4 py-3 ">
+                              {" "}
+                              {new Date(row.patientDOB).toLocaleDateString()}
+                            </td>
 
                             <td className="px-4 py-3">
                               {" "}
                               <div className="flex space-x-2">
-                                <button className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded">
-                                  View
-                                </button>
-                                <button className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded">
-                                  Delete
-                                </button>
+                                <EditAdminPatient
+                                  id={row.patientId}
+                                  fetch_doctor_data={fetch_doctor_data}
+                                />
+
+                                <DeleteAdminPatient
+                                  id={row.patientId}
+                                  fetch_doctor_data={fetch_doctor_data}
+                                />
                               </div>
                             </td>
                           </tr>

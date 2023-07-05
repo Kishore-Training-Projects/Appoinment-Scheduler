@@ -1,88 +1,91 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DoctorSidebar } from "../../layout/sidebar/doctorsidebar";
 import ReactPaginate from "react-paginate";
+import axios from "axios";
+import DeleteDoctorLeave from "./components/DeleteDoctorLeave";
 
 export const DoctorLeave = () => {
   const today = new Date().toISOString().split("T")[0]; // Get current date in yyyy-mm-dd format
 
+  const [formData, setFormData] = useState({
+    leaveFrom: "",
+    leaveTo: "",
+    leaveReason: "",
+    doctor: {
+      doctorId: JSON.parse(sessionStorage.getItem("doctor_key")).userid,
+    },
+  });
 
-  const tableData = [
-    {
-      doctorName: 'Dr. John Smith',
-      designation: 'Cardiologist',
-      date: '2023-06-28',
-      disease: 'Hypertension',
-      allergy: 'None',
-      prescription: 'Medication X, Medication Y',
-      remark: 'Patient advised to monitor blood pressure regularly.',
-    },
-    {
-      doctorName: 'Dr. Sarah Johnson',
-      designation: 'Dermatologist',
-      date: '2023-06-30',
-      disease: 'Eczema',
-      allergy: 'Penicillin',
-      prescription: 'Cream A, Cream B',
-      remark: 'Patient to avoid exposure to allergens.',
-    }, {
-      doctorName: 'Dr. Emily Lee',
-      designation: 'Pediatrician',
-      date: '2023-06-29',
-      disease: 'Common Cold',
-      allergy: 'None',
-      prescription: 'Antibiotic X, Syrup Y',
-      remark: 'Patient advised to get plenty of rest and drink fluids.',
-    },
-    {
-      doctorName: 'Dr. Michael Johnson',
-      designation: 'Orthopedic Surgeon',
-      date: '2023-06-27',
-      disease: 'Fractured Arm',
-      allergy: 'None',
-      prescription: 'Cast applied, Pain medication',
-      remark: 'Patient to follow up after four weeks for cast removal.',
-    },
-    {
-      doctorName: 'Dr. Jennifer Davis',
-      designation: 'Gynecologist',
-      date: '2023-06-26',
-      disease: 'Irregular Menstruation',
-      allergy: 'None',
-      prescription: 'Hormone Therapy',
-      remark: 'Patient advised to maintain a healthy lifestyle and exercise regularly.',
-    },
-    {
-      doctorName: 'Dr. Robert Anderson',
-      designation: 'Ophthalmologist',
-      date: '2023-06-25',
-      disease: 'Cataracts',
-      allergy: 'None',
-      prescription: 'Cataract Surgery',
-      remark: 'Patient to attend pre-operative consultation before surgery.',
-    },
-    {
-      doctorName: 'Dr. Laura Wilson',
-      designation: 'Psychiatrist',
-      date: '2023-06-24',
-      disease: 'Depression',
-      allergy: 'None',
-      prescription: 'Antidepressant Medication',
-      remark: 'Patient advised to attend therapy sessions regularly.',
-    },
-    {
-      doctorName: 'Dr. Christopher Brown',
-      designation: 'Dentist',
-      date: '2023-06-23',
-      disease: 'Cavity',
-      allergy: 'None',
-      prescription: 'Tooth Filling',
-      remark: 'Patient to maintain regular oral hygiene practices.',
-    },
-  ];
+  // submit form
+
+  function SubmitLeave(e) {
+    console.log(formData);
+    e.preventDefault();
+
+    axios
+      .post("/api/DoctorLeave", formData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status === 404) {
+            throw new Error("Resource not found");
+          }
+          if (response.status === 201) {
+            return response.data;
+          } else {
+            throw new Error("Network response was not ok");
+          }
+        }
+        return response.data;
+      })
+      .then((data) => {
+        // Handle the response from the server
+        console.log(data);
+        fetch_doctorLeave_data();
+        alert("Leave Creaetd successfully");
+      })
+      .catch((error) => {
+        // Handle any errors that occurred during the request
+        console.error("Error:", error.message);
+      });
+  }
+
+  // fetch doctor leave data
+  const [doctorleave, setDoctorLeave] = useState([]);
+
+  const fetch_doctorLeave_data = async () => {
+    await axios
+      .get(
+        "/api/DoctorLeave/doctor/" +
+          JSON.parse(sessionStorage.getItem("doctor_key")).userid
+      )
+      .then((response) => {
+        console.log(response.data);
+        setDoctorLeave(response.data);
+      })
+      .catch((error) => {
+        if (error.response) {
+          if (error.response.status === 404) {
+            console.log("Resource not found");
+          } else {
+            console.log("Network response was not ok");
+          }
+        } else {
+          console.error("Error:", error.message);
+        }
+      });
+  };
+
+  useEffect(() => {
+    fetch_doctorLeave_data();
+  }, []);
 
   const itemsPerPage = 5; // Number of items to display per page
-  const pageCount = Math.ceil(tableData.length / itemsPerPage);
+  const pageCount = Math.ceil(doctorleave.length / itemsPerPage);
   const [currentPage, setCurrentPage] = useState(0);
 
   const handlePageChange = ({ selected }) => {
@@ -90,14 +93,7 @@ export const DoctorLeave = () => {
   };
 
   const offset = currentPage * itemsPerPage;
-  const currentPageData = tableData.slice(offset, offset + itemsPerPage);
-
-
-
-
-
-
-
+  const currentPageData = doctorleave.slice(offset, offset + itemsPerPage);
 
   return (
     <>
@@ -181,7 +177,7 @@ export const DoctorLeave = () => {
             <div className="w-full p-3 border border-white rounded-lg">
               <h1 className="text-2xl font-bold mb-6">Doctor Leave Apply</h1>
 
-              <form>
+              <form onSubmit={(e) => SubmitLeave(e)}>
                 <div className="flex flex-wrap mb-4">
                   <label htmlFor="date" className="w-full md:w-1/4">
                     From Date:
@@ -190,6 +186,13 @@ export const DoctorLeave = () => {
                     type="date"
                     id="date"
                     min={today}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        leaveFrom: e.target.value,
+                      })
+                    }
+                    required
                     className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
                   />
                 </div>
@@ -202,6 +205,13 @@ export const DoctorLeave = () => {
                     type="date"
                     id="date"
                     min={today}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        leaveTo: e.target.value,
+                      })
+                    }
+                    required
                     className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
                   />
                 </div>
@@ -211,9 +221,15 @@ export const DoctorLeave = () => {
                     Reason:
                   </label>
                   <textarea
-                    type="email"
-                    id="email"
+                    type="text"
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        leaveReason: e.target.value,
+                      })
+                    }
                     row="3"
+                    required
                     className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
                   />
                 </div>
@@ -228,10 +244,8 @@ export const DoctorLeave = () => {
             </div>
           </div>
 
-
-
-   {/* table code */}
-   <div class="flex w-full mb-4 h-full rounded bg-gray-50 dark:bg-gray-800">
+          {/* table code */}
+          <div class="flex w-full mb-4 h-full rounded bg-gray-50 dark:bg-gray-800">
             <section class="bg-gray-50 dark:bg-gray-900 w-full h-full">
               <div class="mx-auto max-w-screen ">
                 <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
@@ -290,16 +304,14 @@ export const DoctorLeave = () => {
                           <th scope="col" class="px-4 py-3">
                             Sn no
                           </th>
-                          <th scope="col" class="px-4 py-3">
-                            Doctor Name
-                          </th>
+
                           <th scope="col" class="px-4 py-3 ">
                             from date
                           </th>
                           <th scope="col" class="px-4 py-3 ">
                             To date
                           </th>
-                                                  
+
                           <th scope="col" class="px-4 py-3">
                             Reason
                           </th>
@@ -308,56 +320,51 @@ export const DoctorLeave = () => {
                           </th>
                         </tr>
                       </thead>
-                      <tbody>
-                        {currentPageData.map((row, index) => (
-                          <tr
-                            key={index}
-                            class="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                          >
-                            <td class="w-4 px-4 py-3">
-                              <div class="flex items-center">
-                                <input
-                                  id="checkbox-table-search-1"
-                                  type="checkbox"
-                                  onclick="event.stopPropagation()"
-                                  class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                />
-                                <label
-                                  for="checkbox-table-search-1"
-                                  class="sr-only"
-                                >
-                                  checkbox
-                                </label>
-                              </div>
-                            </td>
-                            <td class="px-4 py-3 ">{index+1}</td>
-
-                            <th
-                              scope="row"
-                              class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                      {doctorleave && (
+                        <tbody>
+                          {currentPageData.map((row, index) => (
+                            <tr
+                              key={index}
+                              class="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                             >
-                              {row.date}
-                            </th>
-                            <td class="px-4 py-3 text-center ">{row.doctorName}</td>
-                            <td class="px-4 py-3 text-center">{row.designation}</td>
-                            
+                              <td class="w-4 px-4 py-3">
+                                <div class="flex items-center">
+                                  <input
+                                    id="checkbox-table-search-1"
+                                    type="checkbox"
+                                    onclick="event.stopPropagation()"
+                                    class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                  />
+                                  <label
+                                    for="checkbox-table-search-1"
+                                    class="sr-only"
+                                  >
+                                    checkbox
+                                  </label>
+                                </div>
+                              </td>
+                              <td class="px-4 py-3 ">{index + 1}</td>
 
-                            <td class="px-4 py-3 ">{row.remark}</td>
+                              <td class="px-4 py-3  ">
+                                {new Date(row.leaveFrom).toLocaleDateString()}
+                              </td>
+                              <td class="px-4 py-3 ">
+                                {" "}
+                                {new Date(row.leaveTo).toLocaleDateString()}
+                              </td>
 
-                            <td className="px-4 py-3">
-                              {" "}
-                              <div className="flex space-x-2">
-                                <button className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded">
-                                  View
-                                </button>
-                                <button className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded">
-                                  Delete
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
+                              <td class="px-4 py-3 ">{row.leaveReason}</td>
+
+                              <td className="px-4 py-3">
+                                {" "}
+                                <div className="flex space-x-2">
+                                  <DeleteDoctorLeave id={row.leaveId} fetch_doctorLeave_data={fetch_doctorLeave_data} />
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      )}
                     </table>
                   </div>
                   <nav
@@ -390,8 +397,6 @@ export const DoctorLeave = () => {
               </div>
             </section>
           </div>
-
-
         </div>
       </div>
     </>

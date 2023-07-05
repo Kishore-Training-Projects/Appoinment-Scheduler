@@ -1,23 +1,68 @@
 import React from "react";
 import { useState } from "react";
 import { AdminSidebar } from "../../layout/sidebar/adminsidebar";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export const AddAdminDoctor = () => {
-  const today = new Date().toISOString().split("T")[0]; // Get current date in yyyy-mm-dd format
-  const [selectedDate, setSelectedDate] = useState("");
-  const [showModal, setShowModal] = React.useState(false);
+  const navigate = useNavigate();
 
-
-  const handleDateChange = (event) => {
-    const selected = new Date(event.target.value);
-    if (selected.getDay() === 0) {
-      event.target.value = "";
-      setSelectedDate("");
-      alert("Sundays are holiday 🎉. Please select another date. 📅");
-    } else {
-      setSelectedDate(event.target.value);
+  
+  const [formData, setFormData] = useState({
+    userEmail: "",
+    userPassword: "",
+    userStatus: true,
+    userRole: "doctor",
+    doctor: {
+      doctorName: "",
+      doctorDesignation: "",
+      doctorQualification: "",
+      doctorFees: 0,
+      doctorMobile: "",
+      doctorEmail: "",
+      doctorAddress: "",
+      doctorStatus: "Available",
     }
-  };
+  });
+
+
+  // submit form
+
+  function SubmitDoctor(e) {
+    console.log(formData);
+    e.preventDefault();
+
+    axios.post('/api/User', formData, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status === 404) {
+            throw new Error('Resource not found');
+          }
+          if (response.status === 201) {
+            return response.data;
+          }
+          else {
+            throw new Error('Network response was not ok');
+          }
+        }
+        return response.data;
+      })
+      .then((data) => {
+        // Handle the response from the server
+        console.log(data);
+        alert('Doctor create');
+        navigate('/admin/doctor');
+      })
+      .catch((error) => {
+        // Handle any errors that occurred during the request
+        console.error('Error:', error.message);
+      });
+
+  }
 
   return (
     <>
@@ -68,7 +113,7 @@ export const AddAdminDoctor = () => {
                       href="#"
                       class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2 dark:text-gray-400 dark:hover:text-white"
                     >
-                      Patient
+                      Doctor
                     </a>
                   </div>
                 </li>
@@ -101,49 +146,117 @@ export const AddAdminDoctor = () => {
             <div className="w-full p-3 border border-white rounded-lg">
               <h1 className="text-2xl font-bold mb-6">New Doctor</h1>
 
-              <form>
+              <form onSubmit={(e)=>SubmitDoctor(e)}>
                 <div className="flex flex-wrap mb-4">
                   <label htmlFor="date" className="w-full md:w-1/4">
                     Full Name :
                   </label>
                   <input
                     type="text"
-                    id="date"
-                    name="name"
+                    name="doctorName"
+                    onChange={(e) =>
+                      setFormData((prevFormData) => ({
+                        ...prevFormData,
+                        doctor: {
+                          ...prevFormData.doctor,
+                          doctorName: e.target.value
+                        }
+                      }))
+                    }
+                    required
                     className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
                   />
                 </div>
                 <div className="flex flex-wrap mb-4">
                   <label htmlFor="date" className="w-full md:w-1/4">
-                    Designation :
+                   Doctor Designation :
                   </label>
                   <input
                     type="text"
                     id="date"
-                    name="name"
+                    onChange={(e) =>
+                      setFormData((prevFormData) => ({
+                        ...prevFormData,
+                        doctor: {
+                          ...prevFormData.doctor,
+                          doctorDesignation: e.target.value
+                        }
+                      }))
+                    }
+                    required
                     className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
                   />
                 </div>
                 <div className="flex flex-wrap mb-4">
                   <label htmlFor="date" className="w-full md:w-1/4">
-                    Qualification :
+                   Doctor Qualification :
                   </label>
                   <input
                     type="text"
-                    id="date"
-                    name="name"
+                    onChange={(e) =>
+                      setFormData((prevFormData) => ({
+                        ...prevFormData,
+                        doctor: {
+                          ...prevFormData.doctor,
+                          doctorQualification: e.target.value
+                        }
+                      }))
+                    }
+                    required
                     className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
                   />
                 </div>
-
+                <div className="flex flex-wrap mb-4">
+                  <label htmlFor="date" className="w-full md:w-1/4">
+                    Doctor Fees :
+                  </label>
+                  <input
+                    type="number"
+                    onChange={(e) =>
+                      setFormData((prevFormData) => ({
+                        ...prevFormData,
+                        doctor: {
+                          ...prevFormData.doctor,
+                          doctorFees: e.target.value
+                        }
+                      }))
+                    }
+                    required
+                    className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
+                  />
+                </div>
                 <div className="flex flex-wrap mb-4">
                   <label htmlFor="date" className="w-full md:w-1/4">
                     Email Address :
                   </label>
                   <input
                     type="text"
-                    id="date"
-                    name="name"
+                    onChange={(e) =>
+                      setFormData((prevFormData) => ({
+                        ...prevFormData,
+                        doctor: {
+                          ...prevFormData.doctor,
+                          doctorEmail: e.target.value
+                        }
+                      }))
+                    }
+                    required
+                    className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
+                  />
+                </div>
+                <div className="flex flex-wrap mb-4">
+                  <label htmlFor="date" className="w-full md:w-1/4">
+                    Login Email Address :
+                  </label>
+                  <input
+                    type="text"
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        userEmail: e.target.value,
+                      })
+                    }
+                    required
                     className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
                   />
                 </div>
@@ -153,8 +266,13 @@ export const AddAdminDoctor = () => {
                   </label>
                   <input
                     type="password"
-                    id="date"
-                    name="name"
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        userPassword: e.target.value,
+                      })
+                    }
+                    required
                     className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
                   />
                 </div>
@@ -171,8 +289,16 @@ export const AddAdminDoctor = () => {
                     />
                     <input
                       type="number"
-                      id="date"
-                      name="name"
+                      onChange={(e) =>
+                        setFormData((prevFormData) => ({
+                          ...prevFormData,
+                          doctor: {
+                            ...prevFormData.doctor,
+                            doctorMobile: e.target.value
+                          }
+                        }))
+                      }
+                      required
                       className="w-full  px-2 py-1 border border-gray-300 rounded"
                     />
                   </div>
@@ -183,7 +309,16 @@ export const AddAdminDoctor = () => {
                   </label>
                   <textarea
                     type="text"
-                    id="email"
+                    onChange={(e) =>
+                      setFormData((prevFormData) => ({
+                        ...prevFormData,
+                        doctor: {
+                          ...prevFormData.doctor,
+                          doctorAddress: e.target.value
+                        }
+                      }))
+                    }
+                    required
                     row="3"
                     className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
                   />
@@ -200,8 +335,6 @@ export const AddAdminDoctor = () => {
           </div>
         </div>
       </div>
-
-
     </>
   );
 };

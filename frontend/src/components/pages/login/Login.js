@@ -2,11 +2,14 @@ import React, { useState } from "react";
 
 import Navbar from "../../layout/navbar/navbar";
 import { UserLogin } from "./components/UserLogin";
+import { useNavigate } from "react-router-dom";
 
 import { DoctorLogin } from "./components/DoctorLogin";
+import banner from '../../images/banner.png'
 
 export const Login = () => {
   const [logintype, setLogintype] = useState(true);
+  const navigate = useNavigate();
 
   return (
     <>
@@ -18,7 +21,7 @@ export const Login = () => {
             <div class="w-full md:w-2/3 xl:w-1/2">
               <img
                 class="hospital-image h-64 md:h-auto  md:rounded-lg md:p-8 md:mr-10 hidden md:block"
-                src="https://www.pngall.com/wp-content/uploads/8/Hospital-PNG-Picture.png"
+                src={banner}
               ></img>
             </div>
             <div class="w-full md:w-1/3 xl:w-1/2 flex items-center justify-center mt-6 md:mt-0">

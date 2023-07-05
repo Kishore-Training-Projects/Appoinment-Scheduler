@@ -1,11 +1,27 @@
 import React from "react";
 import firebase from "../../../config/firebase-config";
+import { useNavigate } from "react-router-dom";
 
 export const UserLogin = () => {
+
+  
   const [mobile, setMobile] = React.useState("");
   const [otp, setOtp] = React.useState("");
 
+
+  const navigate = useNavigate();
+
+  const [userdata , setUserdata] = React.useState();
   const [otpVerified, setOtpVerified] = React.useState(false);
+
+    // tokendata
+    const userprofile = {
+      userid: "",
+      name: "",
+      profile: "",
+      mobile :"",
+      acc_type: "",
+    };
 
   const [otpsent, setOtpsent] = React.useState(false);
 
@@ -26,8 +42,7 @@ export const UserLogin = () => {
       }
     );
   }
-  function onSignInSubmit(e) {
-    e.preventDefault();
+  function onSignInSubmit() {
 
     configureCaptcha();
     const phoneNumber = "+91" + mobile;
@@ -59,9 +74,20 @@ export const UserLogin = () => {
       .then((result) => {
         // User signed in successfully.
         const user = result.user;
-        console.log(JSON.stringify(user));
-        alert("User is verified");
+       // console.log(JSON.stringify(user));
+        console.log("User is verified");
+
         setOtpVerified(true);
+
+        userprofile.userid = userdata["patientId"];
+        userprofile.name = userdata["patientName"];
+        userprofile.mobile = userdata["patientMobile"];
+        userprofile.acc_type = "patient";
+        
+        sessionStorage.setItem("student_key", JSON.stringify(userprofile));
+        navigate("/user/dashboard");
+
+
         // ...
       })
       .catch((error) => {
@@ -70,6 +96,43 @@ export const UserLogin = () => {
         // ...
       });
   }
+
+
+   // fetch Patient details by mobile
+
+   const fetchData = async (e) => {
+    e.preventDefault();
+    await fetch("/api/Patient/search/" + mobile)
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status === 404) {
+            throw new Error("Resource not found");
+          } else {
+            throw new Error("Network response was not ok");
+          }
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setUserdata(data);
+        onSignInSubmit();
+      })
+      .catch((error) => {
+        // Handle any errors that occurred during the request
+        alert("Invalid Mobile Number");
+        console.error("Error:", error.message);
+      });
+  };
+
+
+
+
+
+
+
+
+
+
 
   return (
     <>
@@ -80,7 +143,7 @@ export const UserLogin = () => {
 
         <form
           class="space-y-4 md:space-y-6"
-          onSubmit={(e) => onSignInSubmit(e)}
+          onSubmit={(e) => fetchData(e)}
         >
           <div>
             <label
@@ -156,7 +219,7 @@ export const UserLogin = () => {
 
       <div class="flex justify-center items-center mt-6">
         <a
-          href="#"
+          onClick={()=>{navigate("/register")}}
           target="_blank"
           class="inline-flex items-center font-bold text-blue-500 hover:text-blue-700 text-xs text-center"
         >

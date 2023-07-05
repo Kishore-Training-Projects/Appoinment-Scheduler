@@ -1,7 +1,44 @@
-import React from "react";
+import {React,useEffect} from "react";
+import axios from "axios";
+import { useState } from "react";
 
 import { DoctorSidebar } from "../../layout/sidebar/doctorsidebar";
 export const DoctorProfile = () => {
+
+  const [profile, setProfile] = useState();
+
+
+   // fetch user data
+
+   const fetch_doctor_data = async (id) => {
+    console.log("hi");
+    try {
+      const response = await axios.get(`/api/Doctor/${id}`);
+      setProfile(response.data);
+    } catch (error) {
+      if (error.response) {
+        if (error.response.status === 404) {
+          console.log("Resource not found");
+        } else {
+          console.log("Network response was not ok");
+        }
+      } else {
+        console.error("Error:", error.message);
+      }
+    }
+  };
+
+
+  
+  useEffect(() => {
+    const profile = () => {
+      var item_value = JSON.parse(sessionStorage.getItem("doctor_key"));
+      fetch_doctor_data(item_value.userid);
+    };
+    profile();
+  }, []);
+
+
   const profileData = {
     name: "John Doe",
     age: 30,
@@ -16,6 +53,7 @@ export const DoctorProfile = () => {
   return (
     <>
       <DoctorSidebar />
+      { profile && (
 
       <div class="p-2 md:p-4 min-h-screen bg-gray-200 sm:ml-64">
         <div class=" p-2 md:p-4 border-2 border-gray-300 border-dashed rounded-lg dark:border-gray-700 mt-14">
@@ -81,7 +119,7 @@ export const DoctorProfile = () => {
                     alt="Bonnie image"
                   />
                   <h5 class="mt-2 text-xl font-medium text-gray-900 dark:text-white">
-                    Bonnie Green
+                  {profile.doctorName}
                   </h5>
 
                   <div class="flex mt-3 space-x-3 md:mt-3">
@@ -126,25 +164,25 @@ export const DoctorProfile = () => {
                   <div class="grid md:grid-cols-2 text-sm">
                     <div class="grid grid-cols-2">
                       <div class="px-4 py-2 font-semibold">Full Name</div>
-                      <div class="px-4 py-2">Jane</div>
+                      <div class="px-4 py-2">{profile.doctorName}</div>
                     </div>
                     <div class="grid grid-cols-2">
                       <div class="px-4 py-2 font-semibold">Qualification</div>
-                      <div class="px-4 py-2">Doe</div>
+                      <div class="px-4 py-2">{profile.doctorQualification}</div>
                     </div>
                     <div class="grid grid-cols-2">
-                      <div class="px-4 py-2 font-semibold">occupation</div>
-                      <div class="px-4 py-2">Female</div>
+                      <div class="px-4 py-2 font-semibold">Designation</div>
+                      <div class="px-4 py-2">{profile.doctorDesignation}</div>
                     </div>
                     <div class="grid grid-cols-2">
                       <div class="px-4 py-2 font-semibold">Contact No.</div>
-                      <div class="px-4 py-2">+11 998001001</div>
+                      <div class="px-4 py-2">+91 {profile.doctorMobile}</div>
                     </div>
                     <div class="grid grid-cols-2">
                       <div class="px-4 py-2 font-semibold">Email</div>
                       <div class="px-4 py-2">
                       <a class="text-blue-800" href="mailto:jane@example.com">
-                          jane@example.com
+                      {profile.doctorEmail}
                         </a>
                       </div>
                       
@@ -152,7 +190,7 @@ export const DoctorProfile = () => {
                     <div class="grid grid-cols-2">
                       <div class="px-4 py-2 font-semibold">Address</div>
                       <div class="px-4 py-2">
-                        73 , 7th cross street chhennao
+                       {profile.doctorAddress}
                       </div>
                     </div>
                     
@@ -165,6 +203,7 @@ export const DoctorProfile = () => {
 
         </div>
       </div>
+      )}
     </>
   );
 };
