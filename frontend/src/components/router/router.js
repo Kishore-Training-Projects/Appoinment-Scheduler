@@ -16,6 +16,7 @@ import { UserPrescription } from "../pages/User/UserPrescription";
 import { UserDoctor } from "../pages/User/UserDoctor";
 import { UserPayment } from "../pages/User/UserPayment";
 import { UserProfile } from "../pages/User/UserProfile";
+import { ViewUserAppointment } from "../pages/User/components/ViewUserAppointment";
 
 // doctor routers
 import { DoctorDashboard } from "../pages/doctor/DoctorDashboard";
@@ -40,6 +41,7 @@ import { AdminLeave } from "../pages/admin/AdminLeave";
 import { AddAdminPatient } from "../pages/admin/AddAdminPatient";
 import { AddAdminDoctor } from "../pages/admin/AddAdminDoctor";
 import { ViewAdminAppointment } from "../pages/admin/components/ViewAdminAppointment";
+import { AdminPayment } from "../pages/admin/AdminPayment";
 
 
 function Router() {
@@ -86,6 +88,10 @@ function Router() {
       {
         path: "/user/appointment/new",
         element: <AddUserAppointment />,
+      },
+      {
+        path: "/user/appointment/view/:id",
+        element: <ViewUserAppointment />,
       },
       {
         path: "/user/medicalrecords",
@@ -196,6 +202,10 @@ function Router() {
       {
         path: "/admin/doctor/new",
         element: <AddAdminDoctor />,
+      },
+      {
+        path: "/admin/payment",
+        element: <AdminPayment />,
       },
   
   

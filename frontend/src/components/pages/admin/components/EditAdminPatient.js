@@ -96,7 +96,7 @@ export const EditAdminPatient = ({ id , fetch_doctor_data}) => {
                 </button>
                 <div className="pt-4 py-3 lg:px-5">
                   <h3 className="pb-2 px-3 text-xl font-medium border-b text-gray-900 dark:text-white">
-                    Add Medical Records
+                   Edit Patient Details
                   </h3>
                   <div>
                     <div className="p-3">

@@ -3,6 +3,8 @@ import firebase from "../../../config/firebase-config";
 import { useNavigate } from "react-router-dom";
 
 export const UserLogin = () => {
+
+  
   const [mobile, setMobile] = React.useState("");
   const [otp, setOtp] = React.useState("");
 
@@ -217,7 +219,7 @@ export const UserLogin = () => {
 
       <div class="flex justify-center items-center mt-6">
         <a
-          href="#"
+          onClick={()=>{navigate("/register")}}
           target="_blank"
           class="inline-flex items-center font-bold text-blue-500 hover:text-blue-700 text-xs text-center"
         >

@@ -133,7 +133,7 @@ export const DoctorLogin = () => {
       </div>
       <div class="flex justify-center items-center mt-6">
         <a
-          href="#"
+          onClick={()=>navigate("/register")}
           target="_blank"
           class="inline-flex items-center font-bold text-blue-500 hover:text-blue-700 text-xs text-center"
         >

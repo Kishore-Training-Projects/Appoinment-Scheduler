@@ -1,14 +1,11 @@
 import { React, useEffect } from "react";
 import { useState } from "react";
-import { AddAdminMedicalrecord } from "./AddAdminMedicalrecord";
-import { AdminSidebar } from "../../../layout/sidebar/adminsidebar";
-import CancelAdminAppointment from "./CancelAdminAppointment";
-import { AddAdminPayment } from "./AddAdminPayment";
-
+import { UserSidebar } from "../../../layout/sidebar/usersidebar";
+import CancelUserAppointment from "./CancelUserAppointment";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
-export const ViewAdminAppointment = () => {
+export const ViewUserAppointment = () => {
   const { id } = useParams();
 
   const [appointmentdata, setAppointmentdata] = useState();
@@ -22,10 +19,8 @@ export const ViewAdminAppointment = () => {
     try {
       const response = await axios.get(`/api/Appointment/${id}`);
       setAppointmentdata(response.data);
-      fetch_medicalrecord_data(
-        response.data.patient.patientId,
-        response.data.appointmentId
-      );
+      fetch_medicalrecord_data(response.data.patient.patientId,response.data.appointmentId)
+
     } catch (error) {
       if (error.response) {
         if (error.response.status === 404) {
@@ -42,11 +37,12 @@ export const ViewAdminAppointment = () => {
   // fetch medical records
   const [medicalrecords, setmedicalrecords] = useState();
 
-  const fetch_medicalrecord_data = async (id1, id2) => {
+  const fetch_medicalrecord_data = async (id1,id2) => {
     await axios
       .get(`/api/MedicalRecord/reception?id1=${id1}&id2=${id2}`)
       .then((response) => {
         setmedicalrecords(response.data);
+        fetch_prescription_data(id1,id2);
       })
       .catch((error) => {
         if (error.response) {
@@ -61,13 +57,37 @@ export const ViewAdminAppointment = () => {
       });
   };
 
+
+    // fetch prescription records
+    const [Prescription, setPrescription] = useState();
+
+    const fetch_prescription_data = async (id1,id2) => {
+      await axios
+        .get(`/api/Prescription/doctor?id1=${id1}&id2=${id2}`)
+        .then((response) => {
+          setPrescription(response.data);
+        })
+        .catch((error) => {
+          if (error.response) {
+            if (error.response.status === 404) {
+              console.log("Resource not found");
+            } else {
+              console.log("Network response was not ok");
+            }
+          } else {
+            console.log("Error:", error.message);
+          }
+        });
+    };
+
   useEffect(() => {
     fetch_appointment_data(id);
+    
   }, []);
 
   return (
     <>
-      <AdminSidebar />
+      <UserSidebar />
       {appointmentdata && (
         <div class="p-2 md:p-4 min-h-screen bg-gray-200 sm:ml-64">
           <div class=" p-2 md:p-4 border-2 border-gray-300 border-dashed rounded-lg dark:border-gray-700 mt-14">
@@ -224,28 +244,13 @@ export const ViewAdminAppointment = () => {
                     </div>
 
                     <div className="flex items-end justify-end">
-                      {appointmentdata.medicalrecordStatus == false &&
-                        appointmentdata.appointmentStatus != "cancelled" && (
-                          <AddAdminMedicalrecord
-                            id={appointmentdata.appointmentId}
-                            fetch_appointment_data={fetch_appointment_data}
-                          />
+
+                    
+                        {appointmentdata.appointmentStatus !="canceled" &&appointmentdata.appointmentStatus !="completed" &&(
+                            
+                            <CancelUserAppointment id = {appointmentdata.appointmentId} fetch_appointment_data={fetch_appointment_data} />
                         )}
 
-                      {appointmentdata.paymentStatus == "not paid" &&
-                        appointmentdata.appointmentStatus == "completed" && (
-                          <AddAdminPayment
-                            id={appointmentdata.patient.patientId}
-                            appointmentId={appointmentdata.appointmentId}
-                            fetch_appointment_data={fetch_appointment_data}
-                          />
-                        )}
-                      {appointmentdata.appointmentStatus != "cancelled" && (
-                        <CancelAdminAppointment
-                          id={appointmentdata.appointmentId}
-                          fetch_appointment_data={fetch_appointment_data}
-                        />
-                      )}
                     </div>
                   </div>
                 </div>
@@ -394,7 +399,7 @@ export const ViewAdminAppointment = () => {
                                 appointmentdata.appointmentDate
                               ).toLocaleDateString()}
                             </th>
-                            <td class="px-4 py-3 text-center">
+                            <td class="px-4 py-3 ">
                               {appointmentdata.appointmentTime}
                             </td>
                             <td class="px-4 py-3 text-center">
@@ -644,6 +649,108 @@ export const ViewAdminAppointment = () => {
                             </td>
                           </tr>
                         </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+
+
+              {/* Prescription Details Table */}
+              <div class="flex mt-4 w-full mb-4 h-full rounded bg-gray-50 dark:bg-gray-800">
+              <section class="bg-gray-50 dark:bg-gray-900 w-full h-full">
+                <div class="mx-auto max-w-screen ">
+                  <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+                    <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
+                      <caption class="w-full p-2 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
+                        Prescription Details
+                      </caption>
+                    </div>
+                    <div class="overflow-x-auto">
+                      <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
+                          <tr>
+                            <th scope="col" class="p-4">
+                              <div class="flex items-center">
+                                <input
+                                  id="checkbox-all"
+                                  type="checkbox"
+                                  class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                />
+                                <label for="checkbox-all" class="sr-only">
+                                  checkbox
+                                </label>
+                              </div>
+                            </th>
+
+                            <th scope="col" class="px-4 py-3 ">
+                              Disease
+                            </th>
+                            <th scope="col" class="px-4 py-3">
+                             Allergy
+                            </th>
+
+                            <th scope="col" class="px-4 py-3">
+                            Prescription
+                            </th>
+                            <th scope="col" class="px-4 py-3">
+                            Prescription Remark
+                            </th>
+
+                            <th scope="col" class="px-4 py-3">
+                            Prescription Timestamp
+                            </th>
+                           
+                          </tr>
+                        </thead>
+                        {Prescription && (
+
+                        <tbody>
+                          <tr class="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                            <td class="w-4 px-4 py-3">
+                              <div class="flex items-center">
+                                <input
+                                  id="checkbox-table-search-1"
+                                  type="checkbox"
+                                  onclick="event.stopPropagation()"
+                                  class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                />
+                                <label
+                                  for="checkbox-table-search-1"
+                                  class="sr-only"
+                                >
+                                  checkbox
+                                </label>
+                              </div>
+                            </td>
+                            <th
+                              scope="row"
+                              class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                            >
+                              {Prescription.disease}
+                            </th>
+                            <td class="px-4 py-3 ">
+                              {" "}
+                              {Prescription.allergy}
+                            </td>
+                            <td class="px-4 py-3 ">
+                              {" "}
+                              {Prescription.prescription}
+                            </td>
+                            <td class="px-4 py-3 ">
+                              {" "}
+                              {Prescription.prescriptionRemark}
+                            </td>
+                            <td class="px-4 py-3 ">
+                              {" "}
+                              {Prescription.prescriptionTimestamp}
+                            </td>
+                           
+                          </tr>
+                        </tbody>
+
+                        )}
                       </table>
                     </div>
                   </div>

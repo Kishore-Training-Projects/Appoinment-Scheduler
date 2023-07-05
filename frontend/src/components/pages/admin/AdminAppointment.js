@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -7,33 +7,31 @@ import { AdminSidebar } from "../../layout/sidebar/adminsidebar";
 export const AdminAppointment = () => {
   const navigate = useNavigate();
 
-// fetch appointment data
-const [appointmentdata, setAppointmentdata] = useState([]);
+  // fetch appointment data
+  const [appointmentdata, setAppointmentdata] = useState([]);
 
-const fetch_appointment_data = async () => {
-  await axios
-    .get("/api/Appointment/")
-    .then((response) => {
-      setAppointmentdata(response.data);
-    })
-    .catch((error) => {
-      if (error.response) {
-        if (error.response.status === 404) {
-          console.log("Resource not found");
+  const fetch_appointment_data = async () => {
+    await axios
+      .get("/api/Appointment/")
+      .then((response) => {
+        setAppointmentdata(response.data);
+      })
+      .catch((error) => {
+        if (error.response) {
+          if (error.response.status === 404) {
+            console.log("Resource not found");
+          } else {
+            console.log("Network response was not ok");
+          }
         } else {
-          console.log("Network response was not ok");
+          console.error("Error:", error.message);
         }
-      } else {
-        console.error("Error:", error.message);
-      }
-    });
-};
+      });
+  };
 
-useEffect(() => {
-  fetch_appointment_data();
-}, []);
-
-
+  useEffect(() => {
+    fetch_appointment_data();
+  }, []);
 
   const itemsPerPage = 5; // Number of items to display per page
   const pageCount = Math.ceil(appointmentdata.length / itemsPerPage);
@@ -99,7 +97,6 @@ useEffect(() => {
               </ol>
             </nav>
           </div>
-       
 
           {/* table code */}
           <div class="flex w-full mb-4 h-full rounded bg-gray-50 dark:bg-gray-800">
@@ -142,7 +139,6 @@ useEffect(() => {
                       </form>
                     </div>
                     <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-        
                       <div class="flex items-center space-x-3 w-full md:w-auto"></div>
                     </div>
                   </div>
@@ -182,11 +178,10 @@ useEffect(() => {
                             Record status
                           </th>
 
-                         
                           <th scope="col" class="px-4 py-3">
                             Payment Status
                           </th>
-                          
+
                           <th scope="col" class="px-4 py-3">
                             Actions
                           </th>
@@ -220,27 +215,136 @@ useEffect(() => {
                             >
                               {row.patient.patientName}
                             </th>
-                            <td class="px-4 py-3 ">{row.patient.patientMobile}</td>
+                            <td class="px-4 py-3 text-center">
+                              {row.patient.patientMobile}
+                            </td>
 
-                            <td class="px-4 py-3 ">
-                            {new Date(row.appointmentDate).toLocaleDateString()}
+                            <td class="px-4 py-3 text-center">
+                              {new Date(
+                                row.appointmentDate
+                              ).toLocaleDateString()}
+                            </td>
+                            <td class="px-4 py-3 text-center">{row.appointmentTime}</td>
+                            <td class="px-4 py-3 text-center">
+                              {row.appointmentStatus == "completed" && (
+                                <span class="bg-green-100 text-green-800 text-sm font-medium mr-2 inline-flex items-center px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300 border border-green-400">
+                                  <svg
+                                    class="w-3 h-3 mr-2 "
+                                    aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path
+                                      fill="currentColor"
+                                      d="m18.774 8.245-.892-.893a1.5 1.5 0 0 1-.437-1.052V5.036a2.484 2.484 0 0 0-2.48-2.48H13.7a1.5 1.5 0 0 1-1.052-.438l-.893-.892a2.484 2.484 0 0 0-3.51 0l-.893.892a1.5 1.5 0 0 1-1.052.437H5.036a2.484 2.484 0 0 0-2.48 2.481V6.3a1.5 1.5 0 0 1-.438 1.052l-.892.893a2.484 2.484 0 0 0 0 3.51l.892.893a1.5 1.5 0 0 1 .437 1.052v1.264a2.484 2.484 0 0 0 2.481 2.481H6.3a1.5 1.5 0 0 1 1.052.437l.893.892a2.484 2.484 0 0 0 3.51 0l.893-.892a1.5 1.5 0 0 1 1.052-.437h1.264a2.484 2.484 0 0 0 2.481-2.48V13.7a1.5 1.5 0 0 1 .437-1.052l.892-.893a2.484 2.484 0 0 0 0-3.51Z"
+                                    />
+                                    <path
+                                      fill="#fff"
+                                      d="M8 13a1 1 0 0 1-.707-.293l-2-2a1 1 0 1 1 1.414-1.414l1.42 1.42 5.318-3.545a1 1 0 0 1 1.11 1.664l-6 4A1 1 0 0 1 8 13Z"
+                                    />
+                                  </svg>
+                                  Completed
+                                </span>
+                              )}
+                              {row.appointmentStatus == "booked" && (
+                                <span class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 inline-flex items-center px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 border border-blue-400">
+                                  <svg
+                                    class="w-3 h-3 mr-2 "
+                                    aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path d="M0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm14-7.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm0 4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm-5-4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm0 4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm-5-4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm0 4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1ZM20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4Z" />
+                                  </svg>
+                                  Booked
+                                </span>
+                              )}
+                              {row.appointmentStatus == "cancelled" && (
+                                <span class="bg-red-100 text-red-800 text-sm font-medium mr-2 inline-flex items-center px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300 border border-red-400">
+                                  <svg
+                                    class="w-3 h-3 mr-2 "
+                                    aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z" />
+                                  </svg>
+                                  Cancelled
+                                </span>
+                              )}
+                              {row.appointmentStatus == "waiting" && (
+                                <span class="bg-yellow-100 text-yellow-800 text-sm font-medium mr-2 inline-flex items-center px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300 border border-yellow-400">
+                                  <svg
+                                    class="w-3 h-3 mr-2 "
+                                    aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z" />
+                                  </svg>
+                                  Waiting
+                                </span>
+                              )}
+                            </td>
+                           
+
+                            <td class="px-4 py-3 text-center">
+                              {row.paymentStatus=="paid"&&(
+                                <span class="bg-green-100 text-green-800 text-sm font-medium mr-2 inline-flex items-center px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300 border border-green-400">
+                                <svg
+                                  class="w-3 h-3 mr-2 "
+                                  aria-hidden="true"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="currentColor"
+                                  viewBox="0 0 20 20"
+                                >
+                                  <path
+                                    fill="currentColor"
+                                    d="m18.774 8.245-.892-.893a1.5 1.5 0 0 1-.437-1.052V5.036a2.484 2.484 0 0 0-2.48-2.48H13.7a1.5 1.5 0 0 1-1.052-.438l-.893-.892a2.484 2.484 0 0 0-3.51 0l-.893.892a1.5 1.5 0 0 1-1.052.437H5.036a2.484 2.484 0 0 0-2.48 2.481V6.3a1.5 1.5 0 0 1-.438 1.052l-.892.893a2.484 2.484 0 0 0 0 3.51l.892.893a1.5 1.5 0 0 1 .437 1.052v1.264a2.484 2.484 0 0 0 2.481 2.481H6.3a1.5 1.5 0 0 1 1.052.437l.893.892a2.484 2.484 0 0 0 3.51 0l.893-.892a1.5 1.5 0 0 1 1.052-.437h1.264a2.484 2.484 0 0 0 2.481-2.48V13.7a1.5 1.5 0 0 1 .437-1.052l.892-.893a2.484 2.484 0 0 0 0-3.51Z"
+                                  />
+                                  <path
+                                    fill="#fff"
+                                    d="M8 13a1 1 0 0 1-.707-.293l-2-2a1 1 0 1 1 1.414-1.414l1.42 1.42 5.318-3.545a1 1 0 0 1 1.11 1.664l-6 4A1 1 0 0 1 8 13Z"
+                                  />
+                                </svg>
+                                Paid
+                              </span>
+                              )}
+                              {row.paymentStatus=="not paid"&&(
+                                <span class="bg-red-100 text-red-800 text-sm font-medium mr-2 inline-flex items-center px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300 border border-red-400">
+                               <svg
+                                    class="w-3 h-3 mr-2 "
+                                    aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z" />
+                                  </svg>
+                                Not Paid
+                              </span>
+                              )}
+                              
                               </td>
-                            <td class="px-4 py-3 ">{row.appointmentTime}</td>
-                            <td class="px-4 py-3 ">{row.appointmentStatus}</td>
-                            <td class="px-4 py-3 ">{row.medicalrecordStatus==true?"recorded":"not recorded"}</td>
 
-                            <td class="px-4 py-3 ">{row.paymentStatus}</td>
-                       
                             <td className="px-4 py-3">
                               {" "}
                               <div className="flex space-x-2">
-                                <button 
-                                                                onClick={()=>navigate("/admin/appointment/view/"+row.appointmentId)}
-
-                                className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded">
+                                <button
+                                  onClick={() =>
+                                    navigate(
+                                      "/admin/appointment/view/" +
+                                        row.appointmentId
+                                    )
+                                  }
+                                  className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded"
+                                >
                                   View
                                 </button>
-                           
                               </div>
                             </td>
                           </tr>

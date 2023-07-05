@@ -75,7 +75,7 @@ export const Register = () => {
             <div className="py-4 px-2 pb-6 md:py-0 md:pb-6 md:px-2 mx-auto max-w-4xl lg:py-18">
               <div className="shadow-2xl border-2 border-gray-400  rounded px-5 py-1 bg-white">
                 <h2 className="mb-7 mt-5 text-2xl text-center font-bold text-gray-900 dark:text-white">
-                  Welcome 🙏
+                  Welcome Patient 🏥
                 </h2>
                 <div>
                   <div className="grid gap-4 sm:grid-cols-3 sm:gap-6">
@@ -141,6 +141,8 @@ export const Register = () => {
                         }
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       >
+                        <option>select</option>
+
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
                         <option value="Others">Others</option>

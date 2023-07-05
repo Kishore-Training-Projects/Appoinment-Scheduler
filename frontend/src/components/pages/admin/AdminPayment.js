@@ -3,9 +3,9 @@ import ReactPaginate from "react-paginate";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-import { UserSidebar } from "../../layout/sidebar/usersidebar";
+import { AdminSidebar } from "../../layout/sidebar/adminsidebar";
 
-export const UserPayment = () => {
+export const AdminPayment = () => {
   const navigate = useNavigate();
 
    // fetch prescription data
@@ -13,7 +13,7 @@ export const UserPayment = () => {
 
    const fetch_doctor_data = async () => {
      await axios
-       .get("/api/Payment/patient/"+JSON.parse(sessionStorage.getItem("student_key")).userid)
+       .get("/api/Payment/")
        .then((response) => {
         setPaymentdata(response.data);
        })
@@ -47,7 +47,7 @@ export const UserPayment = () => {
 
   return (
     <>
-      <UserSidebar />
+      <AdminSidebar />
 
       <div class="p-2 md:p-4 min-h-screen bg-gray-200 sm:ml-64">
         <div class=" p-2 md:p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
@@ -162,6 +162,12 @@ export const UserPayment = () => {
                             Sn no
                           </th>
                           <th scope="col" class="px-4 py-3">
+                            Patient Name
+                          </th>
+                          <th scope="col" class="px-4 py-3">
+                            Patient Mobile
+                          </th>
+                          <th scope="col" class="px-4 py-3">
                             Payment Mode
                           </th>
                           <th scope="col" class="px-4 py-3 ">
@@ -201,7 +207,8 @@ export const UserPayment = () => {
                             </td>
                             <td class="px-4 py-3 ">{index+1}</td>
 
-                         
+                            <td class="px-4 py-3 ">{row.patient.patientName}</td>
+                            <td class="px-4 py-3 ">{row.patient.patientMobile}</td>
                             <td class="px-4 py-3 ">{row.paymentMethod}</td>
                             <td class="px-4 py-3 ">{row.paymentAmount}</td>
                             <td class="px-4 py-3 ">{row.paymentTimestamp}</td>

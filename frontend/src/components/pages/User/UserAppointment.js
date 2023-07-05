@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -12,7 +12,10 @@ export const UserAppointment = () => {
 
   const fetch_appointment_data = async () => {
     await axios
-      .get("/api/Appointment/patient/"+(JSON.parse(sessionStorage.getItem("student_key"))).userid)
+      .get(
+        "/api/Appointment/patient/" +
+          JSON.parse(sessionStorage.getItem("student_key")).userid
+      )
       .then((response) => {
         setAppointmentdata(response.data);
       })
@@ -32,9 +35,6 @@ export const UserAppointment = () => {
   useEffect(() => {
     fetch_appointment_data();
   }, []);
-
-  
-
 
   const itemsPerPage = 5; // Number of items to display per page
   const pageCount = Math.ceil(appointmentdata.length / itemsPerPage);
@@ -100,71 +100,108 @@ export const UserAppointment = () => {
               </ol>
             </nav>
           </div>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
-            <div class="flex items-center justify-center h-24 shadow-soft-xl rounded-2xl bg-clip-border bg-gray-50 dark:bg-gray-800">
-              <div class="flex-auto p-4">
-                <div class="flex flex-wrap -mx-3">
-                  <div class="flex-none w-2/3 max-w-full px-3">
-                    <div>
-                      <p class="mb-2  font-sans font-semibold text-blue-800 leading-normal text-md">
-                        Upcoming Appointment ✔
-                      </p>
-                      <h5 class="text-center mb-0 font-bold">01</h5>
-                    </div>
-                  </div>
-                  <div class="w-4/12 max-w-full px-3 ml-auto text-right flex-0">
-                    <div class="inline-block w-12 h-12 text-center rounded-lg bg-gradient-to-tl from-purple-700 to-pink-500 shadow-soft-2xl">
-                      <i
-                        class="ni ni-money-coins text-lg relative top-3.5 text-white"
-                        aria-hidden="true"
-                      ></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
 
-            <div class="flex items-center justify-center h-24 shadow-soft-xl rounded-2xl bg-clip-border bg-gray-50 dark:bg-gray-800">
-              <div class="flex-auto p-4">
-                <div class="flex flex-wrap -mx-3">
-                  <div class="flex-none w-2/3 max-w-full px-3">
-                    <div>
-                      <p class="mb-2  font-sans text-red-800 font-semibold leading-normal text-md">
-                        Cancelled Appointment ❌
-                      </p>
-                      <h5 class="text-center mb-0 font-bold">01</h5>
-                    </div>
-                  </div>
-                  <div class="w-4/12 max-w-full px-3 ml-auto text-right flex-0">
-                    <div class="inline-block w-12 h-12 text-center rounded-lg bg-gradient-to-tl from-purple-700 to-pink-500 shadow-soft-2xl">
-                      <i
-                        class="ni ni-money-coins text-lg relative top-3.5 text-white"
-                        aria-hidden="true"
-                      ></i>
-                    </div>
-                  </div>
+          <div class="flex items-center justify-center h-58 mb-6 rounded-md  dark:bg-gray-800">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-4 gap-4">
+              <div class="flex items-start p-4 rounded-xl shadow-lg bg-white">
+                <div class="flex items-center justify-center bg-blue-50 h-12 w-12 rounded-full border border-blue-100">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6 text-blue-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
+                    />
+                  </svg>
+                </div>
+
+                <div class="ml-4">
+                  <h2 class="font-semibold">574 Messages</h2>
+                  <p class="mt-2 text-sm text-gray-500">
+                    Last opened 4 days ago
+                  </p>
                 </div>
               </div>
-            </div>
-            <div class="flex items-center justify-center h-24 shadow-soft-xl rounded-2xl bg-clip-border bg-gray-50 dark:bg-gray-800">
-              <div class="flex-auto p-4">
-                <div class="flex flex-wrap -mx-3">
-                  <div class="flex-none w-2/3 max-w-full px-3">
-                    <div>
-                      <p class="mb-2  font-sans font-semibold text-green-800 leading-normal text-md">
-                        Completed Appointment ✨
-                      </p>
-                      <h5 class="text-center mb-0 font-bold">01</h5>
-                    </div>
-                  </div>
-                  <div class="w-4/12 max-w-full px-3 ml-auto text-right flex-0">
-                    <div class="inline-block w-12 h-12 text-center rounded-lg bg-gradient-to-tl from-purple-700 to-pink-500 shadow-soft-2xl">
-                      <i
-                        class="ni ni-money-coins text-lg relative top-3.5 text-white"
-                        aria-hidden="true"
-                      ></i>
-                    </div>
-                  </div>
+
+              <div class="flex items-start p-4 rounded-xl shadow-lg bg-white">
+                <div class="flex items-center justify-center bg-orange-50 h-12 w-12 rounded-full border border-orange-100">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6 text-orange-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                    />
+                  </svg>
+                </div>
+
+                <div class="ml-4">
+                  <h2 class="font-semibold">1823 Users</h2>
+                  <p class="mt-2 text-sm text-gray-500">
+                    Last checked 3 days ago
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-start p-4 rounded-xl shadow-lg bg-white">
+                <div class="flex items-center justify-center bg-red-50 h-12 w-12 rounded-full border border-red-100">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6 text-red-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                    />
+                  </svg>
+                </div>
+
+                <div class="ml-4">
+                  <h2 class="font-semibold">548 Posts</h2>
+                  <p class="mt-2 text-sm text-gray-500">
+                    Last authored 1 day ago
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-start p-4 rounded-xl shadow-lg bg-white">
+                <div class="flex items-center justify-center bg-indigo-50 h-12 w-12 rounded-full border border-indigo-100">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6 text-indigo-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
+                    />
+                  </svg>
+                </div>
+
+                <div class="ml-4">
+                  <h2 class="font-semibold">129 Comments</h2>
+                  <p class="mt-2 text-sm text-gray-500">
+                    Last commented 8 days ago
+                  </p>
                 </div>
               </div>
             </div>
@@ -276,54 +313,165 @@ export const UserAppointment = () => {
                         </tr>
                       </thead>
                       {appointmentdata && (
-
-                      <tbody>
-                        {currentPageData.map((row, index) => (
-                          <tr
-                            key={index}
-                            class="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                          >
-                            <td class="w-4 px-4 py-3">
-                              <div class="flex items-center">
-                                <input
-                                  id="checkbox-table-search-1"
-                                  type="checkbox"
-                                  onclick="event.stopPropagation()"
-                                  class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                />
-                                <label
-                                  for="checkbox-table-search-1"
-                                  class="sr-only"
-                                >
-                                  checkbox
-                                </label>
-                              </div>
-                            </td>
-                            <th
-                              scope="row"
-                              class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        <tbody>
+                          {currentPageData.map((row, index) => (
+                            <tr
+                              key={index}
+                              class="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                             >
-                              {row.doctor.doctorName}
-                            </th>
-                            <td class="px-4 py-3 ">{new Date(row.appointmentDate).toLocaleDateString()}</td>
-                            <td class="px-4 py-3 ">{row.appointmentTime}</td>
-                            <td class="px-4 py-3 ">{row.appointmentStatus}</td>
-                            <td class="px-4 py-3 ">{row.paymentStatus}</td>
-                            <td class="px-4 py-3 ">{row.appointmentReason}</td>
-                            <td className="px-4 py-3">
-                              {" "}
-                              <div className="flex space-x-2">
-                                <CancelUserAppointment id={row.appointmentId} fetch_appointment_data={fetch_appointment_data}/>
-                               
-                                {/* <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
-                                  Edit
-                                </button> */}
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-
+                              <td class="w-4 px-4 py-3">
+                                <div class="flex items-center">
+                                  <input
+                                    id="checkbox-table-search-1"
+                                    type="checkbox"
+                                    onclick="event.stopPropagation()"
+                                    class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                  />
+                                  <label
+                                    for="checkbox-table-search-1"
+                                    class="sr-only"
+                                  >
+                                    checkbox
+                                  </label>
+                                </div>
+                              </td>
+                              <th
+                                scope="row"
+                                class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                              >
+                                {row.doctor.doctorName}
+                              </th>
+                              <td class="px-4 py-3 ">
+                                {new Date(
+                                  row.appointmentDate
+                                ).toLocaleDateString()}
+                              </td>
+                              <td class="px-4 py-3 ">{row.appointmentTime}</td>
+                              <td class="px-4 py-3 text-center">
+                              {row.appointmentStatus == "completed" && (
+                                <span class="bg-green-100 text-green-800 text-sm font-medium mr-2 inline-flex items-center px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300 border border-green-400">
+                                  <svg
+                                    class="w-3 h-3 mr-2 "
+                                    aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path
+                                      fill="currentColor"
+                                      d="m18.774 8.245-.892-.893a1.5 1.5 0 0 1-.437-1.052V5.036a2.484 2.484 0 0 0-2.48-2.48H13.7a1.5 1.5 0 0 1-1.052-.438l-.893-.892a2.484 2.484 0 0 0-3.51 0l-.893.892a1.5 1.5 0 0 1-1.052.437H5.036a2.484 2.484 0 0 0-2.48 2.481V6.3a1.5 1.5 0 0 1-.438 1.052l-.892.893a2.484 2.484 0 0 0 0 3.51l.892.893a1.5 1.5 0 0 1 .437 1.052v1.264a2.484 2.484 0 0 0 2.481 2.481H6.3a1.5 1.5 0 0 1 1.052.437l.893.892a2.484 2.484 0 0 0 3.51 0l.893-.892a1.5 1.5 0 0 1 1.052-.437h1.264a2.484 2.484 0 0 0 2.481-2.48V13.7a1.5 1.5 0 0 1 .437-1.052l.892-.893a2.484 2.484 0 0 0 0-3.51Z"
+                                    />
+                                    <path
+                                      fill="#fff"
+                                      d="M8 13a1 1 0 0 1-.707-.293l-2-2a1 1 0 1 1 1.414-1.414l1.42 1.42 5.318-3.545a1 1 0 0 1 1.11 1.664l-6 4A1 1 0 0 1 8 13Z"
+                                    />
+                                  </svg>
+                                  Completed
+                                </span>
+                              )}
+                               {row.appointmentStatus == "waiting" && (
+                                <span class="bg-yellow-100 text-yellow-800 text-sm font-medium mr-2 inline-flex items-center px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300 border border-yellow-400">
+                                  <svg
+                                     class="w-3 h-3 mr-2 "
+                                    aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z" />
+                                  </svg>
+                                  Waiting
+                                </span>
+                              )}
+                              {row.appointmentStatus == "booked" && (
+                                <span class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 inline-flex items-center px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 border border-blue-400">
+                                  <svg
+                                    class="w-3 h-3 mr-2 "
+                                    aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path d="M0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm14-7.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm0 4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm-5-4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm0 4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm-5-4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm0 4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1ZM20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4Z" />
+                                  </svg>
+                                  Booked
+                                </span>
+                              )}
+                              {row.appointmentStatus == "cancelled" && (
+                                <span class="bg-red-100 text-red-800 text-sm font-medium mr-2 inline-flex items-center px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300 border border-red-400">
+                                  <svg
+                                    class="w-3 h-3 mr-2 "
+                                    aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z" />
+                                  </svg>
+                                  Cancelled
+                                </span>
+                              )}
+                              </td>
+                              <td class="px-4 py-3 text-center">
+                              {row.paymentStatus=="paid"&&(
+                                <span class="bg-green-100 text-green-800 text-sm font-medium mr-2 inline-flex items-center px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300 border border-green-400">
+                                <svg
+                                  class="w-3 h-3 mr-2 "
+                                  aria-hidden="true"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="currentColor"
+                                  viewBox="0 0 20 20"
+                                >
+                                  <path
+                                    fill="currentColor"
+                                    d="m18.774 8.245-.892-.893a1.5 1.5 0 0 1-.437-1.052V5.036a2.484 2.484 0 0 0-2.48-2.48H13.7a1.5 1.5 0 0 1-1.052-.438l-.893-.892a2.484 2.484 0 0 0-3.51 0l-.893.892a1.5 1.5 0 0 1-1.052.437H5.036a2.484 2.484 0 0 0-2.48 2.481V6.3a1.5 1.5 0 0 1-.438 1.052l-.892.893a2.484 2.484 0 0 0 0 3.51l.892.893a1.5 1.5 0 0 1 .437 1.052v1.264a2.484 2.484 0 0 0 2.481 2.481H6.3a1.5 1.5 0 0 1 1.052.437l.893.892a2.484 2.484 0 0 0 3.51 0l.893-.892a1.5 1.5 0 0 1 1.052-.437h1.264a2.484 2.484 0 0 0 2.481-2.48V13.7a1.5 1.5 0 0 1 .437-1.052l.892-.893a2.484 2.484 0 0 0 0-3.51Z"
+                                  />
+                                  <path
+                                    fill="#fff"
+                                    d="M8 13a1 1 0 0 1-.707-.293l-2-2a1 1 0 1 1 1.414-1.414l1.42 1.42 5.318-3.545a1 1 0 0 1 1.11 1.664l-6 4A1 1 0 0 1 8 13Z"
+                                  />
+                                </svg>
+                                Paid
+                              </span>
+                              )}
+                              {row.paymentStatus=="not paid"&&(
+                                <span class="bg-red-100 text-red-800 text-sm font-medium mr-2 inline-flex items-center px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300 border border-red-400">
+                               <svg
+                                    class="w-3 h-3 mr-2 "
+                                    aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z" />
+                                  </svg>
+                                Not Paid
+                              </span>
+                              )}
+                              
+                              </td>
+                              <td class="px-4 py-3 ">
+                                {row.appointmentReason}
+                              </td>
+                              <td className="px-4 py-3">
+                                {" "}
+                                <div className="flex space-x-2">
+                                  <button
+                                    onClick={() =>
+                                      navigate(
+                                        "/user/appointment/view/" +
+                                          row.appointmentId
+                                      )
+                                    }
+                                    className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded"
+                                  >
+                                    View
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
                       )}
                     </table>
                   </div>
