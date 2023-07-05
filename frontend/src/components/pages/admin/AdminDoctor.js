@@ -42,6 +42,7 @@ export const AdminDoctor = () => {
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected);
   };
+  
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
 

@@ -15,6 +15,7 @@ export const AdminAppointment = () => {
       .get("/api/Appointment/")
       .then((response) => {
         setAppointmentdata(response.data);
+        setSearchResults(response.data);
       })
       .catch((error) => {
         if (error.response) {
@@ -40,9 +41,36 @@ export const AdminAppointment = () => {
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected);
   };
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
 
   const offset = currentPage * itemsPerPage;
-  const currentPageData = appointmentdata.slice(offset, offset + itemsPerPage);
+  var currentPageData = searchResults.slice(offset, offset + itemsPerPage);
+
+  // Function to handle search query changes
+  const handleSearchQueryChange = (event) => {
+    setSearchQuery(event.target.value);
+    handleSearch(event.target.value);
+  };
+
+  // Function to handle search
+  const handleSearch = (search) => {
+    console.log(search);
+    // Perform search logic here using searchQuery
+    const filteredResults = appointmentdata.filter(
+      (appointment) =>
+        appointment.patient.patientName
+          .toLowerCase()
+          .includes(search.toLowerCase()) ||
+        appointment.patient.patientMobile.includes(search)
+    );
+    console.log(filteredResults);
+
+    setSearchResults(filteredResults);
+
+    // Reset pagination to the first page
+    setCurrentPage(0);
+  };
 
   return (
     <>
@@ -133,7 +161,8 @@ export const AdminAppointment = () => {
                             id="simple-search"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="Search"
-                            required=""
+                            value={searchQuery}
+                            onChange={handleSearchQueryChange}
                           />
                         </div>
                       </form>
@@ -224,7 +253,9 @@ export const AdminAppointment = () => {
                                 row.appointmentDate
                               ).toLocaleDateString()}
                             </td>
-                            <td class="px-4 py-3 text-center">{row.appointmentTime}</td>
+                            <td class="px-4 py-3 text-center">
+                              {row.appointmentTime}
+                            </td>
                             <td class="px-4 py-3 text-center">
                               {row.appointmentStatus == "completed" && (
                                 <span class="bg-green-100 text-green-800 text-sm font-medium mr-2 inline-flex items-center px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300 border border-green-400">
@@ -290,33 +321,70 @@ export const AdminAppointment = () => {
                                 </span>
                               )}
                             </td>
-                           
 
                             <td class="px-4 py-3 text-center">
-                              {row.paymentStatus=="paid"&&(
-                                <span class="bg-green-100 text-green-800 text-sm font-medium mr-2 inline-flex items-center px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300 border border-green-400">
-                                <svg
-                                  class="w-3 h-3 mr-2 "
-                                  aria-hidden="true"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="currentColor"
-                                  viewBox="0 0 20 20"
-                                >
-                                  <path
+                              {row.medicalrecordStatus == true && (
+                                <span class="inline-flex items-center justify-center w-6 h-6 mr-2 text-sm font-semibold text-green-800 bg-blue-100 rounded-full dark:bg-gray-700 dark:text-green-400">
+                                  <svg
+                                    class="w-4 h-4"
+                                    aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg"
                                     fill="currentColor"
-                                    d="m18.774 8.245-.892-.893a1.5 1.5 0 0 1-.437-1.052V5.036a2.484 2.484 0 0 0-2.48-2.48H13.7a1.5 1.5 0 0 1-1.052-.438l-.893-.892a2.484 2.484 0 0 0-3.51 0l-.893.892a1.5 1.5 0 0 1-1.052.437H5.036a2.484 2.484 0 0 0-2.48 2.481V6.3a1.5 1.5 0 0 1-.438 1.052l-.892.893a2.484 2.484 0 0 0 0 3.51l.892.893a1.5 1.5 0 0 1 .437 1.052v1.264a2.484 2.484 0 0 0 2.481 2.481H6.3a1.5 1.5 0 0 1 1.052.437l.893.892a2.484 2.484 0 0 0 3.51 0l.893-.892a1.5 1.5 0 0 1 1.052-.437h1.264a2.484 2.484 0 0 0 2.481-2.48V13.7a1.5 1.5 0 0 1 .437-1.052l.892-.893a2.484 2.484 0 0 0 0-3.51Z"
-                                  />
-                                  <path
-                                    fill="#fff"
-                                    d="M8 13a1 1 0 0 1-.707-.293l-2-2a1 1 0 1 1 1.414-1.414l1.42 1.42 5.318-3.545a1 1 0 0 1 1.11 1.664l-6 4A1 1 0 0 1 8 13Z"
-                                  />
-                                </svg>
-                                Paid
-                              </span>
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path
+                                      fill="currentColor"
+                                      d="m18.774 8.245-.892-.893a1.5 1.5 0 0 1-.437-1.052V5.036a2.484 2.484 0 0 0-2.48-2.48H13.7a1.5 1.5 0 0 1-1.052-.438l-.893-.892a2.484 2.484 0 0 0-3.51 0l-.893.892a1.5 1.5 0 0 1-1.052.437H5.036a2.484 2.484 0 0 0-2.48 2.481V6.3a1.5 1.5 0 0 1-.438 1.052l-.892.893a2.484 2.484 0 0 0 0 3.51l.892.893a1.5 1.5 0 0 1 .437 1.052v1.264a2.484 2.484 0 0 0 2.481 2.481H6.3a1.5 1.5 0 0 1 1.052.437l.893.892a2.484 2.484 0 0 0 3.51 0l.893-.892a1.5 1.5 0 0 1 1.052-.437h1.264a2.484 2.484 0 0 0 2.481-2.48V13.7a1.5 1.5 0 0 1 .437-1.052l.892-.893a2.484 2.484 0 0 0 0-3.51Z"
+                                    />
+                                    <path
+                                      fill="#fff"
+                                      d="M8 13a1 1 0 0 1-.707-.293l-2-2a1 1 0 1 1 1.414-1.414l1.42 1.42 5.318-3.545a1 1 0 0 1 1.11 1.664l-6 4A1 1 0 0 1 8 13Z"
+                                    />
+                                  </svg>
+                                  <span class="sr-only">Done</span>
+                                </span>
                               )}
-                              {row.paymentStatus=="not paid"&&(
+                              {row.medicalrecordStatus == false && (
+                                <span class="inline-flex items-center justify-center w-6 h-6 mr-2 text-sm font-semibold text-red-800 bg-blue-100 rounded-full dark:bg-gray-700 dark:text-red-400">
+                                  <svg
+                                    class="w-4 h-4"
+                                    aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z" />
+                                  </svg>
+                                  <span class="sr-only">Done</span>
+                                </span>
+                              )}
+                            </td>
+
+                            <td class="px-4 py-3 text-center">
+                              {row.paymentStatus == "paid" && (
+                                <span class="bg-green-100 text-green-800 text-sm font-medium mr-2 inline-flex items-center px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300 border border-green-400">
+                                  <svg
+                                    class="w-3 h-3 mr-2 "
+                                    aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path
+                                      fill="currentColor"
+                                      d="m18.774 8.245-.892-.893a1.5 1.5 0 0 1-.437-1.052V5.036a2.484 2.484 0 0 0-2.48-2.48H13.7a1.5 1.5 0 0 1-1.052-.438l-.893-.892a2.484 2.484 0 0 0-3.51 0l-.893.892a1.5 1.5 0 0 1-1.052.437H5.036a2.484 2.484 0 0 0-2.48 2.481V6.3a1.5 1.5 0 0 1-.438 1.052l-.892.893a2.484 2.484 0 0 0 0 3.51l.892.893a1.5 1.5 0 0 1 .437 1.052v1.264a2.484 2.484 0 0 0 2.481 2.481H6.3a1.5 1.5 0 0 1 1.052.437l.893.892a2.484 2.484 0 0 0 3.51 0l.893-.892a1.5 1.5 0 0 1 1.052-.437h1.264a2.484 2.484 0 0 0 2.481-2.48V13.7a1.5 1.5 0 0 1 .437-1.052l.892-.893a2.484 2.484 0 0 0 0-3.51Z"
+                                    />
+                                    <path
+                                      fill="#fff"
+                                      d="M8 13a1 1 0 0 1-.707-.293l-2-2a1 1 0 1 1 1.414-1.414l1.42 1.42 5.318-3.545a1 1 0 0 1 1.11 1.664l-6 4A1 1 0 0 1 8 13Z"
+                                    />
+                                  </svg>
+                                  Paid
+                                </span>
+                              )}
+                              {row.paymentStatus == "not paid" && (
                                 <span class="bg-red-100 text-red-800 text-sm font-medium mr-2 inline-flex items-center px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300 border border-red-400">
-                               <svg
+                                  <svg
                                     class="w-3 h-3 mr-2 "
                                     aria-hidden="true"
                                     xmlns="http://www.w3.org/2000/svg"
@@ -325,11 +393,10 @@ export const AdminAppointment = () => {
                                   >
                                     <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z" />
                                   </svg>
-                                Not Paid
-                              </span>
+                                  Not Paid
+                                </span>
                               )}
-                              
-                              </td>
+                            </td>
 
                             <td className="px-4 py-3">
                               {" "}

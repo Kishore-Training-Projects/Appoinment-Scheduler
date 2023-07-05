@@ -17,6 +17,7 @@ export const AdminPatient = () => {
       .get("/api/Patient")
       .then((response) => {
         setpatientdata(response.data);
+        setSearchResults(response.data);
       })
       .catch((error) => {
         if (error.response) {
@@ -34,6 +35,7 @@ export const AdminPatient = () => {
   useEffect(() => {
     fetch_doctor_data();
   }, []);
+
   const itemsPerPage = 5; // Number of items to display per page
   const pageCount = Math.ceil(patientdata.length / itemsPerPage);
   const [currentPage, setCurrentPage] = useState(0);
@@ -42,8 +44,34 @@ export const AdminPatient = () => {
     setCurrentPage(selected);
   };
 
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+
   const offset = currentPage * itemsPerPage;
-  const currentPageData = patientdata.slice(offset, offset + itemsPerPage);
+  var currentPageData = searchResults.slice(offset, offset + itemsPerPage);
+
+  // Function to handle search query changes
+  const handleSearchQueryChange = (event) => {
+    setSearchQuery(event.target.value);
+    handleSearch(event.target.value);
+  };
+
+  // Function to handle search
+  const handleSearch = (search) => {
+    console.log(search);
+    // Perform search logic here using searchQuery
+    const filteredResults = patientdata.filter(
+      (patient) =>
+        patient.patientName.toLowerCase().includes(search.toLowerCase()) ||
+        patient.patientMobile.includes(search)
+    );
+    console.log(filteredResults);
+
+    setSearchResults(filteredResults);
+
+    // Reset pagination to the first page
+    setCurrentPage(0);
+  };
 
   return (
     <>
@@ -134,7 +162,9 @@ export const AdminPatient = () => {
                             id="simple-search"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="Search"
-                            required=""
+                            value={searchQuery}
+                             onChange={handleSearchQueryChange}
+        
                           />
                         </div>
                       </form>
@@ -254,10 +284,15 @@ export const AdminPatient = () => {
                             <td className="px-4 py-3">
                               {" "}
                               <div className="flex space-x-2">
-                              <EditAdminPatient id={row.patientId} fetch_doctor_data={fetch_doctor_data} />
+                                <EditAdminPatient
+                                  id={row.patientId}
+                                  fetch_doctor_data={fetch_doctor_data}
+                                />
 
-                                <DeleteAdminPatient id={row.patientId} fetch_doctor_data={fetch_doctor_data} />
-
+                                <DeleteAdminPatient
+                                  id={row.patientId}
+                                  fetch_doctor_data={fetch_doctor_data}
+                                />
                               </div>
                             </td>
                           </tr>
