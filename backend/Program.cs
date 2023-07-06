@@ -1,6 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using AppoinmentScheduler.Data;
+using Hangfire;
+using Microsoft.OpenApi.Models;
+using System.Configuration;
+
 namespace AppoinmentScheduler
 {
     public class Program
@@ -28,6 +32,21 @@ namespace AppoinmentScheduler
 
             }));
 
+            //hangfire
+
+            builder.Services.AddControllers();
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "HangfireApplication", Version = "v1" });
+            });
+
+            builder.Services.AddHangfire(x =>
+            {
+                x.UseSqlServerStorage(builder.Configuration.GetConnectionString("AppoinmentSchedulerContext"));
+            });
+            builder.Services.AddHangfireServer();
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -35,9 +54,16 @@ namespace AppoinmentScheduler
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+                //hangfire
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "HangfireApplication v1"));
+
             }
 
             app.UseCors("corspolicy");
+
+            //hangfire
+
+            app.UseHangfireDashboard();
 
 
             app.UseAuthorization();
