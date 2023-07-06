@@ -47,28 +47,28 @@ export const AddUserAppointment = () => {
       }
     })
       .then((response) => {
-        if (!response.ok) {
-          if (response.status === 404) {
-            throw new Error('Resource not found');
-          }
-          if (response.status === 201) {
-            return response.data;
-          }
-          else {
-            throw new Error('Network response was not ok');
-          }
-        }
-        return response.data;
-      })
-      .then((data) => {
-        // Handle the response from the server
-        console.log(data);
+        console.log(response.data);
         alert('Appoint registered');
         navigate('/user/appointment');
       })
+      
       .catch((error) => {
         // Handle any errors that occurred during the request
-        console.error('Error:', error.message);
+        if (error.response) {
+          // The request was made and the server responded with a status code that falls out of the range of 2xx
+          console.log(error.response.status);
+          alert(error.response.data.detail);
+
+          //console.log(error.response.data);
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error', error.message);
+        }
+        //console.log(error.config);
+    
       });
   }
 

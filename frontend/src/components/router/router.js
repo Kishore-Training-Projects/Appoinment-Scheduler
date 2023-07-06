@@ -42,7 +42,7 @@ import { AddAdminPatient } from "../pages/admin/AddAdminPatient";
 import { AddAdminDoctor } from "../pages/admin/AddAdminDoctor";
 import { ViewAdminAppointment } from "../pages/admin/components/ViewAdminAppointment";
 import { AdminPayment } from "../pages/admin/AdminPayment";
-
+import { AdminReception } from "../pages/admin/AdminReceptionist";
 
 function Router() {
     return (
@@ -207,7 +207,10 @@ function Router() {
         path: "/admin/payment",
         element: <AdminPayment />,
       },
-  
+      {
+        path: "/admin/reception",
+        element: <AdminReception />,
+      },
   
   ];
   

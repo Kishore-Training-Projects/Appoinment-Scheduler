@@ -2,7 +2,7 @@ import { React, useState } from "react";
 import axios from "axios";
 
 
-const DeleteAdminDoctor = ({ id ,fetch_doctor_data }) => {
+const DeleteAdminUser = ({ id ,fetch_doctor_data }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Function to toggle the modal
@@ -12,11 +12,11 @@ const DeleteAdminDoctor = ({ id ,fetch_doctor_data }) => {
   };
 
   const handleDelete = () => {
-    axios.delete('/api/Doctor/'+id)
+    axios.delete('/api/User/'+id)
       .then(response => {
         // Handle successful response
-        console.log('Delete request successful:', response);
-        alert("Doctor Delete Successfully");
+        console.log('Reception request successful:', response);
+        alert("Reception Delete Successfully");
         toggleModal();
         fetch_doctor_data();
       })
@@ -133,4 +133,4 @@ const DeleteAdminDoctor = ({ id ,fetch_doctor_data }) => {
   );
 };
 
-export default DeleteAdminDoctor;
+export default DeleteAdminUser;

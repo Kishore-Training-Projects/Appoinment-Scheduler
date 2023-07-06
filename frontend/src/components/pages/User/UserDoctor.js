@@ -16,6 +16,8 @@ export const UserDoctor = () => {
       .get("/api/Doctor")
       .then((response) => {
         setdoctordata(response.data);
+        setSearchResults(response.data);
+
       })
       .catch((error) => {
         if (error.response) {
@@ -41,9 +43,34 @@ export const UserDoctor = () => {
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected);
   };
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
 
   const offset = currentPage * itemsPerPage;
-  const currentPageData = doctordata.slice(offset, offset + itemsPerPage);
+  var currentPageData = searchResults.slice(offset, offset + itemsPerPage);
+
+  // Function to handle search query changes
+  const handleSearchQueryChange = (event) => {
+    setSearchQuery(event.target.value);
+    handleSearch(event.target.value);
+  };
+
+  // Function to handle search
+  const handleSearch = (search) => {
+    console.log(search);
+    // Perform search logic here using searchQuery
+    const filteredResults = doctordata.filter(
+      (doctor) =>
+        doctor.doctorName.toLowerCase().includes(search.toLowerCase()) ||
+        doctor.doctorDesignation.toLowerCase().includes(search.toLowerCase())
+    );
+    console.log(filteredResults);
+
+    setSearchResults(filteredResults);
+
+    // Reset pagination to the first page
+    setCurrentPage(0);
+  };
 
   return (
     <>
@@ -136,7 +163,8 @@ export const UserDoctor = () => {
                             id="simple-search"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="Search"
-                            required=""
+                            value={searchQuery}
+                            onChange={handleSearchQueryChange}
                           />
                         </div>
                       </form>
@@ -164,13 +192,13 @@ export const UserDoctor = () => {
                           <th scope="col" class="px-4 py-3">
                             Doctor Name
                           </th>
-                          <th scope="col" class="px-4 py-3 ">
+                          <th scope="col" class="px-4 py-3 text-center">
                             Doctor Designation
                           </th>
-                          <th scope="col" class="px-4 py-3">
+                          <th scope="col" class="px-4 py-3 text-center">
                             Doctor Qualification
                           </th>
-                          <th scope="col" class="px-4 py-3">
+                          <th scope="col" class="px-4 py-3 text-center">
                             Doctor Status
                           </th>                          
                           <th scope="col" class="px-4 py-3">
@@ -212,7 +240,21 @@ export const UserDoctor = () => {
                             </th>
                             <td class="px-4 py-3 text-center ">{row.doctorDesignation}</td>
                             <td class="px-4 py-3 text-center">{row.doctorQualification}</td>
-                            <td class="px-4 py-3 text-center">{row.doctorStatus}</td>
+                            <td class="px-4 py-3 text-center">
+                              {" "}
+                              {row.doctorStatus=="Leave"&&(
+                                <span class="bg-red-100 text-red-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">🏝️ Leave</span>
+
+                              )}
+                              {row.doctorStatus=="Available"&&(
+                                <span class="bg-green-100 text-green-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">👨‍⚕️ Available</span>
+
+                              )}
+                              {row.doctorStatus=="Lunch"&&(
+                                <span class="bg-yellow-100 text-yellow-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">🍰 Lunch</span>
+
+                              )}
+                            </td>
 
 
                             <td className="px-4 py-3">

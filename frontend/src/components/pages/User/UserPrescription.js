@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
 import { useNavigate } from "react-router-dom";
 import UserPrescriptionExport from "./components/UserPrescriptionExport";
@@ -13,9 +13,13 @@ export const UserPrescription = () => {
 
   const fetch_prescription_data = async () => {
     await axios
-      .get("/api/Prescription/patient/"+(JSON.parse(sessionStorage.getItem("student_key"))).userid)
+      .get(
+        "/api/Prescription/patient/" +
+          JSON.parse(sessionStorage.getItem("student_key")).userid
+      )
       .then((response) => {
         setprescription(response.data);
+        setSearchResults(response.data);
       })
       .catch((error) => {
         if (error.response) {
@@ -34,7 +38,6 @@ export const UserPrescription = () => {
     fetch_prescription_data();
   }, []);
 
-
   const itemsPerPage = 5; // Number of items to display per page
   const pageCount = Math.ceil(prescription.length / itemsPerPage);
   const [currentPage, setCurrentPage] = useState(0);
@@ -43,9 +46,36 @@ export const UserPrescription = () => {
     setCurrentPage(selected);
   };
 
-  const offset = currentPage * itemsPerPage;
-  const currentPageData = prescription.slice(offset, offset + itemsPerPage);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
 
+  const offset = currentPage * itemsPerPage;
+  var currentPageData = searchResults.slice(offset, offset + itemsPerPage);
+
+  // Function to handle search query changes
+  const handleSearchQueryChange = (event) => {
+    setSearchQuery(event.target.value);
+    handleSearch(event.target.value);
+  };
+
+  // Function to handle search
+  const handleSearch = (search) => {
+    console.log(search);
+    // Perform search logic here using searchQuery
+    const filteredResults = prescription.filter(
+      (pres) =>
+        pres.doctor.doctorName.toLowerCase().includes(search.toLowerCase()) ||
+        pres.doctor.doctorDesignation
+          .toLowerCase()
+          .includes(search.toLowerCase())
+    );
+    console.log(filteredResults);
+
+    setSearchResults(filteredResults);
+
+    // Reset pagination to the first page
+    setCurrentPage(0);
+  };
   return (
     <>
       <UserSidebar />
@@ -100,8 +130,6 @@ export const UserPrescription = () => {
             </nav>
           </div>
 
-    
-
           {/* table code */}
           <div class="flex w-full mb-4 h-full rounded bg-gray-50 dark:bg-gray-800">
             <section class="bg-gray-50 dark:bg-gray-900 w-full h-full">
@@ -137,7 +165,8 @@ export const UserPrescription = () => {
                             id="simple-search"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="Search"
-                            required=""
+                            value={searchQuery}
+                            onChange={handleSearchQueryChange}
                           />
                         </div>
                       </form>
@@ -175,8 +204,8 @@ export const UserPrescription = () => {
                             Disease
                           </th>
                           <th scope="col" class="px-4 py-3">
-                           Allergy
-                          </th>                         
+                            Allergy
+                          </th>
                           <th scope="col" class="px-4 py-3">
                             Remark
                           </th>
@@ -185,57 +214,68 @@ export const UserPrescription = () => {
                           </th>
                         </tr>
                       </thead>
-                      {prescription&&(
-
-                      <tbody>
-                        {currentPageData.map((row, index) => (
-                          <tr
-                            key={index}
-                            class="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                          >
-                            <td class="w-4 px-4 py-3">
-                              <div class="flex items-center">
-                                <input
-                                  id="checkbox-table-search-1"
-                                  type="checkbox"
-                                  onclick="event.stopPropagation()"
-                                  class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                />
-                                <label
-                                  for="checkbox-table-search-1"
-                                  class="sr-only"
-                                >
-                                  checkbox
-                                </label>
-                              </div>
-                            </td>
-                            <td class="px-4 py-3 ">{index+1}</td>
-
-                            <th
-                              scope="row"
-                              class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                      {prescription && (
+                        <tbody>
+                          {currentPageData.map((row, index) => (
+                            <tr
+                              key={index}
+                              class="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                             >
-                              {new Date(row.prescriptionTimestamp).toLocaleDateString()}
-                            </th>
-                            <td class="px-4 py-3 text-center ">{row.doctor.doctorName}</td>
-                            <td class="px-4 py-3 text-center">{row.doctor.doctorDesignation}</td>
-                            <td class="px-4 py-3 text-center">{row.disease}</td>
-                            <td class="px-4 py-3 text-center">{row.allergy}</td>
+                              <td class="w-4 px-4 py-3">
+                                <div class="flex items-center">
+                                  <input
+                                    id="checkbox-table-search-1"
+                                    type="checkbox"
+                                    onclick="event.stopPropagation()"
+                                    class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                  />
+                                  <label
+                                    for="checkbox-table-search-1"
+                                    class="sr-only"
+                                  >
+                                    checkbox
+                                  </label>
+                                </div>
+                              </td>
+                              <td class="px-4 py-3 ">{index + 1}</td>
 
-                            <td class="px-4 py-3 ">{row.prescriptionRemark}</td>
+                              <th
+                                scope="row"
+                                class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                              >
+                                {new Date(
+                                  row.prescriptionTimestamp
+                                ).toLocaleDateString()}
+                              </th>
+                              <td class="px-4 py-3 text-center ">
+                                {row.doctor.doctorName}
+                              </td>
+                              <td class="px-4 py-3 text-center">
+                                {row.doctor.doctorDesignation}
+                              </td>
+                              <td class="px-4 py-3 text-center">
+                                {row.disease}
+                              </td>
+                              <td class="px-4 py-3 text-center">
+                                {row.allergy}
+                              </td>
 
-                            <td className="px-4 py-3">
-                              {" "}
-                              <div className="flex space-x-2">
-                                {/* <button className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded">
+                              <td class="px-4 py-3 ">
+                                {row.prescriptionRemark}
+                              </td>
+
+                              <td className="px-4 py-3">
+                                {" "}
+                                <div className="flex space-x-2">
+                                  {/* <button className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded">
                                   View
                                 </button> */}
-                                <UserPrescriptionExport rowData={row} />
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
+                                  <UserPrescriptionExport rowData={row} />
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
                       )}
                     </table>
                   </div>

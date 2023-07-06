@@ -1,4 +1,4 @@
-import { React, useEffect } from "react";
+import { React, useEffect,useRef } from "react";
 import { useState } from "react";
 import { AddAdminMedicalrecord } from "./AddAdminMedicalrecord";
 import { AdminSidebar } from "../../../layout/sidebar/adminsidebar";
@@ -64,6 +64,19 @@ export const ViewAdminAppointment = () => {
   useEffect(() => {
     fetch_appointment_data(id);
   }, []);
+
+    // function to print ref
+    const contentRef = useRef(null);
+
+    const handlePrint = () => {
+      const content = contentRef.current;
+      if (content) {
+        const originalClassName = content.className;
+        content.className = "print-only"; // Add a class to hide the sidebar when printing
+        window.print();
+        content.className = originalClassName; // Restore the original class after printing
+      }
+    };
 
   return (
     <>
@@ -246,6 +259,22 @@ export const ViewAdminAppointment = () => {
                           fetch_appointment_data={fetch_appointment_data}
                         />
                       )}
+                        <button
+                        onClick={handlePrint}
+                        className="text-xs bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded"
+                        data-tooltip-target="tooltip-default"
+                      >
+                        <svg
+                          fill="currentColor"
+                          viewBox="0 0 16 16"
+                          height="1em"
+                          width="1em"
+                          className="w-6 h-6"
+                        >
+                          <path d="M2.5 8a.5.5 0 100-1 .5.5 0 000 1z" />
+                          <path d="M5 1a2 2 0 00-2 2v2H2a2 2 0 00-2 2v3a2 2 0 002 2h1v1a2 2 0 002 2h6a2 2 0 002-2v-1h1a2 2 0 002-2V7a2 2 0 00-2-2h-1V3a2 2 0 00-2-2H5zM4 3a1 1 0 011-1h6a1 1 0 011 1v2H4V3zm1 5a2 2 0 00-2 2v1H2a1 1 0 01-1-1V7a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-1 1h-1v-1a2 2 0 00-2-2H5zm7 2v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-3a1 1 0 011-1h6a1 1 0 011 1z" />
+                        </svg>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -590,7 +619,7 @@ export const ViewAdminAppointment = () => {
                               Doctor Mobile
                             </th>
 
-                            <th scope="col" class="px-4 py-3">
+                            <th scope="col" class="px-4 py-3 text-center">
                               Doctor status
                             </th>
                             <th scope="col" class="px-4 py-3">
@@ -634,9 +663,20 @@ export const ViewAdminAppointment = () => {
                               {" "}
                               {appointmentdata.doctor.doctorMobile}
                             </td>
-                            <td class="px-4 py-3 ">
+                            <td class="px-4 py-3 text-center">
                               {" "}
-                              {appointmentdata.doctor.doctorStatus}
+                              {appointmentdata.doctor.doctorStatus=="Leave"&&(
+                                <span class="bg-red-100 text-red-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">🏝️ Leave</span>
+
+                              )}
+                              {appointmentdata.doctor.doctorStatus=="Available"&&(
+                                <span class="bg-green-100 text-green-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">👨‍⚕️ Available</span>
+
+                              )}
+                              {appointmentdata.doctor.doctorStatus=="Lunch"&&(
+                                <span class="bg-yellow-100 text-yellow-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">🍰 Lunch</span>
+
+                              )}
                             </td>
                             <td class="px-4 py-3 ">
                               {" "}

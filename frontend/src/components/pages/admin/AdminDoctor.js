@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -42,13 +42,12 @@ export const AdminDoctor = () => {
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected);
   };
-  
-  const [searchQuery, setSearchQuery] = useState('');
+
+  const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
   const offset = currentPage * itemsPerPage;
   var currentPageData = searchResults.slice(offset, offset + itemsPerPage);
-
 
   // Function to handle search query changes
   const handleSearchQueryChange = (event) => {
@@ -58,22 +57,21 @@ export const AdminDoctor = () => {
 
   // Function to handle search
   const handleSearch = (search) => {
-    console.log(search)
+    console.log(search);
     // Perform search logic here using searchQuery
     const filteredResults = doctordata.filter(
       (doctor) =>
         doctor.doctorName.toLowerCase().includes(search.toLowerCase()) ||
         doctor.doctorMobile.includes(search)
     );
-    console.log(filteredResults)
-  
+    console.log(filteredResults);
+
     setSearchResults(filteredResults);
 
     // Reset pagination to the first page
     setCurrentPage(0);
   };
 
- 
   return (
     <>
       <AdminSidebar />
@@ -120,15 +118,13 @@ export const AdminDoctor = () => {
                       ></path>
                     </svg>
                     <a class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2 dark:text-gray-400 dark:hover:text-white">
-                     Doctor Details
+                      Doctor Details
                     </a>
                   </div>
                 </li>
               </ol>
             </nav>
           </div>
-
-    
 
           {/* table code */}
           <div class="flex w-full mb-4 h-full rounded bg-gray-50 dark:bg-gray-800">
@@ -166,8 +162,7 @@ export const AdminDoctor = () => {
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="Search"
                             value={searchQuery}
-        onChange={handleSearchQueryChange}
-        
+                            onChange={handleSearchQueryChange}
                           />
                         </div>
                       </div>
@@ -178,7 +173,6 @@ export const AdminDoctor = () => {
                         onClick={() => navigate("/admin/doctor/new")}
                         class="flex items-center justify-center text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800"
                       >
-                       
                         Add Doctor
                       </button>
                       <div class="flex items-center space-x-3 w-full md:w-auto"></div>
@@ -223,7 +217,7 @@ export const AdminDoctor = () => {
                           </th>
                           <th scope="col" class="px-4 py-3">
                             Doctor Status
-                          </th>                          
+                          </th>
                           <th scope="col" class="px-4 py-3">
                             Actions
                           </th>
@@ -251,7 +245,7 @@ export const AdminDoctor = () => {
                                 </label>
                               </div>
                             </td>
-                            <td class="px-4 py-3 ">{index+1}</td>
+                            <td class="px-4 py-3 ">{index + 1}</td>
 
                             <th
                               scope="row"
@@ -259,22 +253,38 @@ export const AdminDoctor = () => {
                             >
                               {row.doctorName}
                             </th>
-                            <td class="px-4 py-3 text-center ">{row.doctorFees}</td>
+                            <td class="px-4 py-3 text-center ">
+                              {row.doctorFees}
+                            </td>
 
-                            <td class="px-4 py-3 text-center ">{row.doctorDesignation}</td>
-                            <td class="px-4 py-3 text-center">{row.doctorQualification}</td>
-                            <td class="px-4 py-3 text-center">{row.doctorEmail}</td>
-                            <td class="px-4 py-3 text-center">{row.doctorAddress}</td>
-                            <td class="px-4 py-3 text-center">{row.doctorStatus}</td>
-
+                            <td class="px-4 py-3 text-center ">
+                              {row.doctorDesignation}
+                            </td>
+                            <td class="px-4 py-3 text-center">
+                              {row.doctorQualification}
+                            </td>
+                            <td class="px-4 py-3 text-center">
+                              {row.doctorEmail}
+                            </td>
+                            <td class="px-4 py-3 text-center">
+                              {row.doctorAddress}
+                            </td>
+                            <td class="px-4 py-3 text-center">
+                              {row.doctorStatus}
+                            </td>
 
                             <td className="px-4 py-3">
                               {" "}
                               <div className="flex space-x-2">
-                               
-                                                              <EditAdminDoctor id={row.doctorId} fetch_doctor_data={fetch_doctor_data} />
+                                <EditAdminDoctor
+                                  id={row.doctorId}
+                                  fetch_doctor_data={fetch_doctor_data}
+                                />
 
-                                <DeleteAdminDoctor id={row.doctorId} fetch_doctor_data={fetch_doctor_data} />
+                                <DeleteAdminDoctor
+                                  id={row.doctorId}
+                                  fetch_doctor_data={fetch_doctor_data}
+                                />
                               </div>
                             </td>
                           </tr>

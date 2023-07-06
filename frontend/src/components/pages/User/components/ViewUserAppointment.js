@@ -1,4 +1,4 @@
-import { React, useEffect } from "react";
+import { React, useEffect, useRef } from "react";
 import { useState } from "react";
 import { UserSidebar } from "../../../layout/sidebar/usersidebar";
 import CancelUserAppointment from "./CancelUserAppointment";
@@ -19,8 +19,10 @@ export const ViewUserAppointment = () => {
     try {
       const response = await axios.get(`/api/Appointment/${id}`);
       setAppointmentdata(response.data);
-      fetch_medicalrecord_data(response.data.patient.patientId,response.data.appointmentId)
-
+      fetch_medicalrecord_data(
+        response.data.patient.patientId,
+        response.data.appointmentId
+      );
     } catch (error) {
       if (error.response) {
         if (error.response.status === 404) {
@@ -37,12 +39,12 @@ export const ViewUserAppointment = () => {
   // fetch medical records
   const [medicalrecords, setmedicalrecords] = useState();
 
-  const fetch_medicalrecord_data = async (id1,id2) => {
+  const fetch_medicalrecord_data = async (id1, id2) => {
     await axios
       .get(`/api/MedicalRecord/reception?id1=${id1}&id2=${id2}`)
       .then((response) => {
         setmedicalrecords(response.data);
-        fetch_prescription_data(id1,id2);
+        fetch_prescription_data(id1, id2);
       })
       .catch((error) => {
         if (error.response) {
@@ -57,39 +59,54 @@ export const ViewUserAppointment = () => {
       });
   };
 
+  // fetch prescription records
+  const [Prescription, setPrescription] = useState();
 
-    // fetch prescription records
-    const [Prescription, setPrescription] = useState();
-
-    const fetch_prescription_data = async (id1,id2) => {
-      await axios
-        .get(`/api/Prescription/doctor?id1=${id1}&id2=${id2}`)
-        .then((response) => {
-          setPrescription(response.data);
-        })
-        .catch((error) => {
-          if (error.response) {
-            if (error.response.status === 404) {
-              console.log("Resource not found");
-            } else {
-              console.log("Network response was not ok");
-            }
+  const fetch_prescription_data = async (id1, id2) => {
+    await axios
+      .get(`/api/Prescription/doctor?id1=${id1}&id2=${id2}`)
+      .then((response) => {
+        setPrescription(response.data);
+      })
+      .catch((error) => {
+        if (error.response) {
+          if (error.response.status === 404) {
+            console.log("Resource not found");
           } else {
-            console.log("Error:", error.message);
+            console.log("Network response was not ok");
           }
-        });
-    };
+        } else {
+          console.log("Error:", error.message);
+        }
+      });
+  };
 
   useEffect(() => {
     fetch_appointment_data(id);
-    
   }, []);
+
+  // function to print ref
+  const contentRef = useRef(null);
+
+  const handlePrint = () => {
+    const content = contentRef.current;
+    if (content) {
+      const originalClassName = content.className;
+      content.className = "print-only"; // Add a class to hide the sidebar when printing
+      window.print();
+      content.className = originalClassName; // Restore the original class after printing
+    }
+  };
 
   return (
     <>
       <UserSidebar />
+
       {appointmentdata && (
-        <div class="p-2 md:p-4 min-h-screen bg-gray-200 sm:ml-64">
+        <div
+          class="p-2 md:p-4 min-h-screen bg-gray-200 sm:ml-64"
+          ref={contentRef}
+        >
           <div class=" p-2 md:p-4 border-2 border-gray-300 border-dashed rounded-lg dark:border-gray-700 mt-14">
             {/* bread crumbs  */}
             <div class="flex w-full mb-4 rounded bg-white dark:bg-gray-800">
@@ -244,13 +261,30 @@ export const ViewUserAppointment = () => {
                     </div>
 
                     <div className="flex items-end justify-end">
-
-                    
-                        {appointmentdata.appointmentStatus !="canceled" &&appointmentdata.appointmentStatus !="completed" &&(
-                            
-                            <CancelUserAppointment id = {appointmentdata.appointmentId} fetch_appointment_data={fetch_appointment_data} />
+                      {appointmentdata.appointmentStatus != "canceled" &&
+                        appointmentdata.appointmentStatus != "completed" && (
+                          <CancelUserAppointment
+                            id={appointmentdata.appointmentId}
+                            fetch_appointment_data={fetch_appointment_data}
+                          />
                         )}
 
+                      <button
+                        onClick={handlePrint}
+                        className="text-xs bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded"
+                        data-tooltip-target="tooltip-default"
+                      >
+                        <svg
+                          fill="currentColor"
+                          viewBox="0 0 16 16"
+                          height="1em"
+                          width="1em"
+                          className="w-6 h-6"
+                        >
+                          <path d="M2.5 8a.5.5 0 100-1 .5.5 0 000 1z" />
+                          <path d="M5 1a2 2 0 00-2 2v2H2a2 2 0 00-2 2v3a2 2 0 002 2h1v1a2 2 0 002 2h6a2 2 0 002-2v-1h1a2 2 0 002-2V7a2 2 0 00-2-2h-1V3a2 2 0 00-2-2H5zM4 3a1 1 0 011-1h6a1 1 0 011 1v2H4V3zm1 5a2 2 0 00-2 2v1H2a1 1 0 01-1-1V7a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-1 1h-1v-1a2 2 0 00-2-2H5zm7 2v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-3a1 1 0 011-1h6a1 1 0 011 1z" />
+                        </svg>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -403,7 +437,8 @@ export const ViewUserAppointment = () => {
                               {appointmentdata.appointmentTime}
                             </td>
                             <td class="px-4 py-3 text-center">
-                              {appointmentdata.appointmentStatus == "completed" && (
+                              {appointmentdata.appointmentStatus ==
+                                "completed" && (
                                 <span class="bg-green-100 text-green-800 text-sm font-medium mr-2 inline-flex items-center px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300 border border-green-400">
                                   <svg
                                     class="w-3 h-3 mr-2 "
@@ -424,7 +459,8 @@ export const ViewUserAppointment = () => {
                                   Completed
                                 </span>
                               )}
-                              {appointmentdata.appointmentStatus == "booked" && (
+                              {appointmentdata.appointmentStatus ==
+                                "booked" && (
                                 <span class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 inline-flex items-center px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 border border-blue-400">
                                   <svg
                                     class="w-3 h-3 mr-2 "
@@ -438,7 +474,8 @@ export const ViewUserAppointment = () => {
                                   Booked
                                 </span>
                               )}
-                              {appointmentdata.appointmentStatus == "cancelled" && (
+                              {appointmentdata.appointmentStatus ==
+                                "cancelled" && (
                                 <span class="bg-red-100 text-red-800 text-sm font-medium mr-2 inline-flex items-center px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300 border border-red-400">
                                   <svg
                                     class="w-3 h-3 mr-2 "
@@ -452,7 +489,8 @@ export const ViewUserAppointment = () => {
                                   Cancelled
                                 </span>
                               )}
-                              {appointmentdata.appointmentStatus == "waiting" && (
+                              {appointmentdata.appointmentStatus ==
+                                "waiting" && (
                                 <span class="bg-yellow-100 text-yellow-800 text-sm font-medium mr-2 inline-flex items-center px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300 border border-yellow-400">
                                   <svg
                                     class="w-3 h-3 mr-2 "
@@ -471,30 +509,30 @@ export const ViewUserAppointment = () => {
                               {appointmentdata.appointmentRemark}
                             </td>
                             <td class="px-4 py-3 text-center">
-                              {appointmentdata.paymentStatus=="paid"&&(
+                              {appointmentdata.paymentStatus == "paid" && (
                                 <span class="bg-green-100 text-green-800 text-sm font-medium mr-2 inline-flex items-center px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300 border border-green-400">
-                                <svg
-                                  class="w-3 h-3 mr-2 "
-                                  aria-hidden="true"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="currentColor"
-                                  viewBox="0 0 20 20"
-                                >
-                                  <path
+                                  <svg
+                                    class="w-3 h-3 mr-2 "
+                                    aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg"
                                     fill="currentColor"
-                                    d="m18.774 8.245-.892-.893a1.5 1.5 0 0 1-.437-1.052V5.036a2.484 2.484 0 0 0-2.48-2.48H13.7a1.5 1.5 0 0 1-1.052-.438l-.893-.892a2.484 2.484 0 0 0-3.51 0l-.893.892a1.5 1.5 0 0 1-1.052.437H5.036a2.484 2.484 0 0 0-2.48 2.481V6.3a1.5 1.5 0 0 1-.438 1.052l-.892.893a2.484 2.484 0 0 0 0 3.51l.892.893a1.5 1.5 0 0 1 .437 1.052v1.264a2.484 2.484 0 0 0 2.481 2.481H6.3a1.5 1.5 0 0 1 1.052.437l.893.892a2.484 2.484 0 0 0 3.51 0l.893-.892a1.5 1.5 0 0 1 1.052-.437h1.264a2.484 2.484 0 0 0 2.481-2.48V13.7a1.5 1.5 0 0 1 .437-1.052l.892-.893a2.484 2.484 0 0 0 0-3.51Z"
-                                  />
-                                  <path
-                                    fill="#fff"
-                                    d="M8 13a1 1 0 0 1-.707-.293l-2-2a1 1 0 1 1 1.414-1.414l1.42 1.42 5.318-3.545a1 1 0 0 1 1.11 1.664l-6 4A1 1 0 0 1 8 13Z"
-                                  />
-                                </svg>
-                                Paid
-                              </span>
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path
+                                      fill="currentColor"
+                                      d="m18.774 8.245-.892-.893a1.5 1.5 0 0 1-.437-1.052V5.036a2.484 2.484 0 0 0-2.48-2.48H13.7a1.5 1.5 0 0 1-1.052-.438l-.893-.892a2.484 2.484 0 0 0-3.51 0l-.893.892a1.5 1.5 0 0 1-1.052.437H5.036a2.484 2.484 0 0 0-2.48 2.481V6.3a1.5 1.5 0 0 1-.438 1.052l-.892.893a2.484 2.484 0 0 0 0 3.51l.892.893a1.5 1.5 0 0 1 .437 1.052v1.264a2.484 2.484 0 0 0 2.481 2.481H6.3a1.5 1.5 0 0 1 1.052.437l.893.892a2.484 2.484 0 0 0 3.51 0l.893-.892a1.5 1.5 0 0 1 1.052-.437h1.264a2.484 2.484 0 0 0 2.481-2.48V13.7a1.5 1.5 0 0 1 .437-1.052l.892-.893a2.484 2.484 0 0 0 0-3.51Z"
+                                    />
+                                    <path
+                                      fill="#fff"
+                                      d="M8 13a1 1 0 0 1-.707-.293l-2-2a1 1 0 1 1 1.414-1.414l1.42 1.42 5.318-3.545a1 1 0 0 1 1.11 1.664l-6 4A1 1 0 0 1 8 13Z"
+                                    />
+                                  </svg>
+                                  Paid
+                                </span>
                               )}
-                              {appointmentdata.paymentStatus=="not paid"&&(
+                              {appointmentdata.paymentStatus == "not paid" && (
                                 <span class="bg-red-100 text-red-800 text-sm font-medium mr-2 inline-flex items-center px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300 border border-red-400">
-                               <svg
+                                  <svg
                                     class="w-3 h-3 mr-2 "
                                     aria-hidden="true"
                                     xmlns="http://www.w3.org/2000/svg"
@@ -503,12 +541,11 @@ export const ViewUserAppointment = () => {
                                   >
                                     <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z" />
                                   </svg>
-                                Not Paid
-                              </span>
+                                  Not Paid
+                                </span>
                               )}
-                              
-                              </td>
-                              <td class="px-4 py-3 text-center">
+                            </td>
+                            <td class="px-4 py-3 text-center">
                               {appointmentdata.medicalrecordStatus == true && (
                                 <span class="inline-flex items-center justify-center w-6 h-6 mr-2 text-sm font-semibold text-green-800 bg-blue-100 rounded-full dark:bg-gray-700 dark:text-green-400">
                                   <svg
@@ -533,7 +570,7 @@ export const ViewUserAppointment = () => {
                               {appointmentdata.medicalrecordStatus == false && (
                                 <span class="inline-flex items-center justify-center w-6 h-6 mr-2 text-sm font-semibold text-red-800 bg-blue-100 rounded-full dark:bg-gray-700 dark:text-red-400">
                                   <svg
-                                      class="w-4 h-4"
+                                    class="w-4 h-4"
                                     aria-hidden="true"
                                     xmlns="http://www.w3.org/2000/svg"
                                     fill="currentColor"
@@ -595,7 +632,7 @@ export const ViewUserAppointment = () => {
                               Doctor Mobile
                             </th>
 
-                            <th scope="col" class="px-4 py-3">
+                            <th scope="col" class="px-4 py-3 text-center">
                               Doctor status
                             </th>
                             <th scope="col" class="px-4 py-3">
@@ -639,9 +676,26 @@ export const ViewUserAppointment = () => {
                               {" "}
                               {appointmentdata.doctor.doctorMobile}
                             </td>
-                            <td class="px-4 py-3 ">
+                            <td class="px-4 py-3 text-center">
                               {" "}
-                              {appointmentdata.doctor.doctorStatus}
+                              {appointmentdata.doctor.doctorStatus ==
+                                "Leave" && (
+                                <span class="bg-red-100 text-red-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">
+                                  🏝️ Leave
+                                </span>
+                              )}
+                              {appointmentdata.doctor.doctorStatus ==
+                                "Available" && (
+                                <span class="bg-green-100 text-green-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
+                                  👨‍⚕️ Available
+                                </span>
+                              )}
+                              {appointmentdata.doctor.doctorStatus ==
+                                "Lunch" && (
+                                <span class="bg-yellow-100 text-yellow-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">
+                                  🍰 Lunch
+                                </span>
+                              )}
                             </td>
                             <td class="px-4 py-3 ">
                               {" "}
@@ -656,9 +710,8 @@ export const ViewUserAppointment = () => {
               </section>
             </div>
 
-
-              {/* Prescription Details Table */}
-              <div class="flex mt-4 w-full mb-4 h-full rounded bg-gray-50 dark:bg-gray-800">
+            {/* Prescription Details Table */}
+            <div class="flex mt-4 w-full mb-4 h-full rounded bg-gray-50 dark:bg-gray-800">
               <section class="bg-gray-50 dark:bg-gray-900 w-full h-full">
                 <div class="mx-auto max-w-screen ">
                   <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
@@ -688,68 +741,64 @@ export const ViewUserAppointment = () => {
                               Disease
                             </th>
                             <th scope="col" class="px-4 py-3">
-                             Allergy
+                              Allergy
                             </th>
 
                             <th scope="col" class="px-4 py-3">
-                            Prescription
+                              Prescription
                             </th>
                             <th scope="col" class="px-4 py-3">
-                            Prescription Remark
+                              Prescription Remark
                             </th>
 
                             <th scope="col" class="px-4 py-3">
-                            Prescription Timestamp
+                              Prescription Timestamp
                             </th>
-                           
                           </tr>
                         </thead>
                         {Prescription && (
-
-                        <tbody>
-                          <tr class="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                            <td class="w-4 px-4 py-3">
-                              <div class="flex items-center">
-                                <input
-                                  id="checkbox-table-search-1"
-                                  type="checkbox"
-                                  onclick="event.stopPropagation()"
-                                  class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                />
-                                <label
-                                  for="checkbox-table-search-1"
-                                  class="sr-only"
-                                >
-                                  checkbox
-                                </label>
-                              </div>
-                            </td>
-                            <th
-                              scope="row"
-                              class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                            >
-                              {Prescription.disease}
-                            </th>
-                            <td class="px-4 py-3 ">
-                              {" "}
-                              {Prescription.allergy}
-                            </td>
-                            <td class="px-4 py-3 ">
-                              {" "}
-                              {Prescription.prescription}
-                            </td>
-                            <td class="px-4 py-3 ">
-                              {" "}
-                              {Prescription.prescriptionRemark}
-                            </td>
-                            <td class="px-4 py-3 ">
-                              {" "}
-                              {Prescription.prescriptionTimestamp}
-                            </td>
-                           
-                          </tr>
-                        </tbody>
-
+                          <tbody>
+                            <tr class="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                              <td class="w-4 px-4 py-3">
+                                <div class="flex items-center">
+                                  <input
+                                    id="checkbox-table-search-1"
+                                    type="checkbox"
+                                    onclick="event.stopPropagation()"
+                                    class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                  />
+                                  <label
+                                    for="checkbox-table-search-1"
+                                    class="sr-only"
+                                  >
+                                    checkbox
+                                  </label>
+                                </div>
+                              </td>
+                              <th
+                                scope="row"
+                                class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                              >
+                                {Prescription.disease}
+                              </th>
+                              <td class="px-4 py-3 ">
+                                {" "}
+                                {Prescription.allergy}
+                              </td>
+                              <td class="px-4 py-3 ">
+                                {" "}
+                                {Prescription.prescription}
+                              </td>
+                              <td class="px-4 py-3 ">
+                                {" "}
+                                {Prescription.prescriptionRemark}
+                              </td>
+                              <td class="px-4 py-3 ">
+                                {" "}
+                                {Prescription.prescriptionTimestamp}
+                              </td>
+                            </tr>
+                          </tbody>
                         )}
                       </table>
                     </div>

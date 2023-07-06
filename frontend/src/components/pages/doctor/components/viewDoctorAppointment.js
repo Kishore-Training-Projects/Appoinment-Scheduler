@@ -251,22 +251,7 @@ export const ViewDoctorAppointment = () => {
                             <AddDoctorPrescription id = {appointmentdata.appointmentId} setPrescription={setPrescription} />
                         )}
 
-                      <button className=" mx-2 text-xs bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke-width="1.5"
-                          stroke="currentColor"
-                          class="w-6 h-6"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"
-                          />
-                        </svg>
-                      </button>
+                     
                     
                         {appointmentdata.appointmentStatus !="canceled" &&appointmentdata.appointmentStatus !="completed" &&(
                             
@@ -617,7 +602,7 @@ export const ViewDoctorAppointment = () => {
                               Doctor Mobile
                             </th>
 
-                            <th scope="col" class="px-4 py-3">
+                            <th scope="col" class="px-4 py-3 text-center">
                               Doctor status
                             </th>
                             <th scope="col" class="px-4 py-3">
@@ -661,9 +646,20 @@ export const ViewDoctorAppointment = () => {
                               {" "}
                               {appointmentdata.doctor.doctorMobile}
                             </td>
-                            <td class="px-4 py-3 ">
+                            <td class="px-4 py-3 text-center">
                               {" "}
-                              {appointmentdata.doctor.doctorStatus}
+                              {appointmentdata.doctor.doctorStatus=="Leave"&&(
+                                <span class="bg-red-100 text-red-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">🏝️ Leave</span>
+
+                              )}
+                              {appointmentdata.doctor.doctorStatus=="Available"&&(
+                                <span class="bg-green-100 text-green-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">👨‍⚕️ Available</span>
+
+                              )}
+                              {appointmentdata.doctor.doctorStatus=="Lunch"&&(
+                                <span class="bg-yellow-100 text-yellow-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">🍰 Lunch</span>
+
+                              )}
                             </td>
                             <td class="px-4 py-3 ">
                               {" "}
