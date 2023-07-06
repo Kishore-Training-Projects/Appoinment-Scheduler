@@ -320,6 +320,23 @@ namespace AppoinmentScheduler.Controllers
               return Problem("Entity set 'AppoinmentSchedulerContext.AppointmentModel'  is null.");
             }
 
+            var app = await _context.AppointmentModel.Where(x => x.Doctor.DoctorId == appointmentModel.Doctor.DoctorId && x.AppointmentDate == appointmentModel.AppointmentDate && x.AppointmentTime == appointmentModel.AppointmentTime &&x.AppointmentStatus != "cancelled").FirstOrDefaultAsync();
+
+            if(app != null)
+            {
+                return Problem("Appointment Already exsist");
+            }
+
+            var app2 = await _context.AppointmentModel.Where(x => x.Patient.PatientId==appointmentModel.Patient.PatientId&& x.Doctor.DoctorId == appointmentModel.Doctor.DoctorId && x.AppointmentDate == appointmentModel.AppointmentDate && x.AppointmentStatus != "cancelled").FirstOrDefaultAsync();
+
+            if (app2 != null)
+            {
+                return Problem("Already have an appointment with doctor");
+            }
+
+
+
+
             var patientModel = await _context.PatientModel.Where(x => x.PatientId == appointmentModel.Patient.PatientId).FirstOrDefaultAsync();
             var doctorModel = await _context.DoctorModel.Where(x => x.DoctorId == appointmentModel.Doctor.DoctorId).FirstOrDefaultAsync();
 
