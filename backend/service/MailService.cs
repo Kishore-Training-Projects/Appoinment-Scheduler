@@ -6,7 +6,7 @@ namespace AppoinmentScheduler.service
     {
         public static void sendConfirmationEmail(String emailSubject, String emailMessage, String toEmail)
         {
-            toEmail = "kishoredurai7@gmail.com";//for testing purposes
+           // toEmail = "kishoredurai7@gmail.com";//for testing purposes
             try
             {
 

@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using AppoinmentScheduler.Data;
 using AppoinmentScheduler.Model;
 using System.Reflection;
+using AppoinmentScheduler.service;
+using Hangfire;
 
 namespace AppoinmentScheduler.Controllers
 {
@@ -16,10 +18,13 @@ namespace AppoinmentScheduler.Controllers
     public class AppointmentController : ControllerBase
     {
         private readonly AppoinmentSchedulerContext _context;
+        private readonly IRecurringJobManager _recurringJobManager;
 
-        public AppointmentController(AppoinmentSchedulerContext context)
+
+        public AppointmentController(AppoinmentSchedulerContext context, IRecurringJobManager recurringJobManager)
         {
             _context = context;
+            _recurringJobManager = recurringJobManager;
         }
 
         // GET: api/Appointment
@@ -89,6 +94,80 @@ namespace AppoinmentScheduler.Controllers
             }
             return await _context.AppointmentModel.Include(x => x.Patient).Where(x=> x.AppointmentDate == today).ToListAsync();
         }
+
+
+       
+
+        [HttpGet("/sendmail")]
+        public ActionResult CreateReccuringJob()
+        {
+            // _recurringJobManager.AddOrUpdate("jobId", () => _jobTestService.ReccuringJob(), Cron.Minutely);
+            //   _recurringJobManager.AddOrUpdate<MyBackgroundJobs>("MailCheck", x => x.DisplayMessage(), Cron.Daily, TimeZoneInfo.Local);
+
+            return Ok();
+        }
+
+        [NonAction]
+        public async Task<OkResult> GettodayAppointmentModeldaily()
+        {
+            DateTime today = DateTime.Today;
+          
+            var app = await _context.AppointmentModel.Include(x=>x.Patient).Include(x=>x.Doctor).Where(x => x.AppointmentDate == today && x.AppointmentStatus !="cancelled").ToListAsync();
+
+            foreach(var  item in app)
+            {
+                Console.WriteLine(item.Patient.PatientEmail);
+                string message = "Today you have an appointment with Dr." + item.Doctor.DoctorName + " at " + item.AppointmentTime + "So kindly be on time";
+                MailService.sendConfirmationEmail($"⏰ Reminder for Appointment on {((DateTime)item.AppointmentDate).ToString("dd/MM/yyyy")} 📆" , message, item.Patient.PatientEmail);
+
+            }
+
+            Console.WriteLine("hi");
+
+            return Ok();
+            
+        }
+
+        [NonAction]
+        public async Task<OkResult> changeoldappointments()
+        {
+            DateTime yesterday = DateTime.Today.AddDays(-1);
+
+            var app = await _context.AppointmentModel.Include(x => x.Patient).Include(x => x.Doctor).Where(x => x.AppointmentDate == yesterday && x.AppointmentStatus == "booked" || x.AppointmentStatus == "waiting").ToListAsync();
+
+            foreach (var item in app)
+            {
+                Console.WriteLine(item.Patient.PatientEmail);
+
+                AppointmentModel appointment = item;
+
+                appointment.AppointmentStatus = "cancelled";
+                appointment.AppointmentRemark = "Appointment expired !!";
+
+                _context.Entry(appointment).State = EntityState.Modified;
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                   
+                }
+
+                string message = "Your appointment with Dr." + item.Doctor.DoctorName + " at " + item.AppointmentTime + "has been cancelled.";
+                MailService.sendConfirmationEmail($"❌ Cancellation for Appointment on {((DateTime)item.AppointmentDate).ToString("dd/MM/yyyy")} 📆", message, item.Patient.PatientEmail);
+
+            }
+
+            Console.WriteLine("cancelled");
+
+            return Ok();
+
+        }
+
+
+
 
 
 
