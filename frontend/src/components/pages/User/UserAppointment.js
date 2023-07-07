@@ -5,6 +5,11 @@ import axios from "axios";
 import { UserSidebar } from "../../layout/sidebar/usersidebar";
 import CancelUserAppointment from "./components/CancelUserAppointment";
 export const UserAppointment = () => {
+  const [waitingCount, setWaitingCount] = useState(0);
+  const [canceledCount, setCanceledCount] = useState(0);
+  const [bookedCount, setBookedCount] = useState(0);
+  const [notPaidCount, setNotPaidCount] = useState(0);
+
   const navigate = useNavigate();
 
   // fetch appointment data
@@ -18,6 +23,9 @@ export const UserAppointment = () => {
       )
       .then((response) => {
         setAppointmentdata(response.data);
+        calculateAppointmentCounts(response.data);
+
+        setSearchResults(response.data);
       })
       .catch((error) => {
         if (error.response) {
@@ -36,6 +44,36 @@ export const UserAppointment = () => {
     fetch_appointment_data();
   }, []);
 
+
+
+  const calculateAppointmentCounts = (appointments) => {
+    let waiting = 0;
+    let canceled = 0;
+    let booked = 0;
+    let notPaid = 0;
+
+    appointments.forEach(function(appointment) {
+      if (appointment.appointmentStatus === "waiting") {
+        waiting++;
+      } else if (appointment.appointmentStatus === "cancelled") {
+        canceled++;
+      } else if (appointment.appointmentStatus === "booked") {
+        booked++;
+      }
+
+      if (appointment.paymentStatus === "not paid") {
+        notPaid++;
+      }
+    });
+
+    setWaitingCount(waiting);
+    setCanceledCount(canceled);
+    setBookedCount(booked);
+    setNotPaidCount(notPaid);
+  };
+
+
+
   const itemsPerPage = 5; // Number of items to display per page
   const pageCount = Math.ceil(appointmentdata.length / itemsPerPage);
   const [currentPage, setCurrentPage] = useState(0);
@@ -44,9 +82,38 @@ export const UserAppointment = () => {
     setCurrentPage(selected);
   };
 
-  const offset = currentPage * itemsPerPage;
-  const currentPageData = appointmentdata.slice(offset, offset + itemsPerPage);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
 
+  const offset = currentPage * itemsPerPage;
+  var currentPageData = searchResults.slice(offset, offset + itemsPerPage);
+
+  // Function to handle search query changes
+  const handleSearchQueryChange = (event) => {
+    setSearchQuery(event.target.value);
+    handleSearch(event.target.value);
+  };
+
+  // Function to handle search
+  const handleSearch = (search) => {
+    console.log(search);
+    // Perform search logic here using searchQuery
+    const filteredResults = appointmentdata.filter(
+      (appointment) =>
+        appointment.doctor.doctorName
+          .toLowerCase()
+          .includes(search.toLowerCase()) ||
+        appointment.appointmentStatus
+          .toLowerCase()
+          .includes(search.toLowerCase())
+    );
+    console.log(filteredResults);
+
+    setSearchResults(filteredResults);
+
+    // Reset pagination to the first page
+    setCurrentPage(0);
+  };
   return (
     <>
       <UserSidebar />
@@ -101,9 +168,9 @@ export const UserAppointment = () => {
             </nav>
           </div>
 
-          <div class="flex items-center justify-center h-58 mb-6 rounded-md  dark:bg-gray-800">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-4 gap-4">
-              <div class="flex items-start p-4 rounded-xl shadow-lg bg-white">
+          <div class="flex  items-center justify-center h-58 mb-6 rounded-md  dark:bg-gray-800">
+            <div class="grid w-full grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-4 gap-4">
+              <div class="flex w-full items-start p-4 rounded-xl shadow-lg bg-white">
                 <div class="flex items-center justify-center bg-blue-50 h-12 w-12 rounded-full border border-blue-100">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -122,9 +189,9 @@ export const UserAppointment = () => {
                 </div>
 
                 <div class="ml-4">
-                  <h2 class="font-semibold">574 Messages</h2>
+                  <h2 class="font-semibold">{bookedCount} - Appointment </h2>
                   <p class="mt-2 text-sm text-gray-500">
-                    Last opened 4 days ago
+                   📆 Booked to see doctor
                   </p>
                 </div>
               </div>
@@ -148,9 +215,9 @@ export const UserAppointment = () => {
                 </div>
 
                 <div class="ml-4">
-                  <h2 class="font-semibold">1823 Users</h2>
+                  <h2 class="font-semibold">{waitingCount} - Appointment</h2>
                   <p class="mt-2 text-sm text-gray-500">
-                    Last checked 3 days ago
+                   ⏰ waiting to see doctor
                   </p>
                 </div>
               </div>
@@ -173,9 +240,9 @@ export const UserAppointment = () => {
                 </div>
 
                 <div class="ml-4">
-                  <h2 class="font-semibold">548 Posts</h2>
+                <h2 class="font-semibold">{canceledCount} - Appointment </h2>
                   <p class="mt-2 text-sm text-gray-500">
-                    Last authored 1 day ago
+                   ❌ Canceled  appointment
                   </p>
                 </div>
               </div>
@@ -198,9 +265,9 @@ export const UserAppointment = () => {
                 </div>
 
                 <div class="ml-4">
-                  <h2 class="font-semibold">129 Comments</h2>
+                  <h2 class="font-semibold">{notPaidCount} - Appointment</h2>
                   <p class="mt-2 text-sm text-gray-500">
-                    Last commented 8 days ago
+                   💳 Not paid appointment
                   </p>
                 </div>
               </div>
@@ -242,7 +309,8 @@ export const UserAppointment = () => {
                             id="simple-search"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="Search"
-                            required=""
+                            value={searchQuery}
+                            onChange={handleSearchQueryChange}
                           />
                         </div>
                       </form>
@@ -348,107 +416,106 @@ export const UserAppointment = () => {
                               </td>
                               <td class="px-4 py-3 ">{row.appointmentTime}</td>
                               <td class="px-4 py-3 text-center">
-                              {row.appointmentStatus == "completed" && (
-                                <span class="bg-green-100 text-green-800 text-sm font-medium mr-2 inline-flex items-center px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300 border border-green-400">
-                                  <svg
-                                    class="w-3 h-3 mr-2 "
-                                    aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                  >
-                                    <path
+                                {row.appointmentStatus == "completed" && (
+                                  <span class="bg-green-100 text-green-800 text-sm font-medium mr-2 inline-flex items-center px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300 border border-green-400">
+                                    <svg
+                                      class="w-3 h-3 mr-2 "
+                                      aria-hidden="true"
+                                      xmlns="http://www.w3.org/2000/svg"
                                       fill="currentColor"
-                                      d="m18.774 8.245-.892-.893a1.5 1.5 0 0 1-.437-1.052V5.036a2.484 2.484 0 0 0-2.48-2.48H13.7a1.5 1.5 0 0 1-1.052-.438l-.893-.892a2.484 2.484 0 0 0-3.51 0l-.893.892a1.5 1.5 0 0 1-1.052.437H5.036a2.484 2.484 0 0 0-2.48 2.481V6.3a1.5 1.5 0 0 1-.438 1.052l-.892.893a2.484 2.484 0 0 0 0 3.51l.892.893a1.5 1.5 0 0 1 .437 1.052v1.264a2.484 2.484 0 0 0 2.481 2.481H6.3a1.5 1.5 0 0 1 1.052.437l.893.892a2.484 2.484 0 0 0 3.51 0l.893-.892a1.5 1.5 0 0 1 1.052-.437h1.264a2.484 2.484 0 0 0 2.481-2.48V13.7a1.5 1.5 0 0 1 .437-1.052l.892-.893a2.484 2.484 0 0 0 0-3.51Z"
-                                    />
-                                    <path
-                                      fill="#fff"
-                                      d="M8 13a1 1 0 0 1-.707-.293l-2-2a1 1 0 1 1 1.414-1.414l1.42 1.42 5.318-3.545a1 1 0 0 1 1.11 1.664l-6 4A1 1 0 0 1 8 13Z"
-                                    />
-                                  </svg>
-                                  Completed
-                                </span>
-                              )}
-                               {row.appointmentStatus == "waiting" && (
-                                <span class="bg-yellow-100 text-yellow-800 text-sm font-medium mr-2 inline-flex items-center px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300 border border-yellow-400">
-                                  <svg
-                                     class="w-3 h-3 mr-2 "
-                                    aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                  >
-                                    <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z" />
-                                  </svg>
-                                  Waiting
-                                </span>
-                              )}
-                              {row.appointmentStatus == "booked" && (
-                                <span class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 inline-flex items-center px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 border border-blue-400">
-                                  <svg
-                                    class="w-3 h-3 mr-2 "
-                                    aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                  >
-                                    <path d="M0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm14-7.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm0 4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm-5-4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm0 4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm-5-4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm0 4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1ZM20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4Z" />
-                                  </svg>
-                                  Booked
-                                </span>
-                              )}
-                              {row.appointmentStatus == "cancelled" && (
-                                <span class="bg-red-100 text-red-800 text-sm font-medium mr-2 inline-flex items-center px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300 border border-red-400">
-                                  <svg
-                                    class="w-3 h-3 mr-2 "
-                                    aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                  >
-                                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z" />
-                                  </svg>
-                                  Cancelled
-                                </span>
-                              )}
+                                      viewBox="0 0 20 20"
+                                    >
+                                      <path
+                                        fill="currentColor"
+                                        d="m18.774 8.245-.892-.893a1.5 1.5 0 0 1-.437-1.052V5.036a2.484 2.484 0 0 0-2.48-2.48H13.7a1.5 1.5 0 0 1-1.052-.438l-.893-.892a2.484 2.484 0 0 0-3.51 0l-.893.892a1.5 1.5 0 0 1-1.052.437H5.036a2.484 2.484 0 0 0-2.48 2.481V6.3a1.5 1.5 0 0 1-.438 1.052l-.892.893a2.484 2.484 0 0 0 0 3.51l.892.893a1.5 1.5 0 0 1 .437 1.052v1.264a2.484 2.484 0 0 0 2.481 2.481H6.3a1.5 1.5 0 0 1 1.052.437l.893.892a2.484 2.484 0 0 0 3.51 0l.893-.892a1.5 1.5 0 0 1 1.052-.437h1.264a2.484 2.484 0 0 0 2.481-2.48V13.7a1.5 1.5 0 0 1 .437-1.052l.892-.893a2.484 2.484 0 0 0 0-3.51Z"
+                                      />
+                                      <path
+                                        fill="#fff"
+                                        d="M8 13a1 1 0 0 1-.707-.293l-2-2a1 1 0 1 1 1.414-1.414l1.42 1.42 5.318-3.545a1 1 0 0 1 1.11 1.664l-6 4A1 1 0 0 1 8 13Z"
+                                      />
+                                    </svg>
+                                    Completed
+                                  </span>
+                                )}
+                                {row.appointmentStatus == "waiting" && (
+                                  <span class="bg-yellow-100 text-yellow-800 text-sm font-medium mr-2 inline-flex items-center px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300 border border-yellow-400">
+                                    <svg
+                                      class="w-3 h-3 mr-2 "
+                                      aria-hidden="true"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="currentColor"
+                                      viewBox="0 0 20 20"
+                                    >
+                                      <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z" />
+                                    </svg>
+                                    Waiting
+                                  </span>
+                                )}
+                                {row.appointmentStatus == "booked" && (
+                                  <span class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 inline-flex items-center px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 border border-blue-400">
+                                    <svg
+                                      class="w-3 h-3 mr-2 "
+                                      aria-hidden="true"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="currentColor"
+                                      viewBox="0 0 20 20"
+                                    >
+                                      <path d="M0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm14-7.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm0 4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm-5-4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm0 4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm-5-4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm0 4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1ZM20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4Z" />
+                                    </svg>
+                                    Booked
+                                  </span>
+                                )}
+                                {row.appointmentStatus == "cancelled" && (
+                                  <span class="bg-red-100 text-red-800 text-sm font-medium mr-2 inline-flex items-center px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300 border border-red-400">
+                                    <svg
+                                      class="w-3 h-3 mr-2 "
+                                      aria-hidden="true"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="currentColor"
+                                      viewBox="0 0 20 20"
+                                    >
+                                      <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z" />
+                                    </svg>
+                                    Cancelled
+                                  </span>
+                                )}
                               </td>
                               <td class="px-4 py-3 text-center">
-                              {row.paymentStatus=="paid"&&(
-                                <span class="bg-green-100 text-green-800 text-sm font-medium mr-2 inline-flex items-center px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300 border border-green-400">
-                                <svg
-                                  class="w-3 h-3 mr-2 "
-                                  aria-hidden="true"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="currentColor"
-                                  viewBox="0 0 20 20"
-                                >
-                                  <path
-                                    fill="currentColor"
-                                    d="m18.774 8.245-.892-.893a1.5 1.5 0 0 1-.437-1.052V5.036a2.484 2.484 0 0 0-2.48-2.48H13.7a1.5 1.5 0 0 1-1.052-.438l-.893-.892a2.484 2.484 0 0 0-3.51 0l-.893.892a1.5 1.5 0 0 1-1.052.437H5.036a2.484 2.484 0 0 0-2.48 2.481V6.3a1.5 1.5 0 0 1-.438 1.052l-.892.893a2.484 2.484 0 0 0 0 3.51l.892.893a1.5 1.5 0 0 1 .437 1.052v1.264a2.484 2.484 0 0 0 2.481 2.481H6.3a1.5 1.5 0 0 1 1.052.437l.893.892a2.484 2.484 0 0 0 3.51 0l.893-.892a1.5 1.5 0 0 1 1.052-.437h1.264a2.484 2.484 0 0 0 2.481-2.48V13.7a1.5 1.5 0 0 1 .437-1.052l.892-.893a2.484 2.484 0 0 0 0-3.51Z"
-                                  />
-                                  <path
-                                    fill="#fff"
-                                    d="M8 13a1 1 0 0 1-.707-.293l-2-2a1 1 0 1 1 1.414-1.414l1.42 1.42 5.318-3.545a1 1 0 0 1 1.11 1.664l-6 4A1 1 0 0 1 8 13Z"
-                                  />
-                                </svg>
-                                Paid
-                              </span>
-                              )}
-                              {row.paymentStatus=="not paid"&&(
-                                <span class="bg-red-100 text-red-800 text-sm font-medium mr-2 inline-flex items-center px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300 border border-red-400">
-                               <svg
-                                    class="w-3 h-3 mr-2 "
-                                    aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                  >
-                                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z" />
-                                  </svg>
-                                Not Paid
-                              </span>
-                              )}
-                              
+                                {row.paymentStatus == "paid" && (
+                                  <span class="bg-green-100 text-green-800 text-sm font-medium mr-2 inline-flex items-center px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300 border border-green-400">
+                                    <svg
+                                      class="w-3 h-3 mr-2 "
+                                      aria-hidden="true"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="currentColor"
+                                      viewBox="0 0 20 20"
+                                    >
+                                      <path
+                                        fill="currentColor"
+                                        d="m18.774 8.245-.892-.893a1.5 1.5 0 0 1-.437-1.052V5.036a2.484 2.484 0 0 0-2.48-2.48H13.7a1.5 1.5 0 0 1-1.052-.438l-.893-.892a2.484 2.484 0 0 0-3.51 0l-.893.892a1.5 1.5 0 0 1-1.052.437H5.036a2.484 2.484 0 0 0-2.48 2.481V6.3a1.5 1.5 0 0 1-.438 1.052l-.892.893a2.484 2.484 0 0 0 0 3.51l.892.893a1.5 1.5 0 0 1 .437 1.052v1.264a2.484 2.484 0 0 0 2.481 2.481H6.3a1.5 1.5 0 0 1 1.052.437l.893.892a2.484 2.484 0 0 0 3.51 0l.893-.892a1.5 1.5 0 0 1 1.052-.437h1.264a2.484 2.484 0 0 0 2.481-2.48V13.7a1.5 1.5 0 0 1 .437-1.052l.892-.893a2.484 2.484 0 0 0 0-3.51Z"
+                                      />
+                                      <path
+                                        fill="#fff"
+                                        d="M8 13a1 1 0 0 1-.707-.293l-2-2a1 1 0 1 1 1.414-1.414l1.42 1.42 5.318-3.545a1 1 0 0 1 1.11 1.664l-6 4A1 1 0 0 1 8 13Z"
+                                      />
+                                    </svg>
+                                    Paid
+                                  </span>
+                                )}
+                                {row.paymentStatus == "not paid" && (
+                                  <span class="bg-red-100 text-red-800 text-sm font-medium mr-2 inline-flex items-center px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300 border border-red-400">
+                                    <svg
+                                      class="w-3 h-3 mr-2 "
+                                      aria-hidden="true"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="currentColor"
+                                      viewBox="0 0 20 20"
+                                    >
+                                      <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z" />
+                                    </svg>
+                                    Not Paid
+                                  </span>
+                                )}
                               </td>
                               <td class="px-4 py-3 ">
                                 {row.appointmentReason}

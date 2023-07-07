@@ -1,6 +1,10 @@
 import { React, useState } from "react";
 import axios from "axios";
 
+import {  toast } from "react-toastify";
+
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const DeleteDoctorLeave = ({ id ,fetch_doctorLeave_data }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -14,15 +18,39 @@ const DeleteDoctorLeave = ({ id ,fetch_doctorLeave_data }) => {
     axios.delete('/api/DoctorLeave/'+id)
       .then(response => {
         // Handle successful response
-        console.log('Delete request successful:', response);
-        alert("Doctor Leave Delete Successfully");
+       
+        
         toggleModal();
-        fetch_doctorLeave_data();
+
+
+        toast.success('Leave Delete Successfully ✔', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
+          setTimeout(() => {
+            fetch_doctorLeave_data();
+          }, 3000);
+    
       })
       .catch(error => {
         if (error.response) {
             if (error.response.status === 204) {
-             alert("Doctor Delete deleted Successfully");
+              toast.success('Leave Delete Successfully ✔', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                });
             } else {
               console.log("Network response was not ok");
             }
@@ -35,6 +63,8 @@ const DeleteDoctorLeave = ({ id ,fetch_doctorLeave_data }) => {
 
   return (
     <>
+    <ToastContainer/>
+
       <button
         onClick={toggleModal}
         className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded"

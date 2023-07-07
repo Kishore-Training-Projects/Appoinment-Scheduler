@@ -5,6 +5,9 @@ import { AdminDoctorSearch } from "./components/AdminDoctorSearch";
 import { AdminPatientSearch } from "./components/AdminPatientSearch";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import {  toast } from "react-toastify";
 
 export const AddAdminAppointment = () => {
   const navigate = useNavigate();
@@ -39,34 +42,57 @@ export const AddAdminAppointment = () => {
     console.log(formData);
     e.preventDefault();
 
-    axios.post('/api/Appointment', formData, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
+    axios
+      .post("/api/Appointment", formData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((response) => {
-        if (!response.ok) {
-          if (response.status === 404) {
-            throw new Error('Resource not found');
-          }
-          if (response.status === 201) {
-            return response.data;
-          }
-          else {
-            throw new Error('Network response was not ok');
-          }
-        }
-        return response.data;
+        toast.success('Appointment registered 📆', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
+          setTimeout(() => {
+            navigate("/user/appointment");
+          }, 3000);
+    
+     
       })
-      .then((data) => {
-        // Handle the response from the server
-        console.log(data);
-        alert('Appoint registered');
-        navigate('/admin/appointment');
-      })
+
       .catch((error) => {
         // Handle any errors that occurred during the request
-        console.error('Error:', error.message);
+        if (error.response) {
+          // The request was made and the server responded with a status code that falls out of the range of 2xx
+          console.log(error.response.status);
+
+          toast.error(error.response.data.detail, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            });
+        
+
+          //console.log(error.response.data);
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log("Error", error.message);
+        }
+        //console.log(error.config);
       });
   }
 
@@ -101,12 +127,13 @@ export const AddAdminAppointment = () => {
     setDoctorshowModal(false);
   }
 
-  console.log(formData);
+ 
 
   return (
     <>
       <AdminSidebar />
 
+      <ToastContainer />
       <div class="p-2 md:p-4 min-h-screen bg-gray-200 sm:ml-64">
         <div class=" p-2 md:p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
           {/* bread crumbs  */}
@@ -185,10 +212,10 @@ export const AddAdminAppointment = () => {
             <div className="w-full p-3 border border-white rounded-lg">
               <h1 className="text-2xl font-bold mb-6">Appointment Schedule</h1>
 
-              <form onSubmit={(e)=>submitappointment(e)}>
+              <form onSubmit={(e) => submitappointment(e)}>
                 <div className="flex flex-wrap mb-4">
                   <label htmlFor="name" className="w-full md:w-1/4">
-                    Name 
+                    Name
                   </label>
                   <div className="flex w-full md:w-3/4">
                     <input

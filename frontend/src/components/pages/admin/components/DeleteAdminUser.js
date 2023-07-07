@@ -3,7 +3,7 @@ import axios from "axios";
 import {  toast } from "react-toastify";
 
 
-const DeleteAdminPatient = ({ id ,fetch_doctor_data }) => {
+const DeleteAdminUser = ({ id ,fetch_doctor_data }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Function to toggle the modal
@@ -13,12 +13,12 @@ const DeleteAdminPatient = ({ id ,fetch_doctor_data }) => {
   };
 
   const handleDelete = () => {
-    axios.delete('/api/Patient/'+id)
+    axios.delete('/api/User/'+id)
       .then(response => {
         // Handle successful response
         
         toggleModal();
-        toast.success('Admin Patient Delted', {
+        toast.success('Delete Admin User', {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -28,7 +28,7 @@ const DeleteAdminPatient = ({ id ,fetch_doctor_data }) => {
           progress: undefined,
           theme: "light",
           });
-
+  
           setTimeout(() => {
             fetch_doctor_data();
           }, 3000);
@@ -37,17 +37,23 @@ const DeleteAdminPatient = ({ id ,fetch_doctor_data }) => {
       .catch(error => {
         if (error.response) {
             if (error.response.status === 204) {
-             toast.success('Admin Patient Delted', {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          });
-            } else {
+              toast.success('Delete Admin User', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                });
+        
+            }
+            if (error.response.status === 404) {
+              alert("Doctor has some active appointments");
+              toggleModal();
+             }
+              else {
               console.log("Network response was not ok");
             }
           }
@@ -124,7 +130,7 @@ const DeleteAdminPatient = ({ id ,fetch_doctor_data }) => {
                   />
                 </svg>
                 <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                  Are you sure you want to delete this Patient?
+                  Are you sure you want to delete this Doctor?
                 </h3>
                 <button
                   onClick={()=>handleDelete()}
@@ -151,4 +157,4 @@ const DeleteAdminPatient = ({ id ,fetch_doctor_data }) => {
   );
 };
 
-export default DeleteAdminPatient;
+export default DeleteAdminUser;

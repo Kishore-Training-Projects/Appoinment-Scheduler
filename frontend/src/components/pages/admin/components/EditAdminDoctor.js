@@ -1,13 +1,13 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import {  toast } from "react-toastify";
 
 export const EditAdminDoctor = ({ id , fetch_doctor_data}) => {
   const [showModal, setShowModal] = React.useState(false);
 
   function submitrecord(e) {
     e.preventDefault();
-    console.log(doctordata);
 
     axios
       .put(`/api/Doctor/${id}`, doctordata, {
@@ -30,10 +30,21 @@ export const EditAdminDoctor = ({ id , fetch_doctor_data}) => {
       })
       .then((data) => {
         // Handle the response from the server
-        console.log(data);
-        alert("Record Updated Done");
         setShowModal(false);
-        fetch_doctor_data();
+        toast.success('Doctor Details Updated', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
+          setTimeout(() => {
+            fetch_doctor_data();
+          }, 3000);
+    
       })
       .catch((error) => {
         // Handle any errors that occurred during the request

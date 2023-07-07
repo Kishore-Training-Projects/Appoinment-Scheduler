@@ -1,6 +1,10 @@
 import React from "react";
 import { useState } from "react";
 import axios from "axios";
+import {  toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 export const AddAdminMedicalrecord = (id) => {
   const [showModal, setShowModal] = React.useState(false);
@@ -20,7 +24,7 @@ export const AddAdminMedicalrecord = (id) => {
   function submitrecord(e)
   {
     e.preventDefault();
-    console.log(formData);
+   
 
     axios.post('/api/MedicalRecord', formData, {
         headers: {
@@ -43,9 +47,17 @@ export const AddAdminMedicalrecord = (id) => {
         })
         .then((data) => {
           // Handle the response from the server
-          console.log(data);
-          alert('Record Inserted Done');
-         setShowModal(false)
+          setShowModal(false)
+          toast.success('Record Inserted Done 👩‍⚕️', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            });
         })
         .catch((error) => {
           // Handle any errors that occurred during the request
@@ -57,6 +69,8 @@ export const AddAdminMedicalrecord = (id) => {
 
   return (
     <>
+    <ToastContainer/>
+
       {/* select doctor modal */}
       {showModal ? (
         <>

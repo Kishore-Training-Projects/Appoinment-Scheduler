@@ -3,6 +3,7 @@ import { useState } from "react";
 import { AdminSidebar } from "../../layout/sidebar/adminsidebar";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import {  toast } from "react-toastify";
 
 export const AddAdminPatient = () => {
   const navigate = useNavigate();
@@ -14,7 +15,6 @@ export const AddAdminPatient = () => {
   // formsubmit
 
   function SubmitPatient(e) {
-    console.log(formData);
     e.preventDefault();
 
     axios.post('/api/Patient', formData, {
@@ -38,9 +38,22 @@ export const AddAdminPatient = () => {
       })
       .then((data) => {
         // Handle the response from the server
-        console.log(data);
-        alert('Patient create');
-        navigate('/admin/patient');
+     
+        toast.success('Patient Created ✅', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
+  
+          setTimeout(() => {
+            navigate('/admin/patient');
+          }, 3000);
+    
       })
       .catch((error) => {
         // Handle any errors that occurred during the request

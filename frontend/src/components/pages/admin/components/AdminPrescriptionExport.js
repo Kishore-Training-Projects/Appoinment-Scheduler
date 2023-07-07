@@ -3,7 +3,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import logo from "../../../images/logo.png";
 
-const UserPrescriptionExport = ({ rowData }) => {
+const AdminPrescriptionExport = ({ rowData }) => {
   const handleExport = () => {
     var date = new Date(rowData.prescriptionTimestamp).toLocaleDateString();
 
@@ -73,4 +73,4 @@ const UserPrescriptionExport = ({ rowData }) => {
     </button>
   );
 };
-export default UserPrescriptionExport;
+export default AdminPrescriptionExport;

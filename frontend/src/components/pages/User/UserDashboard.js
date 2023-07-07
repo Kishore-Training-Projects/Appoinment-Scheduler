@@ -1,7 +1,10 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 import { UserSidebar } from "../../layout/sidebar/usersidebar";
 export const UserDashboard = () => {
+  const navigate = useNavigate();
+
   return (
     <>
       <UserSidebar />
@@ -30,7 +33,7 @@ export const UserDashboard = () => {
                   Book Doctor Appointment online instantly with top specialists
                 </p>
                 <a
-                  href="#"
+                  onClick={() => navigate("/user/appointment")}
                   class="inline-flex items-center px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 >
                   Read more
@@ -74,7 +77,7 @@ export const UserDashboard = () => {
                   everywhere
                 </p>
                 <a
-                  href="#"
+                  onClick={() => navigate("/user/medicalrecords")}
                   class="inline-flex items-center px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 >
                   Read more
@@ -123,7 +126,7 @@ export const UserDashboard = () => {
                   Get instant prescription from prefered your doctor.
                 </p>
                 <a
-                  href="#"
+                  onClick={() => navigate("/user/prescription")}
                   class="inline-flex items-center px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 >
                   Read more

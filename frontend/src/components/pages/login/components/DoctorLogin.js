@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import {  toast } from "react-toastify";
 
 export const DoctorLogin = () => {
   const navigate = useNavigate();
@@ -36,7 +36,18 @@ export const DoctorLogin = () => {
         return response.data;
       }
       if (response.status === 204) {
-        alert("Invalid Login")
+        toast.error('Wrong Username and Password', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
+ 
+       
         throw new Error('invalid login');
       } else if (response.status === 404) {
         throw new Error('Resource not found');
@@ -54,7 +65,23 @@ export const DoctorLogin = () => {
         userprofile.acc_type = "admin";
         
         sessionStorage.setItem("admin_key", JSON.stringify(userprofile));
-        navigate("/admin/dashboard");
+
+        toast.success('Successfull Login 👩‍⚕️', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
+
+
+        setTimeout(() => {
+          navigate("/admin/dashboard");
+        }, 4000);
+
 
       }
       else
@@ -68,7 +95,25 @@ export const DoctorLogin = () => {
         userprofile.acc_type = "doctor";
         
         sessionStorage.setItem("doctor_key", JSON.stringify(userprofile));
-        navigate("/doctor/dashboard");
+
+        toast.success('Successfull Login 👩‍⚕️', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
+
+
+        setTimeout(() => {
+          navigate("/doctor/dashboard");
+        }, 4000);
+
+
+
       }
 
     })

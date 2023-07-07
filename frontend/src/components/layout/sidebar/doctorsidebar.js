@@ -6,6 +6,10 @@ import axios from "axios";
 import logo from "../../images/logo.png";
 import profileimage from "../../images/profile.png";
 
+
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 export const DoctorSidebar = () => {
   const [profile, setProfile] = useState();
 
@@ -92,7 +96,9 @@ export const DoctorSidebar = () => {
   if (!sessionStorage.getItem("doctor_key")) return <Navigate to="/login" />;
 
   return (
+    
     <>
+    <ToastContainer/>
       <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-300 px-4 lg:px-6 py-2.5 dark:bg-gray-800 ">
         <div class="flex flex-wrap justify-between items-center">
           <div class="flex justify-start items-center">

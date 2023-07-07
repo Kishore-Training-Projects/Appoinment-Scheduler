@@ -16,6 +16,8 @@ export const AdminMedicalRecords = () => {
       .get("/api/MedicalRecord/")
       .then((response) => {
         setmedicalrecords(response.data);
+        setSearchResults(response.data);
+
       })
       .catch((error) => {
         if (error.response) {
@@ -42,9 +44,36 @@ export const AdminMedicalRecords = () => {
     setCurrentPage(selected);
   };
 
-  const offset = currentPage * itemsPerPage;
-  const currentPageData = medicalrecords.slice(offset, offset + itemsPerPage);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
 
+
+  const offset = currentPage * itemsPerPage;
+  var currentPageData = searchResults.slice(offset, offset + itemsPerPage);
+
+
+  // Function to handle search query changes
+  const handleSearchQueryChange = (event) => {
+    setSearchQuery(event.target.value);
+    handleSearch(event.target.value);
+  };
+
+  // Function to handle search
+  const handleSearch = (search) => {
+    console.log(search)
+    // Perform search logic here using searchQuery
+    const filteredResults = medicalrecords.filter(
+      (medical) =>
+        medical.patient.patientName.toLowerCase().includes(search.toLowerCase()) ||
+        medical.patient.patientMobile.includes(search)
+    );
+    console.log(filteredResults)
+  
+    setSearchResults(filteredResults);
+
+    // Reset pagination to the first page
+    setCurrentPage(0);
+  };
   return (
     <>
       <AdminSidebar />
@@ -136,7 +165,9 @@ export const AdminMedicalRecords = () => {
                             id="simple-search"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="Search"
-                            required=""
+                            value={searchQuery}
+                            onChange={handleSearchQueryChange}
+                            
                           />
                         </div>
                       </form>
