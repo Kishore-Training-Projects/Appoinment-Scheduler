@@ -10,7 +10,6 @@ namespace AppoinmentScheduler.service
             try
             {
 
-                string fromPassword ="hi";
                 var email = new MimeMessage();
                 email.From.Add(MailboxAddress.Parse("kishoredurai7@gmail.com"));
                 email.To.Add(MailboxAddress.Parse(toEmail));

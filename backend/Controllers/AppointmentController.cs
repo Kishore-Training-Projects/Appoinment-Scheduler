@@ -96,16 +96,7 @@ namespace AppoinmentScheduler.Controllers
         }
 
 
-       
-
-        [HttpGet("/sendmail")]
-        public ActionResult CreateReccuringJob()
-        {
-            // _recurringJobManager.AddOrUpdate("jobId", () => _jobTestService.ReccuringJob(), Cron.Minutely);
-            //   _recurringJobManager.AddOrUpdate<MyBackgroundJobs>("MailCheck", x => x.DisplayMessage(), Cron.Daily, TimeZoneInfo.Local);
-
-            return Ok();
-        }
+      
 
         [NonAction]
         public async Task<OkResult> GettodayAppointmentModeldaily()
