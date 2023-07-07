@@ -136,19 +136,19 @@ export const UserLogin = () => {
 
   return (
     <>
-      <div class="mt-7">
+      <div className="mt-7">
         {/* mobile number form */}
 
    
 
         <form
-          class="space-y-4 md:space-y-6"
+          className="space-y-4 md:space-y-6"
           onSubmit={(e) => fetchData(e)}
         >
           <div>
             <label
-              for="email"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              htmlFor="email"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
               Your Mobile Number
             </label>
@@ -177,7 +177,7 @@ export const UserLogin = () => {
           {!otpsent && (
             <button
               type="submit"
-              class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
               Send OTP
             </button>
@@ -188,7 +188,7 @@ export const UserLogin = () => {
 
         {otpsent && (
           <form
-            class="space-y-4 md:space-y-6 mt-6"
+            className="space-y-4 md:space-y-6 mt-6"
             onSubmit={(e) => onSubmitOTP(e)}
           >
             <div>
@@ -209,7 +209,7 @@ export const UserLogin = () => {
             </div>
             <button
               type="submit"
-              class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
               Verify OTP
             </button>
@@ -217,26 +217,26 @@ export const UserLogin = () => {
         )}
       </div>
 
-      <div class="flex justify-center items-center mt-6">
+      <div className="flex justify-center items-center mt-6">
         <a
           onClick={()=>{navigate("/register")}}
           target="_blank"
-          class="inline-flex items-center font-bold text-blue-500 hover:text-blue-700 text-xs text-center"
+          className="inline-flex items-center font-bold text-blue-500 hover:text-blue-700 text-xs text-center"
         >
           <span>
             <svg
-              class="h-6 w-6"
+              className="h-6 w-6"
               fill="none"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
               <path d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
             </svg>
           </span>
-          <span class="ml-2">You don't have an account?</span>
+          <span className="ml-2">You don't have an account?</span>
         </a>
       </div>
     </>
