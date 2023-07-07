@@ -3,6 +3,8 @@ import firebase from "../../config/firebase-config";
 import Navbar from "../../layout/navbar/navbar";
 import { MobileAuth } from "./components/MobileAuth";
 import axios from "axios";
+import {  toast } from "react-toastify";
+
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 export const Register = () => {
@@ -44,9 +46,23 @@ export const Register = () => {
       })
       .then((data) => {
         // Handle the response from the server
-        console.log(data);
-        alert("User registered");
-        navigate("/login");
+       // console.log(data);
+        toast.success('User Registered !!', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
+  
+  
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
+  
       })
       .catch((error) => {
         // Handle any errors that occurred during the request

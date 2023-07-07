@@ -1,5 +1,6 @@
 import { React, useState } from "react";
 import axios from "axios";
+import {  toast } from "react-toastify";
 
 
 const DeleteAdminPatient = ({ id ,fetch_doctor_data }) => {
@@ -15,15 +16,37 @@ const DeleteAdminPatient = ({ id ,fetch_doctor_data }) => {
     axios.delete('/api/Patient/'+id)
       .then(response => {
         // Handle successful response
-        console.log('Delete request successful:', response);
-        alert("Patient Delete Successfully");
+        
         toggleModal();
-        fetch_doctor_data();
+        toast.success('Admin Patient Delted', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
+
+          setTimeout(() => {
+            fetch_doctor_data();
+          }, 3000);
+    
       })
       .catch(error => {
         if (error.response) {
             if (error.response.status === 204) {
-             alert("Doctor Delete Successfully");
+             toast.success('Admin Patient Delted', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
             } else {
               console.log("Network response was not ok");
             }

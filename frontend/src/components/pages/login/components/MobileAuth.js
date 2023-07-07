@@ -1,5 +1,6 @@
 import React from "react";
 import firebase from "../../../config/firebase-config";
+import {  toast } from "react-toastify";
 
 export const MobileAuth = ({ getmobile }) => {
   const [mobile, setMobile] = React.useState("");
@@ -39,7 +40,16 @@ export const MobileAuth = ({ getmobile }) => {
         // SMS sent. Prompt user to type the code from the message, then sign the
         // user in with confirmationResult.confirm(code).
         window.confirmationResult = confirmationResult;
-        console.log("OTP has been sent");
+        toast.success('OTP has been sent 📱', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
         setShowModal(true);
         // ...
       })
@@ -60,7 +70,18 @@ export const MobileAuth = ({ getmobile }) => {
         // User signed in successfully.
         const user = result.user;
         console.log(JSON.stringify(user));
-        alert("User is verified");
+        
+    toast.success('OTP verified ✔', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      });
+
         setOtpVerified(true);
         getmobile(mobile);
 
@@ -69,7 +90,18 @@ export const MobileAuth = ({ getmobile }) => {
         // ...
       })
       .catch((error) => {
-        alert("Error invalid otp ⚠");
+        toast.error('Error invalid otp ⚠', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
+      
+      
         // User couldn't sign in (bad verification code?)
         // ...
       });
@@ -91,7 +123,17 @@ export const MobileAuth = ({ getmobile }) => {
         return response.json();
       })
       .then((data) => {
-        alert("mobile number already exisit");
+        toast.error('Mobile number already exisit', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
+      
       })
       .catch((error) => {
         // Handle any errors that occurred during the request

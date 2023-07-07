@@ -3,7 +3,9 @@ import { useState, useEffect } from "react";
 import { UserSidebar } from "../../layout/sidebar/usersidebar";
 import { UserDoctorSearch } from "./components/UserDoctorSearch";
 import { useNavigate } from "react-router-dom";
-import axios  from "axios";
+import axios from "axios";
+import { toast } from "react-toastify";
+
 export const AddUserAppointment = () => {
   const navigate = useNavigate();
 
@@ -36,28 +38,50 @@ export const AddUserAppointment = () => {
     medicalrecordStatus: false,
   });
 
-
   function submitpatient(e) {
     console.log(formData);
     e.preventDefault();
 
-    axios.post('/api/Appointment', formData, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then((response) => {
-        console.log(response.data);
-        alert('Appoint registered');
-        navigate('/user/appointment');
+    axios
+      .post("/api/Appointment", formData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
       })
-      
+      .then((response) => {
+        // console.log(response.data);
+        toast.success("Appointment Created 📅", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+
+        setTimeout(() => {
+          navigate("/user/appointment");
+        }, 3000);
+      })
+
       .catch((error) => {
         // Handle any errors that occurred during the request
         if (error.response) {
           // The request was made and the server responded with a status code that falls out of the range of 2xx
           console.log(error.response.status);
-          alert(error.response.data.detail);
+
+          toast.error(error.response.data.detail, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
 
           //console.log(error.response.data);
         } else if (error.request) {
@@ -65,10 +89,9 @@ export const AddUserAppointment = () => {
           console.log(error.request);
         } else {
           // Something happened in setting up the request that triggered an Error
-          console.log('Error', error.message);
+          console.log("Error", error.message);
         }
         //console.log(error.config);
-    
       });
   }
 
@@ -104,7 +127,6 @@ export const AddUserAppointment = () => {
     }));
     setDoctorshowModal(false);
   }
-
 
   return (
     <>
@@ -188,7 +210,7 @@ export const AddUserAppointment = () => {
             <div className="w-full p-3 border border-white rounded-lg">
               <h1 className="text-2xl font-bold mb-6">Appointment Schedule</h1>
 
-              <form onSubmit={(e)=>submitpatient(e)}>
+              <form onSubmit={(e) => submitpatient(e)}>
                 <div className="flex flex-wrap mb-4">
                   <label htmlFor="name" className="w-full md:w-1/4">
                     Name:{" "}
@@ -214,7 +236,6 @@ export const AddUserAppointment = () => {
                     id="email"
                     value={profile ? profile.mobile : ""}
                     disabled
-
                     className="w-full md:w-3/4 px-2 py-1 border border-gray-300 rounded"
                   />
                 </div>
@@ -228,7 +249,6 @@ export const AddUserAppointment = () => {
                       type="text"
                       id="username-success"
                       disabled
-
                       placeholder={
                         formData.doctor
                           ? formData.doctor.doctorName
@@ -350,9 +370,7 @@ export const AddUserAppointment = () => {
                     Search Doctor
                   </h3>
                   <div>
-                    <UserDoctorSearch
-                      selecteddoctor={selecteddoctor}
-                    />
+                    <UserDoctorSearch selecteddoctor={selecteddoctor} />
                   </div>
                 </div>
               </div>

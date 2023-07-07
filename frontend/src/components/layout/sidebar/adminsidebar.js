@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import logo from "../../images/logo.png";
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 export const AdminSidebar = () => {
   const [profile, setProfile] = useState();
 
@@ -45,6 +48,8 @@ export const AdminSidebar = () => {
 
   return (
     <>
+    <ToastContainer/>
+
       <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <div class="px-3 py-3 lg:px-5 lg:pl-3">
           <div class="flex items-center justify-between">

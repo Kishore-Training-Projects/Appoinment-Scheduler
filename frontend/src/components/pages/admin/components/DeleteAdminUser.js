@@ -1,5 +1,6 @@
 import { React, useState } from "react";
 import axios from "axios";
+import {  toast } from "react-toastify";
 
 
 const DeleteAdminUser = ({ id ,fetch_doctor_data }) => {
@@ -15,15 +16,38 @@ const DeleteAdminUser = ({ id ,fetch_doctor_data }) => {
     axios.delete('/api/User/'+id)
       .then(response => {
         // Handle successful response
-        console.log('Reception request successful:', response);
-        alert("Reception Delete Successfully");
+        
         toggleModal();
-        fetch_doctor_data();
+        toast.success('Delete Admin User', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
+  
+          setTimeout(() => {
+            fetch_doctor_data();
+          }, 3000);
+    
       })
       .catch(error => {
         if (error.response) {
             if (error.response.status === 204) {
-             alert("Doctor Delete Successfully");
+              toast.success('Delete Admin User', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                });
+        
             }
             if (error.response.status === 404) {
               alert("Doctor has some active appointments");

@@ -10,9 +10,10 @@ import banner from '../../images/banner.png'
 export const Login = () => {
   const [logintype, setLogintype] = useState(true);
   const navigate = useNavigate();
-
+  
   return (
     <>
+
       <div className="bg-gray-100 flex flex-col h-screen">
         <Navbar />
 

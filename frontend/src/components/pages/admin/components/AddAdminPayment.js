@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import axios from "axios";
+import {  toast } from "react-toastify";
 
 export const AddAdminPayment = ({id,appointmentId,fetch_appointment_data}) => {
   console.log(id)
@@ -42,8 +43,9 @@ export const AddAdminPayment = ({id,appointmentId,fetch_appointment_data}) => {
         })
         .then((data) => {
           // Handle the response from the server
-          console.log(data);
-          alert('Record Inserted Done');
+       
+         
+    
           appointmentupdate(appointmentId)
           
        
@@ -79,10 +81,22 @@ export const AddAdminPayment = ({id,appointmentId,fetch_appointment_data}) => {
     })
     .then((data) => {
       // Handle the response from the server
-      console.log(data);
-    
       setShowModal(false);
-      fetch_appointment_data(appointmentId);
+      toast.success('Record Inserted Done', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
+    
+        setTimeout(() => {
+          fetch_appointment_data(appointmentId);
+        }, 3000);
+  
     })
     .catch((error) => {
       // Handle any errors that occurred during the request

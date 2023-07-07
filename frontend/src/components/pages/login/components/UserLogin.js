@@ -1,27 +1,25 @@
 import React from "react";
 import firebase from "../../../config/firebase-config";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 export const UserLogin = () => {
-
-  
   const [mobile, setMobile] = React.useState("");
   const [otp, setOtp] = React.useState("");
 
-
   const navigate = useNavigate();
 
-  const [userdata , setUserdata] = React.useState();
+  const [userdata, setUserdata] = React.useState();
   const [otpVerified, setOtpVerified] = React.useState(false);
 
-    // tokendata
-    const userprofile = {
-      userid: "",
-      name: "",
-      profile: "",
-      mobile :"",
-      acc_type: "",
-    };
+  // tokendata
+  const userprofile = {
+    userid: "",
+    name: "",
+    profile: "",
+    mobile: "",
+    acc_type: "",
+  };
 
   const [otpsent, setOtpsent] = React.useState(false);
 
@@ -43,7 +41,6 @@ export const UserLogin = () => {
     );
   }
   function onSignInSubmit() {
-
     configureCaptcha();
     const phoneNumber = "+91" + mobile;
     console.log(phoneNumber);
@@ -55,8 +52,18 @@ export const UserLogin = () => {
         // SMS sent. Prompt user to type the code from the message, then sign the
         // user in with confirmationResult.confirm(code).
         window.confirmationResult = confirmationResult;
-        console.log("OTP has been sent");
-        setOtpsent(true)
+        toast.success('OTP has been sent 💬', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
+       
+        setOtpsent(true);
         // ...
       })
       .catch((error) => {
@@ -74,7 +81,7 @@ export const UserLogin = () => {
       .then((result) => {
         // User signed in successfully.
         const user = result.user;
-       // console.log(JSON.stringify(user));
+        // console.log(JSON.stringify(user));
         console.log("User is verified");
 
         setOtpVerified(true);
@@ -83,24 +90,51 @@ export const UserLogin = () => {
         userprofile.name = userdata["patientName"];
         userprofile.mobile = userdata["patientMobile"];
         userprofile.acc_type = "patient";
-        
-        sessionStorage.setItem("student_key", JSON.stringify(userprofile));
-        navigate("/user/dashboard");
 
+        sessionStorage.setItem("student_key", JSON.stringify(userprofile));
+
+        toast.success('OTP verified sucess', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
+  
+  
+        setTimeout(() => {
+          navigate("/user/dashboard");
+        }, 4000);
+
+        
 
         // ...
       })
       .catch((error) => {
-        alert("Error invalid otp ⚠");
+
+        toast.error('Invalid otp ⚠', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
+ 
+          
         // User couldn't sign in (bad verification code?)
         // ...
       });
   }
 
+  // fetch Patient details by mobile
 
-   // fetch Patient details by mobile
-
-   const fetchData = async (e) => {
+  const fetchData = async (e) => {
     e.preventDefault();
     await fetch("/api/Patient/search/" + mobile)
       .then((response) => {
@@ -119,32 +153,30 @@ export const UserLogin = () => {
       })
       .catch((error) => {
         // Handle any errors that occurred during the request
-        alert("Invalid Mobile Number");
+        toast.error('Invalid Mobile Number ⚠', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
+      
         console.error("Error:", error.message);
       });
   };
 
-
-
-
-
-
-
-
-
-
-
   return (
+    
     <>
       <div className="mt-7">
         {/* mobile number form */}
 
-   
+      
 
-        <form
-          className="space-y-4 md:space-y-6"
-          onSubmit={(e) => fetchData(e)}
-        >
+        <form className="space-y-4 md:space-y-6" onSubmit={(e) => fetchData(e)}>
           <div>
             <label
               htmlFor="email"
@@ -219,7 +251,9 @@ export const UserLogin = () => {
 
       <div className="flex justify-center items-center mt-6">
         <a
-          onClick={()=>{navigate("/register")}}
+          onClick={() => {
+            navigate("/register");
+          }}
           target="_blank"
           className="inline-flex items-center font-bold text-blue-500 hover:text-blue-700 text-xs text-center"
         >

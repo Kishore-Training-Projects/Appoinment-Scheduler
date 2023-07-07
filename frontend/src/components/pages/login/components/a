@@ -1,0 +1,43 @@
+ setTimeout(() => {
+          navigate("/admin/dashboard");
+        }, 4000);
+
+
+        import {  toast } from "react-toastify";
+
+
+        import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+
+
+<ToastContainer/>
+
+
+toast.error('Wrong Username and Password', {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: false,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+    });
+
+
+    toast.success('Successfull Login 👩‍⚕️', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
+
+
+      setTimeout(() => {
+        navigate("/doctor/dashboard");
+      }, 3000);

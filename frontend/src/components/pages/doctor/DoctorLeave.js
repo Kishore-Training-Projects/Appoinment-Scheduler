@@ -4,6 +4,7 @@ import { DoctorSidebar } from "../../layout/sidebar/doctorsidebar";
 import ReactPaginate from "react-paginate";
 import axios from "axios";
 import DeleteDoctorLeave from "./components/DeleteDoctorLeave";
+import { toast } from "react-toastify";
 
 export const DoctorLeave = () => {
   const today = new Date().toISOString().split("T")[0]; // Get current date in yyyy-mm-dd format
@@ -20,7 +21,7 @@ export const DoctorLeave = () => {
   // submit form
 
   function SubmitLeave(e) {
-    console.log(formData);
+    //  console.log(formData);
     e.preventDefault();
 
     axios
@@ -43,10 +44,21 @@ export const DoctorLeave = () => {
         return response.data;
       })
       .then((data) => {
+        toast.success("Leave added ✔", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
         // Handle the response from the server
-        console.log(data);
-        fetch_doctorLeave_data();
-        alert("Leave Creaetd successfully");
+
+        setTimeout(() => {
+          fetch_doctorLeave_data();
+        }, 3000);
       })
       .catch((error) => {
         // Handle any errors that occurred during the request
@@ -64,7 +76,7 @@ export const DoctorLeave = () => {
           JSON.parse(sessionStorage.getItem("doctor_key")).userid
       )
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         setDoctorLeave(response.data);
       })
       .catch((error) => {
@@ -97,6 +109,7 @@ export const DoctorLeave = () => {
 
   return (
     <>
+    
       <DoctorSidebar />
 
       <div class="p-2 md:p-4 min-h-screen bg-gray-200 sm:ml-64">
@@ -358,7 +371,12 @@ export const DoctorLeave = () => {
                               <td className="px-4 py-3">
                                 {" "}
                                 <div className="flex space-x-2">
-                                  <DeleteDoctorLeave id={row.leaveId} fetch_doctorLeave_data={fetch_doctorLeave_data} />
+                                  <DeleteDoctorLeave
+                                    id={row.leaveId}
+                                    fetch_doctorLeave_data={
+                                      fetch_doctorLeave_data
+                                    }
+                                  />
                                 </div>
                               </td>
                             </tr>

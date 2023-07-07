@@ -1,5 +1,6 @@
 import { React, useState } from "react";
 import axios from "axios";
+import {  toast } from "react-toastify";
 
 const CancelAdminAppointment = ({ id, fetch_appointment_data }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -15,15 +16,35 @@ const CancelAdminAppointment = ({ id, fetch_appointment_data }) => {
       .put("/api/Appointment/Reception/" + id)
       .then((response) => {
         // Handle successful response
-        console.log("Appointment Cancelled", response);
-        alert("Appointment Cancelled");
         toggleModal();
+        toast.success('Appointment Canceled', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
+          
+      setTimeout(() => {
         fetch_appointment_data(id);
+      }, 3000);
       })
       .catch((error) => {
         if (error.response) {
           if (error.response.status === 204) {
-            alert("Appointment Cancelled Successfully");
+            toast.success('Appointment Canceled', {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: false,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              });
           } else {
             console.log("Network response was not ok");
           }

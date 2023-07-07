@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import profileimage from "../../images/profile.png";
 import logo from "../../images/logo.png";
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 export const UserSidebar = () => {
   const [profile, setProfile] = useState();
 
@@ -51,6 +52,19 @@ export const UserSidebar = () => {
 
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      {/* Same as */}
       <nav class=" print-only fixed top-0 z-50 w-full bg-white border-b border-gray-300 px-4 lg:px-6 py-2.5 dark:bg-gray-800 ">
         <div class="flex flex-wrap justify-between items-center">
           <div class="flex justify-start items-center">

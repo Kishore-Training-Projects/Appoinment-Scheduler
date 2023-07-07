@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import axios from "axios";
+import {  toast } from "react-toastify";
 
 export const AddDoctorPrescription = ({id ,setPrescription}) => {
   const [showModal, setShowModal] = React.useState(false);
@@ -19,7 +20,7 @@ export const AddDoctorPrescription = ({id ,setPrescription}) => {
 
   function submitrecord(e) {
     e.preventDefault();
-    console.log(formData);
+    //console.log(formData);
 
     axios
       .post("/api/Prescription", formData, {
@@ -42,9 +43,20 @@ export const AddDoctorPrescription = ({id ,setPrescription}) => {
       })
       .then((data) => {
         // Handle the response from the server
-        console.log(data);
-        alert("Record Inserted Done");
-        setShowModal(false);
+//        console.log(data);
+setShowModal(false);
+        
+    toast.success('Prescription Record Inserted ✔', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      });
+
         setPrescription(data);
       })
       .catch((error) => {
