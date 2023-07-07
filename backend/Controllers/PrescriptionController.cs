@@ -29,8 +29,42 @@ namespace AppoinmentScheduler.Controllers
           {
               return NotFound();
           }
-            return await _context.PrescriptionModel.ToListAsync();
+            return await _context.PrescriptionModel.Include(x=>x.Doctor).Include(x=>x.Appointment).Include(x => x.Appointment.Patient).ToListAsync();
         }
+
+
+        // GET: api/Prescription/patient/5
+        [HttpGet("patient/{id}")]
+        public async Task<ActionResult<IEnumerable<PrescriptionModel>>> GetPrescriptionModelbypatient(int id)
+        {
+            if (_context.MedicalRecordModel == null)
+            {
+                return NotFound();
+            }
+            return await _context.PrescriptionModel.Include(x => x.Appointment).Include(x => x.Doctor).Where(x => x.Appointment.Patient.PatientId == id).ToListAsync();
+        }
+
+
+
+        // GET: api/Prescription/doctor
+        [HttpGet("doctor")]
+        public async Task<ActionResult<PrescriptionModel>> GetPrescriptionModelbyDoctor(int id1, int id2)
+        {
+            if (_context.PrescriptionModel == null)
+            {
+                return NotFound();
+            }
+            var prescriptionModel = await _context.PrescriptionModel.Where(x => x.Appointment.Patient.PatientId == id1 && x.Appointment.AppointmentId == id2).FirstOrDefaultAsync();
+
+            if (prescriptionModel == null)
+            {
+                return NotFound();
+            }
+
+            return prescriptionModel;
+        }
+
+
 
         // GET: api/Prescription/5
         [HttpGet("{id}")]
@@ -90,8 +124,44 @@ namespace AppoinmentScheduler.Controllers
           {
               return Problem("Entity set 'AppoinmentSchedulerContext.PrescriptionModel'  is null.");
           }
-            _context.PrescriptionModel.Add(prescriptionModel);
-            await _context.SaveChangesAsync();
+
+            DateTime time = DateTime.Today;
+
+            var doctorModel = await _context.DoctorModel.Where(x => x.DoctorId == prescriptionModel.Doctor.DoctorId).FirstOrDefaultAsync();
+
+            var appointmentModel = await _context.AppointmentModel.Where(x => x.AppointmentId == prescriptionModel.Appointment.AppointmentId).FirstOrDefaultAsync();
+
+            prescriptionModel.Doctor = doctorModel;
+            prescriptionModel.Appointment = appointmentModel;
+
+            appointmentModel.AppointmentStatus = "completed";
+
+            prescriptionModel.PrescriptionTimestamp = time;
+
+            try
+            {
+
+
+                _context.PrescriptionModel.Add(prescriptionModel);
+                 await _context.SaveChangesAsync();
+
+                _context.Entry(appointmentModel).State = EntityState.Modified;
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    return NotFound();
+                }
+
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
 
             return CreatedAtAction("GetPrescriptionModel", new { id = prescriptionModel.PrescriptionId }, prescriptionModel);
         }
