@@ -16,7 +16,14 @@ namespace AppoinmentScheduler
 
 
             builder.Services.AddDbContext<AppoinmentSchedulerContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("AppoinmentSchedulerContext") ?? throw new InvalidOperationException("Connection string 'AppoinmentSchedulerContext' not found.")));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DBContext"),
+                sqlServerOptionsAction:sqlOptions =>
+                {
+                    sqlOptions.EnableRetryOnFailure(
+                        maxRetryCount: 10,
+                        maxRetryDelay: TimeSpan.FromSeconds(5),
+                        errorNumbersToAdd: null);
+                }));
 
             // Add services to the container.
 
@@ -42,7 +49,7 @@ namespace AppoinmentScheduler
 
             builder.Services.AddHangfire(x =>
             {
-                x.UseSqlServerStorage(builder.Configuration.GetConnectionString("AppoinmentSchedulerContext"));
+                x.UseSqlServerStorage(builder.Configuration.GetConnectionString("DBContext"));
             });
             builder.Services.AddHangfireServer();
 

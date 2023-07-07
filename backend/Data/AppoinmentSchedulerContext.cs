@@ -14,15 +14,17 @@ namespace AppoinmentScheduler.Data
         public AppoinmentSchedulerContext (DbContextOptions<AppoinmentSchedulerContext> options)
             : base(options)
         {
-
             try
             {
-                var databaseCreater = Database.GetService<IDatabaseCreator>() as RelationalDatabaseCreator;
-                if (databaseCreater != null)
-                {
-                    if (!databaseCreater.CanConnect()) databaseCreater.Create();
-                    if (!databaseCreater.HasTables()) databaseCreater.CreateTables();
+                Database.EnsureCreated(); // Create the database if it doesn't exist
 
+                // Check if the tables exist in the database
+                bool hasTables = Database.GetPendingMigrations().Any();
+
+                if (!hasTables)
+                {
+                    // Run the database migrations to create/update tables
+                    Database.Migrate();
                 }
             }
             catch (Exception ex)
