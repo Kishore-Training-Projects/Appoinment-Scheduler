@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import UserPrescriptionExport from "./components/UserPrescriptionExport";
 import { UserSidebar } from "../../layout/sidebar/usersidebar";
 import axios from "axios";
-
+import { Backend_Url } from "../../config/connection";
 export const UserPrescription = () => {
   const navigate = useNavigate();
 
@@ -14,7 +14,7 @@ export const UserPrescription = () => {
   const fetch_prescription_data = async () => {
     await axios
       .get(
-        "/api/Prescription/patient/" +
+        Backend_Url+"/api/Prescription/patient/" +
           JSON.parse(sessionStorage.getItem("student_key")).userid
       )
       .then((response) => {

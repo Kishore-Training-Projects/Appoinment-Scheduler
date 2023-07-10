@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import AdminPrescriptionExport from "./components/AdminPrescriptionExport";
 import { AdminSidebar } from "../../layout/sidebar/adminsidebar";
+import { Backend_Url } from "../../config/connection";
 
 export const AdminPrescription = () => {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ export const AdminPrescription = () => {
 
   const fetch_prescription_data = async () => {
     await axios
-      .get("/api/Prescription/")
+      .get(Backend_Url+"/api/Prescription/")
       .then((response) => {
         setprescription(response.data);
         setSearchResults(response.data);

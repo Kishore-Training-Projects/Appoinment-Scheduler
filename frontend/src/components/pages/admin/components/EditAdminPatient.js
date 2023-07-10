@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import {  toast } from "react-toastify";
+import { Backend_Url } from "../../../config/connection";
 
 export const EditAdminPatient = ({ id , fetch_doctor_data}) => {
   const [showModal, setShowModal] = React.useState(false);
@@ -11,7 +12,7 @@ export const EditAdminPatient = ({ id , fetch_doctor_data}) => {
     console.log(patientdata);
 
     axios
-      .put(`/api/Patient/${id}`, patientdata, {
+      .put(`${Backend_Url}/api/Patient/${id}`, patientdata, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -58,7 +59,7 @@ export const EditAdminPatient = ({ id , fetch_doctor_data}) => {
 
   const fetch_doctors_data = async (id) => {
     try {
-      const response = await axios.get(`/api/Patient/${id}`);
+      const response = await axios.get(`${Backend_Url}/api/Patient/${id}`);
       setPatientdata(response.data);
     } catch (error) {
       if (error.response) {

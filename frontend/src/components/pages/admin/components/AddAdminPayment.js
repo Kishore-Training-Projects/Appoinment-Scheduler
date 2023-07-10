@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import axios from "axios";
 import {  toast } from "react-toastify";
-
+import { Backend_Url } from "../../../config/connection";
 export const AddAdminPayment = ({id,appointmentId,fetch_appointment_data}) => {
   console.log(id)
   const [showModal, setShowModal] = React.useState(false);
@@ -22,7 +22,7 @@ export const AddAdminPayment = ({id,appointmentId,fetch_appointment_data}) => {
     e.preventDefault();
     console.log(formData);
 
-    axios.post('/api/Payment', formData, {
+    axios.post(Backend_Url+'/api/Payment', formData, {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -61,7 +61,7 @@ export const AddAdminPayment = ({id,appointmentId,fetch_appointment_data}) => {
   function appointmentupdate(appointmentId)
   {
     axios
-    .put(`/api/Appointment/payment/${appointmentId}`, {
+    .put(`${Backend_Url}/api/Appointment/payment/${appointmentId}`, {
       headers: {
         "Content-Type": "application/json",
       },

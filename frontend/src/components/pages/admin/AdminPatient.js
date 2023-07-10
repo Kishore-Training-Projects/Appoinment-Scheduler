@@ -5,7 +5,7 @@ import axios from "axios";
 import DeleteAdminPatient from "./components/DeleteAdminPatient";
 import { EditAdminPatient } from "./components/EditAdminPatient";
 import { AdminSidebar } from "../../layout/sidebar/adminsidebar";
-
+import { Backend_Url } from "../../config/connection";
 export const AdminPatient = () => {
   const navigate = useNavigate();
 
@@ -14,7 +14,7 @@ export const AdminPatient = () => {
 
   const fetch_doctor_data = async () => {
     await axios
-      .get("/api/Patient")
+      .get(Backend_Url+"/api/Patient")
       .then((response) => {
         setpatientdata(response.data);
         setSearchResults(response.data);

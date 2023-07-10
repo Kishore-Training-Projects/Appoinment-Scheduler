@@ -3,7 +3,7 @@ import ReactPaginate from "react-paginate";
 import { useNavigate } from "react-router-dom";
 import { DoctorSidebar } from "../../layout/sidebar/doctorsidebar";
 import axios from "axios";
-
+import { Backend_Url } from "../../config/connection";
 export const DoctorMedicalRecords = () => {
   const navigate = useNavigate();
 
@@ -12,7 +12,7 @@ export const DoctorMedicalRecords = () => {
 
   const fetch_medicalrecord_data = async () => {
     await axios
-      .get("/api/MedicalRecord/")
+      .get(Backend_Url+"/api/MedicalRecord/")
       .then((response) => {
         setmedicalrecords(response.data);
         setSearchResults(response.data);

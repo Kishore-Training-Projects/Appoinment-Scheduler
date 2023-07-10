@@ -3,6 +3,7 @@ import { DoctorSidebar } from "../../layout/sidebar/doctorsidebar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ImageCarousel } from "./components/ImageSlider";
+import { Backend_Url } from "../../config/connection";
 export const DoctorDashboard = () => {
 
   const [waitingCount, setWaitingCount] = useState(0);
@@ -16,7 +17,7 @@ export const DoctorDashboard = () => {
     const fetch_appointment_data = async () => {
       await axios
         .get(
-          "/api/Appointment/doctor/" +
+          Backend_Url+"/api/Appointment/doctor/" +
             JSON.parse(sessionStorage.getItem("doctor_key")).userid
         )
         .then((response) => {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-
+import { Backend_Url } from "../../../config/connection";
 import ReactPaginate from "react-paginate";
 
 export const AdminPatientSearch = ({selectedpatient}) => {
@@ -9,7 +9,7 @@ export const AdminPatientSearch = ({selectedpatient}) => {
 
   const fetch_patient_data = async () => {
     await axios
-      .get("/api/Patient/")
+      .get(Backend_Url+"/api/Patient/")
       .then((response) => {
         setPatientdetails(response.data);
         setSearchResults(response.data);

@@ -2,6 +2,7 @@ import React from "react";
 import jsPDF from "jspdf";
 import 'jspdf-autotable';
 
+
  const UserMedicalRecordExport = ({ rowData }) => {
   const handleExport = () => {
     var date = new Date(rowData.medicalRecordTimestamp).toLocaleDateString();

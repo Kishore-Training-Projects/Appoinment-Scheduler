@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { Backend_Url } from "../../config/connection";
 import { UserSidebar } from "../../layout/sidebar/usersidebar";
 export const UserDoctor = () => {
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ export const UserDoctor = () => {
 
   const fetch_doctor_data = async () => {
     await axios
-      .get("/api/Doctor")
+      .get(Backend_Url+"/api/Doctor")
       .then((response) => {
         setdoctordata(response.data);
         setSearchResults(response.data);

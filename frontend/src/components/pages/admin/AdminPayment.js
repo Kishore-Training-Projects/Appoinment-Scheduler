@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import { Backend_Url } from "../../config/connection";
 import { AdminSidebar } from "../../layout/sidebar/adminsidebar";
 
 export const AdminPayment = () => {
@@ -13,7 +13,7 @@ export const AdminPayment = () => {
 
   const fetch_doctor_data = async () => {
     await axios
-      .get("/api/Payment/")
+      .get(Backend_Url+"/api/Payment/")
       .then((response) => {
         setPaymentdata(response.data);
         setSearchResults(response.data);

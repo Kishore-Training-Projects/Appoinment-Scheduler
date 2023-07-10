@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import UserMedicalRecordExport from "./components/UserMedicalRecordExport"
 import { UserSidebar } from "../../layout/sidebar/usersidebar";
 import axios from "axios";
-
+import { Backend_Url } from "../../config/connection";
 export const UserMedicalRecords = () => {
   const navigate = useNavigate();
 
@@ -14,7 +14,7 @@ export const UserMedicalRecords = () => {
 
     const fetch_medicalrecord_data = async () => {
       await axios
-        .get("/api/MedicalRecord/patient/"+(JSON.parse(sessionStorage.getItem("student_key"))).userid)
+        .get(Backend_Url+"/api/MedicalRecord/patient/"+(JSON.parse(sessionStorage.getItem("student_key"))).userid)
         .then((response) => {
           setmedicalrecords(response.data);
           setSearchResults(response.data);

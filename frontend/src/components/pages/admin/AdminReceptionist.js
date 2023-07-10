@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import DeleteAdminUser from "./components/DeleteAdminUser";
 import { AdminSidebar } from "../../layout/sidebar/adminsidebar";
+import { Backend_Url } from "../../config/connection";
+
 export const AdminReception = () => {
   const navigate = useNavigate();
   const [showModal, setShowModal] = React.useState(false);
@@ -23,7 +25,7 @@ export const AdminReception = () => {
     e.preventDefault();
     console.log(formData);
 
-    axios.post('/api/User', formData, {
+    axios.post(Backend_Url+'/api/User', formData, {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -62,7 +64,7 @@ export const AdminReception = () => {
 
   const fetch_doctor_data = async () => {
     await axios
-      .get("/api/User")
+      .get(Backend_Url+"/api/User")
       .then((response) => {
         setdoctordata(response.data);
         setSearchResults(response.data);

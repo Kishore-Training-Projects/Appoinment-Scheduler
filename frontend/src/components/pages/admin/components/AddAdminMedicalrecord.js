@@ -4,7 +4,7 @@ import axios from "axios";
 import {  toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { Backend_Url } from "../../../config/connection";
 
 export const AddAdminMedicalrecord = (id) => {
   const [showModal, setShowModal] = React.useState(false);
@@ -26,7 +26,7 @@ export const AddAdminMedicalrecord = (id) => {
     e.preventDefault();
    
 
-    axios.post('/api/MedicalRecord', formData, {
+    axios.post(Backend_Url+'/api/MedicalRecord', formData, {
         headers: {
           'Content-Type': 'application/json'
         }

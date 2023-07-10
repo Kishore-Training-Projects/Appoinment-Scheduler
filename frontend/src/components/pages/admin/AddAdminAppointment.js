@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {  toast } from "react-toastify";
+import { Backend_Url } from "../../config/connection";
+
 
 export const AddAdminAppointment = () => {
   const navigate = useNavigate();
@@ -43,7 +45,7 @@ export const AddAdminAppointment = () => {
     e.preventDefault();
 
     axios
-      .post("/api/Appointment", formData, {
+      .post(Backend_Url+"/api/Appointment", formData, {
         headers: {
           "Content-Type": "application/json",
         },

@@ -1,6 +1,6 @@
 import { React, useState } from "react";
 import axios from "axios";
-
+import { Backend_Url } from "../../../config/connection";
 const CancelUserAppointment = ({ id, fetch_appointment_data }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -12,7 +12,7 @@ const CancelUserAppointment = ({ id, fetch_appointment_data }) => {
 
   const handleDelete = () => {
     axios
-      .put("/api/Appointment/Patient/" + id)
+      .put(Backend_Url+"/api/Appointment/Patient/" + id)
       .then((response) => {
         // Handle successful response
         console.log("Appointment Cancelled", response);

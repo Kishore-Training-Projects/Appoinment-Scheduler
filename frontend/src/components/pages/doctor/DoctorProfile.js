@@ -1,7 +1,7 @@
 import {React,useEffect} from "react";
 import axios from "axios";
 import { useState } from "react";
-
+import { Backend_Url } from "../../config/connection";
 import { DoctorSidebar } from "../../layout/sidebar/doctorsidebar";
 export const DoctorProfile = () => {
 
@@ -13,7 +13,7 @@ export const DoctorProfile = () => {
    const fetch_doctor_data = async (id) => {
     console.log("hi");
     try {
-      const response = await axios.get(`/api/Doctor/${id}`);
+      const response = await axios.get(`${Backend_Url}/api/Doctor/${id}`);
       setProfile(response.data);
     } catch (error) {
       if (error.response) {

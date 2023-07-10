@@ -2,7 +2,7 @@ import React, { useState,useEffect } from "react";
 import ReactPaginate from "react-paginate";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import { Backend_Url } from "../../config/connection";
 import { UserSidebar } from "../../layout/sidebar/usersidebar";
 
 export const UserPayment = () => {
@@ -13,7 +13,7 @@ export const UserPayment = () => {
 
    const fetch_doctor_data = async () => {
      await axios
-       .get("/api/Payment/patient/"+JSON.parse(sessionStorage.getItem("student_key")).userid)
+       .get(Backend_Url+"/api/Payment/patient/"+JSON.parse(sessionStorage.getItem("student_key")).userid)
        .then((response) => {
         setPaymentdata(response.data);
        })

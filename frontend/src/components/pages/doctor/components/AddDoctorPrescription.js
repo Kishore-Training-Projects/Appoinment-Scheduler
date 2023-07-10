@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import axios from "axios";
 import {  toast } from "react-toastify";
-
+import { Backend_Url } from "../../../config/connection";
 export const AddDoctorPrescription = ({id ,setPrescription}) => {
   const [showModal, setShowModal] = React.useState(false);
   const [formData, setFormData] = useState({
@@ -23,7 +23,7 @@ export const AddDoctorPrescription = ({id ,setPrescription}) => {
     //console.log(formData);
 
     axios
-      .post("/api/Prescription", formData, {
+      .post(Backend_Url+"/api/Prescription", formData, {
         headers: {
           "Content-Type": "application/json",
         },

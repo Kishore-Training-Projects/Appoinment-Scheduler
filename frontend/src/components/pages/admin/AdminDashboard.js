@@ -2,7 +2,7 @@ import { React, useState, useEffect } from "react";
 import axios from "axios";
 
 import { AdminSidebar } from "../../layout/sidebar/adminsidebar";
-
+import { Backend_Url } from "../../config/connection";
 export const AdminDashboard = () => {
   const [waitingCount, setWaitingCount] = useState(0);
   const [canceledCount, setCanceledCount] = useState(0);
@@ -23,7 +23,7 @@ export const AdminDashboard = () => {
 
   const fetch_appointment_data = async () => {
     await axios
-      .get("/api/Appointment")
+      .get(Backend_Url+"/api/Appointment")
       .then((response) => {
         calculateAppointmentCounts(response.data);
       })
@@ -44,7 +44,7 @@ export const AdminDashboard = () => {
 
   const fetch_patient_data = async () => {
     await axios
-      .get("/api/patient")
+      .get(Backend_Url+"/api/patient")
       .then((response) => {
         calculatePatientCounts(response.data);
       })
@@ -65,7 +65,7 @@ export const AdminDashboard = () => {
 
   const fetch_doctor_data = async () => {
     await axios
-      .get("/api/doctor")
+      .get(Backend_Url+"/api/doctor")
       .then((response) => {
         calculateDoctorCounts(response.data);
       })

@@ -5,6 +5,7 @@ import { UserDoctorSearch } from "./components/UserDoctorSearch";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { Backend_Url } from "../../config/connection";
 
 export const AddUserAppointment = () => {
   const navigate = useNavigate();
@@ -43,7 +44,7 @@ export const AddUserAppointment = () => {
     e.preventDefault();
 
     axios
-      .post("/api/Appointment", formData, {
+      .post(Backend_Url+"/api/Appointment", formData, {
         headers: {
           "Content-Type": "application/json",
         },

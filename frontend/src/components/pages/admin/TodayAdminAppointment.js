@@ -5,6 +5,8 @@ import axios from "axios";
 import { AddAdminMedicalrecord } from "./components/AddAdminMedicalrecord";
 import { AdminSidebar } from "../../layout/sidebar/adminsidebar";
 import CancelAdminAppointment from "./components/CancelAdminAppointment";
+import { Backend_Url } from "../../config/connection";
+
 export const TodayAdminAppointment = () => {
   const navigate = useNavigate();
 
@@ -13,7 +15,7 @@ const [appointmentdata, setAppointmentdata] = useState([]);
 
 const fetch_appointment_data = async () => {
   await axios
-    .get("/api/Appointment/today/")
+    .get(Backend_Url+"/api/Appointment/today/")
     .then((response) => {
       setAppointmentdata(response.data);
       setSearchResults(response.data);

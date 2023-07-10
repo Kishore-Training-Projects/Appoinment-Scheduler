@@ -5,7 +5,7 @@ import { Navigate } from "react-router-dom";
 import axios from "axios";
 import logo from "../../images/logo.png";
 import profileimage from "../../images/profile.png";
-
+import { Backend_Url } from "../../config/connection";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -71,7 +71,7 @@ export const DoctorSidebar = () => {
 
   const update_status = (id, status) => {
     axios
-      .put(`/api/Doctor?id=${id}&status=${status}`)
+      .put(`${Backend_Url}/api/Doctor?id=${id}&status=${status}`)
       .then((response) => {
         console.log("Status updated");
       })

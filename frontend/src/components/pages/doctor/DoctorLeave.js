@@ -5,7 +5,7 @@ import ReactPaginate from "react-paginate";
 import axios from "axios";
 import DeleteDoctorLeave from "./components/DeleteDoctorLeave";
 import { toast } from "react-toastify";
-
+import { Backend_Url } from "../../config/connection";
 export const DoctorLeave = () => {
   const today = new Date().toISOString().split("T")[0]; // Get current date in yyyy-mm-dd format
 
@@ -25,7 +25,7 @@ export const DoctorLeave = () => {
     e.preventDefault();
 
     axios
-      .post("/api/DoctorLeave", formData, {
+      .post(Backend_Url+"/api/DoctorLeave", formData, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -72,7 +72,7 @@ export const DoctorLeave = () => {
   const fetch_doctorLeave_data = async () => {
     await axios
       .get(
-        "/api/DoctorLeave/doctor/" +
+        Backend_Url+"/api/DoctorLeave/doctor/" +
           JSON.parse(sessionStorage.getItem("doctor_key")).userid
       )
       .then((response) => {

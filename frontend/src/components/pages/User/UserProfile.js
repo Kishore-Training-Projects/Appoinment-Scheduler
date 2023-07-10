@@ -2,7 +2,7 @@ import { React, useEffect } from "react";
 import { useState } from "react";
 import { UserSidebar } from "../../layout/sidebar/usersidebar";
 import axios from "axios";
-
+import { Backend_Url } from "../../config/connection";
 export const UserProfile = () => {
   const [profile, setProfile] = useState();
 
@@ -11,7 +11,7 @@ export const UserProfile = () => {
   const fetch_patient_data = async (id) => {
     console.log("hi");
     try {
-      const response = await axios.get(`/api/Patient/${id}`);
+      const response = await axios.get(`${Backend_Url}/api/Patient/${id}`);
       setProfile(response.data);
     } catch (error) {
       if (error.response) {
@@ -31,7 +31,7 @@ export const UserProfile = () => {
 
   const fetch_medicalrecord_data = async (id) => {
     await axios
-      .get(`/api/MedicalRecord/patient/last/${id}`)
+      .get(`${Backend_Url}/api/MedicalRecord/patient/last/${id}`)
       .then((response) => {
         setmedicalrecords(response.data);
       })

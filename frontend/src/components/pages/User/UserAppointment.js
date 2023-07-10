@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { UserSidebar } from "../../layout/sidebar/usersidebar";
 import CancelUserAppointment from "./components/CancelUserAppointment";
+import { Backend_Url } from "../../config/connection";
+
+
 export const UserAppointment = () => {
   const [waitingCount, setWaitingCount] = useState(0);
   const [canceledCount, setCanceledCount] = useState(0);
@@ -18,7 +21,7 @@ export const UserAppointment = () => {
   const fetch_appointment_data = async () => {
     await axios
       .get(
-        "/api/Appointment/patient/" +
+        Backend_Url+"/api/Appointment/patient/" +
           JSON.parse(sessionStorage.getItem("student_key")).userid
       )
       .then((response) => {

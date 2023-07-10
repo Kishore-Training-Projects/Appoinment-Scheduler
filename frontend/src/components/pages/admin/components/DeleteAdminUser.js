@@ -1,7 +1,7 @@
 import { React, useState } from "react";
 import axios from "axios";
 import {  toast } from "react-toastify";
-
+import { Backend_Url } from "../../../config/connection";
 
 const DeleteAdminUser = ({ id ,fetch_doctor_data }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -13,7 +13,7 @@ const DeleteAdminUser = ({ id ,fetch_doctor_data }) => {
   };
 
   const handleDelete = () => {
-    axios.delete('/api/User/'+id)
+    axios.delete(Backend_Url+'/api/User/'+id)
       .then(response => {
         // Handle successful response
         

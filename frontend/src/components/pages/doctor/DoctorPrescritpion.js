@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
 import { useNavigate } from "react-router-dom";
 import { DoctorSidebar } from "../../layout/sidebar/doctorsidebar";
+import { Backend_Url } from "../../config/connection";
 import axios from "axios";
 
 export const DoctorPrescription = () => {
@@ -12,7 +13,7 @@ export const DoctorPrescription = () => {
 
   const fetch_prescription_data = async () => {
     await axios
-      .get("/api/Prescription/")
+      .get(Backend_Url+"/api/Prescription/")
       .then((response) => {
         setprescription(response.data);
         setSearchResults(response.data);

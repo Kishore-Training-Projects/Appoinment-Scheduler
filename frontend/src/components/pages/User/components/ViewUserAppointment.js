@@ -4,6 +4,7 @@ import { UserSidebar } from "../../../layout/sidebar/usersidebar";
 import CancelUserAppointment from "./CancelUserAppointment";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { Backend_Url } from "../../../config/connection";
 
 export const ViewUserAppointment = () => {
   const { id } = useParams();
@@ -17,7 +18,7 @@ export const ViewUserAppointment = () => {
   const fetch_appointment_data = async (id) => {
     console.log("hi");
     try {
-      const response = await axios.get(`/api/Appointment/${id}`);
+      const response = await axios.get(`${Backend_Url}/api/Appointment/${id}`);
       setAppointmentdata(response.data);
       fetch_medicalrecord_data(
         response.data.patient.patientId,
@@ -41,7 +42,7 @@ export const ViewUserAppointment = () => {
 
   const fetch_medicalrecord_data = async (id1, id2) => {
     await axios
-      .get(`/api/MedicalRecord/reception?id1=${id1}&id2=${id2}`)
+      .get(`${Backend_Url}/api/MedicalRecord/reception?id1=${id1}&id2=${id2}`)
       .then((response) => {
         setmedicalrecords(response.data);
         fetch_prescription_data(id1, id2);
@@ -64,7 +65,7 @@ export const ViewUserAppointment = () => {
 
   const fetch_prescription_data = async (id1, id2) => {
     await axios
-      .get(`/api/Prescription/doctor?id1=${id1}&id2=${id2}`)
+      .get(`${Backend_Url}/api/Prescription/doctor?id1=${id1}&id2=${id2}`)
       .then((response) => {
         setPrescription(response.data);
       })

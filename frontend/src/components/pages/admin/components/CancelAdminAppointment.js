@@ -1,6 +1,7 @@
 import { React, useState } from "react";
 import axios from "axios";
 import {  toast } from "react-toastify";
+import { Backend_Url } from "../../../config/connection";
 
 const CancelAdminAppointment = ({ id, fetch_appointment_data }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -13,7 +14,7 @@ const CancelAdminAppointment = ({ id, fetch_appointment_data }) => {
 
   const handleDelete = () => {
     axios
-      .put("/api/Appointment/Reception/" + id)
+      .put(Backend_Url+"/api/Appointment/Reception/" + id)
       .then((response) => {
         // Handle successful response
         toggleModal();

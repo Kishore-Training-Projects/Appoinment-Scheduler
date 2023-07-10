@@ -4,6 +4,7 @@ import { AdminSidebar } from "../../layout/sidebar/adminsidebar";
 import ReactPaginate from "react-paginate";
 import axios from "axios";
 import DeleteAdminLeave from "./components/DeleteAdminLeave";
+import { Backend_Url } from "../../config/connection";
 export const AdminLeave = () => {
   const today = new Date().toISOString().split("T")[0]; // Get current date in yyyy-mm-dd format
 
@@ -15,7 +16,7 @@ export const AdminLeave = () => {
   const fetch_doctorLeave_data = async () => {
     await axios
       .get(
-        "/api/DoctorLeave/" 
+        Backend_Url+"/api/DoctorLeave/" 
       )
       .then((response) => {
         setDoctorLeave(response.data);

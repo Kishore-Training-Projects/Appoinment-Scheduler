@@ -1,7 +1,7 @@
 import { React, useState } from "react";
 import axios from "axios";
 import {  toast } from "react-toastify";
-
+import { Backend_Url } from "../../../config/connection";
 
 const DeleteAdminLeave = ({ id ,fetch_doctorLeave_data }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -12,7 +12,7 @@ const DeleteAdminLeave = ({ id ,fetch_doctorLeave_data }) => {
   };
 
   const handleDelete = () => {
-    axios.delete('/api/DoctorLeave/'+id)
+    axios.delete(Backend_Url+'/api/DoctorLeave/'+id)
       .then(response => {
         // Handle successful response
         toggleModal();

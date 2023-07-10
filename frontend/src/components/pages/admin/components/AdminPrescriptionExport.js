@@ -2,6 +2,8 @@ import React from "react";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import logo from "../../../images/logo.png";
+import { Backend_Url } from "../../../config/connection";
+
 
 const AdminPrescriptionExport = ({ rowData }) => {
   const handleExport = () => {

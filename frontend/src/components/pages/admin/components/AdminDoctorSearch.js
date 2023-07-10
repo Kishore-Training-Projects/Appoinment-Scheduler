@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 import ReactPaginate from "react-paginate";
-
+import { Backend_Url } from "../../../config/connection";
 export const AdminDoctorSearch = ({ selecteddoctor }) => {
   // fetch doctor data
   const [doctordetails, setDoctordetails] = useState([]);
 
   const fetch_doctor_data = async () => {
     await axios
-      .get("/api/doctor/")
+      .get(Backend_Url+"/api/doctor/")
       .then((response) => {
         setDoctordetails(response.data);
         setSearchResults(response.data);

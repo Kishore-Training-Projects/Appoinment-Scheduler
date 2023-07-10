@@ -4,7 +4,7 @@ import { AdminSidebar } from "../../layout/sidebar/adminsidebar";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {  toast } from "react-toastify";
-
+import { Backend_Url } from "../../config/connection";
 export const AddAdminDoctor = () => {
   const navigate = useNavigate();
 
@@ -32,7 +32,7 @@ export const AddAdminDoctor = () => {
   function SubmitDoctor(e) {
     e.preventDefault();
 
-    axios.post('/api/User', formData, {
+    axios.post(Backend_Url+'/api/User', formData, {
       headers: {
         'Content-Type': 'application/json'
       }

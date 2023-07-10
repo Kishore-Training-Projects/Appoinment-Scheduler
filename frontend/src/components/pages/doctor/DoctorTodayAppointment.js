@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import { Backend_Url } from "../../config/connection";
 import { DoctorSidebar } from "../../layout/sidebar/doctorsidebar";
 export const DoctorTodayAppointment = () => {
   const navigate = useNavigate();
@@ -13,7 +13,7 @@ export const DoctorTodayAppointment = () => {
   const fetch_appointment_data = async () => {
     await axios
       .get(
-        "/api/Appointment/doctor/today/" +
+        Backend_Url+"/api/Appointment/doctor/today/" +
           JSON.parse(sessionStorage.getItem("doctor_key")).userid
       )
       .then((response) => {
