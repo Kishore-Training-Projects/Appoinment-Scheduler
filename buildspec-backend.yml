@@ -1,0 +1,17 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      dotnet: 6.0
+  pre_build:
+    commands:
+      - dotnet restore backend/AppoinmentScheduler.csproj
+  build:
+    commands:
+      - dotnet build backend/AppoinmentScheduler.csproj
+  post_build:
+    commands:
+      - dotnet publish -c Release -o ./app/ backend/AppoinmentScheduler.csproj
+artifacts:
+  files:
+    - '**/*'
