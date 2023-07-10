@@ -136,7 +136,7 @@ export const UserLogin = () => {
 
   const fetchData = async (e) => {
     e.preventDefault();
-    await fetch("/api/Patient/search/" + mobile)
+    await fetch("http://appoinmentscheduler-dev.us-east-1.elasticbeanstalk.com/api/Patient/search/" + mobile)
       .then((response) => {
         if (!response.ok) {
           if (response.status === 404) {
