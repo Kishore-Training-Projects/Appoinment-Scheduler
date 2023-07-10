@@ -1,6 +1,6 @@
 {
   "name": "frontend",
-  "proxy": "http://appoinmentscheduler-dev.us-east-1.elasticbeanstalk.com/",
+
   "version": "0.1.0",
   "private": true,
   "dependencies": {
