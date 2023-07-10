@@ -1,0 +1,1 @@
+export const Backend_Url = "http://appoinmentscheduler-dev.us-east-1.elasticbeanstalk.com"
