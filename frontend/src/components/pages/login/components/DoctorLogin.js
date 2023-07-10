@@ -3,7 +3,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {  toast } from "react-toastify";
-
+import { Backend_Url } from "../../../config/connection";
 export const DoctorLogin = () => {
   const navigate = useNavigate();
 
@@ -26,7 +26,7 @@ export const DoctorLogin = () => {
   function submitlogin(e) {
     e.preventDefault();
 
-    axios.post('/api/User/login', formData, {
+    axios.post(Backend_Url+'/api/User/login', formData, {
       headers: {
         'Content-Type': 'application/json'
       }

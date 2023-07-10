@@ -1,6 +1,8 @@
 import React from "react";
 import firebase from "../../../config/firebase-config";
 import {  toast } from "react-toastify";
+import { Backend_Url } from "../../../config/connection";
+
 
 export const MobileAuth = ({ getmobile }) => {
   const [mobile, setMobile] = React.useState("");
@@ -111,7 +113,7 @@ export const MobileAuth = ({ getmobile }) => {
 
   const fetchData = async (e) => {
     e.preventDefault();
-    await fetch("/api/Patient/search/" + mobile)
+    await fetch(Backend_Url+"/api/Patient/search/" + mobile)
       .then((response) => {
         if (!response.ok) {
           if (response.status === 404) {

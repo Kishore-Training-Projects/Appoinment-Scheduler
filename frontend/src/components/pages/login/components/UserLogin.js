@@ -2,7 +2,7 @@ import React from "react";
 import firebase from "../../../config/firebase-config";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-
+import { Backend_Url } from "../../../config/connection";
 export const UserLogin = () => {
   const [mobile, setMobile] = React.useState("");
   const [otp, setOtp] = React.useState("");
@@ -136,7 +136,7 @@ export const UserLogin = () => {
 
   const fetchData = async (e) => {
     e.preventDefault();
-    await fetch("/api/Patient/search/" + mobile)
+    await fetch(Backend_Url+"/api/Patient/search/" + mobile)
       .then((response) => {
         if (!response.ok) {
           if (response.status === 404) {

@@ -4,7 +4,7 @@ import Navbar from "../../layout/navbar/navbar";
 import { MobileAuth } from "./components/MobileAuth";
 import axios from "axios";
 import {  toast } from "react-toastify";
-
+import { Backend_Url } from "../../config/connection";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 export const Register = () => {
@@ -27,7 +27,7 @@ export const Register = () => {
   function submitpatient() {
     console.log(formData);
 
-    fetch("/api/Patient", {
+    fetch(Backend_Url+"/api/Patient", {
       method: "post",
       body: JSON.stringify(formData),
       headers: {
